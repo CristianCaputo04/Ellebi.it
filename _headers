@@ -1,0 +1,37 @@
+# Intestazioni HTTP servite da Cloudflare Pages.
+# Sintassi: un percorso, poi le intestazioni indentate di due spazi.
+
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-B9FvLHAXniHetk0qiMQ2pvNmOikHNPUG4SB31zmig+0=' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Cross-Origin-Embedder-Policy: credentialless
+  X-Permitted-Cross-Domain-Policies: none
+  X-DNS-Prefetch-Control: off
+
+# Le pagine HTML devono essere sempre riconvalidate: gli aggiornamenti
+# pubblicati via commit compaiono subito, senza attendere la cache.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Risorse con nome stabile: cache lunga ma riconvalidata dal CDN.
+/assets/css/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/assets/js/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/assets/img/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *

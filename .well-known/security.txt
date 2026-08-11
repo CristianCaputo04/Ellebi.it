@@ -1,0 +1,6 @@
+# Contatto per segnalazioni di sicurezza — ellebi.it
+Contact: mailto:info@ellebi.it
+Expires: 2027-08-11T00:00:00.000Z
+Preferred-Languages: it, en
+Canonical: https://ellebi.it/.well-known/security.txt
+Policy: https://ellebi.it/privacy.html

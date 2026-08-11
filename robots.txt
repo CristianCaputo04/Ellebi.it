@@ -1,0 +1,7 @@
+# robots.txt — ellebi.it
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+# Il sito è una vetrina: nessuna area riservata, nessun parametro da escludere.
+Sitemap: https://ellebi.it/sitemap.xml

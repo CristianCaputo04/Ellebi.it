@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="ELLEBI">
+  <title>ELLEBI</title>
+  <circle cx="60" cy="60" r="60" fill="#f6ddd0"/>
+  <g transform="translate(60 62) scale(0.82) translate(-60 -60)">
+  <g fill="none" stroke="#3f2418" stroke-width="3.4" stroke-linecap="round">
+    <path d="M60 46 C 55 58, 49 66, 44 73"/>
+    <path d="M60 46 C 66 56, 72 63, 77 70"/>
+  </g>
+  <g fill="#3f2418">
+    <path d="M60 45 C 43 47, 26 36, 15 13 C 38 13, 55 25, 60 45 Z"/>
+    <path d="M60 45 C 77 47, 94 36, 105 13 C 82 13, 65 25, 60 45 Z" opacity=".92"/>
+    <circle cx="42" cy="88" r="13.5"/>
+    <circle cx="78" cy="85" r="13.5" opacity=".93"/>
+  </g>
+  </g>
+</svg>

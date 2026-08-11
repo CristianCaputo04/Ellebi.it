@@ -1,0 +1,17 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Dipendenze e build (non usate: il sito è statico)
+node_modules/
+dist/
+.wrangler/
+.dev.vars
+.env
+.env.*
