@@ -200,8 +200,8 @@
   /* ------------------------------------------------------------ parallasse */
   (function parallax() {
     var layers = $$("[data-parallax]");
-    var echo = $("[data-hero-echo]");
-    if (!layers.length && !echo) { return; }
+    var heroContent = $("[data-hero-content]");
+    if (!layers.length && !heroContent) { return; }
     if (prefersReduced()) { return; }
 
     var vh = window.innerHeight;
@@ -220,10 +220,11 @@
         layer.style.transform = "translate3d(0," + offset.toFixed(2) + "px,0)";
       });
 
-      if (echo) {
-        var p = Math.min(y / (vh * 0.9), 1);
-        echo.style.transform = "translate3d(0," + (p * -70).toFixed(2) + "px,0) scale(" + (1 + p * 0.14).toFixed(3) + ")";
-        echo.style.opacity = String(Math.max(0, 1 - p * 1.15));
+      // il testo dell'hero sale e sfuma mentre si scorre
+      if (heroContent) {
+        var p = Math.min(y / (vh * 0.85), 1);
+        heroContent.style.transform = "translate3d(0," + (p * -60).toFixed(2) + "px,0)";
+        heroContent.style.opacity = String(Math.max(0, 1 - p * 1.25));
       }
     });
 
@@ -337,23 +338,40 @@
   })();
 
   /* ------------------------------------------------- consenso cookie (GDPR) */
+  /* Regole applicate:
+     - nessuno strumento facoltativo prima del consenso;
+     - rifiutare è immediato quanto accettare;
+     - la scelta viene registrata con data e versione (prova del consenso);
+     - il consenso scade dopo 6 mesi e viene richiesto di nuovo;
+     - un segnale di rifiuto inviato dal browser (Global Privacy Control)
+       vale come rifiuto: il banner non chiede nulla e non si carica nulla. */
   (function consent() {
     var banner = $("#cookie-banner");
-    var STORAGE_KEY = "ellebi-consent-v1";
-    // Token Cloudflare Web Analytics (facoltativo, statistiche senza cookie).
+    var STORAGE_KEY = "ellebi-consent-v2";
+    var VERSIONE = 2;
+    var DURATA_GIORNI = 180;
+    // Token Cloudflare Web Analytics (statistiche senza cookie, facoltative).
     // Lasciare vuoto = nessuno script di statistica viene mai caricato.
     var ANALYTICS_TOKEN = "";
+
+    function segnaleRifiuto() {
+      return navigator.globalPrivacyControl === true || navigator.doNotTrack === "1";
+    }
 
     function read() {
       try {
         var raw = window.localStorage.getItem(STORAGE_KEY);
-        return raw ? JSON.parse(raw) : null;
+        if (!raw) { return null; }
+        var v = JSON.parse(raw);
+        if (!v || v.version !== VERSIONE) { return null; }
+        if (v.expiresAt && new Date(v.expiresAt).getTime() < Date.now()) { return null; }
+        return v;
       } catch (err) { return null; }
     }
 
     function write(value) {
       try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value)); }
-      catch (err) { /* storage non disponibile: la scelta vale per la sessione */ }
+      catch (err) { /* memoria non disponibile: la scelta vale per la sessione */ }
     }
 
     function loadAnalytics() {
@@ -368,6 +386,7 @@
 
     function apply(state) {
       if (state && state.analytics) { loadAnalytics(); }
+      mostraStato(state);
     }
 
     function hide() {
@@ -385,16 +404,51 @@
       banner.classList.add("is-visible");
     }
 
-    function save(analytics) {
-      var state = { analytics: !!analytics, ts: new Date().toISOString(), version: 1 };
+    function save(analytics, origine) {
+      var scadenza = new Date(Date.now() + DURATA_GIORNI * 24 * 60 * 60 * 1000);
+      var state = {
+        analytics: !!analytics,
+        ts: new Date().toISOString(),
+        expiresAt: scadenza.toISOString(),
+        source: origine || "utente",
+        version: VERSIONE
+      };
       write(state);
       apply(state);
       hide();
+      return state;
+    }
+
+    // riepilogo leggibile della scelta, mostrato nella cookie policy
+    function mostraStato(state) {
+      var nodi = $$("[data-consent-status]");
+      if (!nodi.length) { return; }
+      var testo;
+      if (!state) {
+        testo = "Non hai ancora espresso una scelta: le statistiche anonime sono spente.";
+      } else {
+        var data = new Date(state.ts);
+        var fine = new Date(state.expiresAt);
+        var f = function (d) { return d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" }); };
+        testo = (state.analytics ? "Statistiche anonime attive." : "Statistiche anonime disattivate.") +
+          " Scelta registrata il " + f(data) +
+          (state.source === "segnale-browser" ? " tramite il segnale di rifiuto del tuo browser" : "") +
+          ", valida fino al " + f(fine) + ".";
+      }
+      nodi.forEach(function (n) { n.textContent = testo; });
     }
 
     var saved = read();
-    if (saved) { apply(saved); }
-    else if (banner) { window.setTimeout(show, 1200); }
+
+    if (saved) {
+      apply(saved);
+    } else if (segnaleRifiuto()) {
+      // il browser ha già dichiarato il rifiuto: si registra senza disturbare
+      save(false, "segnale-browser");
+    } else {
+      mostraStato(null);
+      if (banner) { window.setTimeout(show, 1200); }
+    }
 
     if (banner) {
       var toggle = $("#consent-analytics");
@@ -408,12 +462,12 @@
       if (store) { store.addEventListener("click", function () { save(toggle && toggle.checked); }); }
     }
 
-    // riapertura delle preferenze dal footer
+    // riapertura delle preferenze dal footer o dalla cookie policy
     $$("[data-cookie-open]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var state = read();
-        var toggle = $("#consent-analytics");
-        if (toggle) { toggle.checked = !!(state && state.analytics); }
+        var t = $("#consent-analytics");
+        if (t) { t.checked = !!(state && state.analytics); }
         show();
       });
     });

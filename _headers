@@ -2,7 +2,7 @@
 # Sintassi: un percorso, poi le intestazioni indentate di due spazi.
 
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-B9FvLHAXniHetk0qiMQ2pvNmOikHNPUG4SB31zmig+0=' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-Zt13/i7zzQKLQX1uCHtCytqMwdvPvimhYkl5IfcBTZs=' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
