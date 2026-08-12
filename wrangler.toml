@@ -1,18 +1,15 @@
-name = "ellebi-handmade"
+name = "ellebi-it"
 type = "javascript"
+main = "src/index.js"
 compatibility_date = "2024-01-01"
 
-[env.production]
-name = "ellebi-handmade-prod"
-route = "ellebi.it/*"
-zone_id = ""
-
-# Static assets configuration
 [build]
 command = ""
-watch_paths = ["assets/**/*", "*.html"]
+watch_paths = ["assets/**/*", "*.html", "*.txt", "*.xml", "*.webmanifest", "*.svg"]
 
-# KV Namespaces (se necessari)
-# [[kv_namespaces]]
-# binding = "KV"
-# id = ""
+[env.production]
+name = "ellebi-it-prod"
+routes = [
+  { pattern = "ellebi.it/*", zone_name = "ellebi.it" },
+  { pattern = "www.ellebi.it/*", zone_name = "ellebi.it" }
+]
