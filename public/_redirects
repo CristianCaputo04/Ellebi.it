@@ -1,14 +1,13 @@
-# Reindirizzamenti Cloudflare Pages (origine  destinazione  codice)
+# Reindirizzamenti Cloudflare (origine  destinazione  codice)
 
 # Scorciatoie comode da scrivere in bio o in direct
 /instagram   https://www.instagram.com/ellebi.it/   302
 /ig          https://www.instagram.com/ellebi.it/   302
 /vinted      https://www.vinted.it/member/65695128-pinkstraw7  302
 
-# Vecchi percorsi e varianti di scrittura delle pagine informative
-/privacy         /privacy.html         301
-/cookie          /cookie.html          301
-/cookie-policy   /cookie.html          301
-/accessibilita   /accessibilita.html   301
-/accessibilità   /accessibilita.html   301
-/index.html      /                     301
+# Varianti di scrittura delle pagine informative.
+# Gli indirizzi /privacy, /cookie e /accessibilita NON vanno elencati qui:
+# Cloudflare serve già la pagina corrispondente, e una regola in più creerebbe
+# un rimbalzo infinito con il reindirizzamento automatico da .html.
+/cookie-policy   /cookie          301
+/accessibilità   /accessibilita   301
