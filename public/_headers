@@ -2,7 +2,7 @@
 # Sintassi: un percorso, poi le intestazioni indentate di due spazi.
 
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-HiHsofHJfLYeej89W05QFwWk/T12MEc8Fwjvfh7ITu8=' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-pI95qKXRYXqkPcLotjiz3zwu0VcYIsqdt9rWYqUclE8=' 'sha256-FQtiB8mnvR11sGcNWoz7N70RwpCmV5Bfr3Zw4YqaiiI=' 'sha256-HiHsofHJfLYeej89W05QFwWk/T12MEc8Fwjvfh7ITu8=' 'sha256-bh3Xi4ByTN/1VcJqV94LaqN+CEqLKB9hNfuSSxBH+6I=' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; frame-src 'none'; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY

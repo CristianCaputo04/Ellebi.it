@@ -18,3 +18,4 @@ dist/
 
 # Cloudflare Wrangler
 .wrangler/
+.logo-tmp/

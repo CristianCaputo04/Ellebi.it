@@ -1,0 +1,444 @@
+{
+ "atelier.jpg": {
+  "larghezza": 1920,
+  "altezza": 1080,
+  "jpg": [
+   [
+    "atelier-w960.jpg",
+    960
+   ],
+   [
+    "atelier.jpg",
+    1920
+   ]
+  ],
+  "webp": []
+ },
+ "borsa-01.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-01-w450.jpg",
+    450
+   ],
+   [
+    "borsa-01.jpg",
+    900
+   ]
+  ],
+  "webp": [
+   [
+    "borsa-01-w450.webp",
+    450
+   ],
+   [
+    "borsa-01.webp",
+    900
+   ]
+  ]
+ },
+ "borsa-01b.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-01b-w450.jpg",
+    450
+   ],
+   [
+    "borsa-01b.jpg",
+    900
+   ]
+  ],
+  "webp": [
+   [
+    "borsa-01b-w450.webp",
+    450
+   ]
+  ]
+ },
+ "borsa-02.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-02-w450.jpg",
+    450
+   ],
+   [
+    "borsa-02.jpg",
+    900
+   ]
+  ],
+  "webp": [
+   [
+    "borsa-02-w450.webp",
+    450
+   ],
+   [
+    "borsa-02.webp",
+    900
+   ]
+  ]
+ },
+ "borsa-02b.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-02b-w450.jpg",
+    450
+   ],
+   [
+    "borsa-02b.jpg",
+    900
+   ]
+  ],
+  "webp": [
+   [
+    "borsa-02b-w450.webp",
+    450
+   ],
+   [
+    "borsa-02b.webp",
+    900
+   ]
+  ]
+ },
+ "borsa-03.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-03-w450.jpg",
+    450
+   ],
+   [
+    "borsa-03.jpg",
+    900
+   ]
+  ],
+  "webp": [
+   [
+    "borsa-03-w450.webp",
+    450
+   ]
+  ]
+ },
+ "borsa-03b.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-03b-w450.jpg",
+    450
+   ],
+   [
+    "borsa-03b.jpg",
+    900
+   ]
+  ],
+  "webp": []
+ },
+ "borsa-04.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-04-w450.jpg",
+    450
+   ],
+   [
+    "borsa-04.jpg",
+    900
+   ]
+  ],
+  "webp": [
+   [
+    "borsa-04-w450.webp",
+    450
+   ],
+   [
+    "borsa-04.webp",
+    900
+   ]
+  ]
+ },
+ "borsa-04b.jpg": {
+  "larghezza": 900,
+  "altezza": 1200,
+  "jpg": [
+   [
+    "borsa-04b-w450.jpg",
+    450
+   ],
+   [
+    "borsa-04b.jpg",
+    900
+   ]
+  ],
+  "webp": [
+   [
+    "borsa-04b-w450.webp",
+    450
+   ],
+   [
+    "borsa-04b.webp",
+    900
+   ]
+  ]
+ },
+ "gallery-01.jpg": {
+  "larghezza": 800,
+  "altezza": 800,
+  "jpg": [
+   [
+    "gallery-01-w400.jpg",
+    400
+   ],
+   [
+    "gallery-01.jpg",
+    800
+   ]
+  ],
+  "webp": [
+   [
+    "gallery-01-w400.webp",
+    400
+   ],
+   [
+    "gallery-01.webp",
+    800
+   ]
+  ]
+ },
+ "gallery-02.jpg": {
+  "larghezza": 800,
+  "altezza": 800,
+  "jpg": [
+   [
+    "gallery-02-w400.jpg",
+    400
+   ],
+   [
+    "gallery-02.jpg",
+    800
+   ]
+  ],
+  "webp": [
+   [
+    "gallery-02-w400.webp",
+    400
+   ],
+   [
+    "gallery-02.webp",
+    800
+   ]
+  ]
+ },
+ "gallery-03.jpg": {
+  "larghezza": 800,
+  "altezza": 800,
+  "jpg": [
+   [
+    "gallery-03-w400.jpg",
+    400
+   ],
+   [
+    "gallery-03.jpg",
+    800
+   ]
+  ],
+  "webp": []
+ },
+ "gallery-04.jpg": {
+  "larghezza": 800,
+  "altezza": 800,
+  "jpg": [
+   [
+    "gallery-04-w400.jpg",
+    400
+   ],
+   [
+    "gallery-04.jpg",
+    800
+   ]
+  ],
+  "webp": [
+   [
+    "gallery-04-w400.webp",
+    400
+   ],
+   [
+    "gallery-04.webp",
+    800
+   ]
+  ]
+ },
+ "gallery-05.jpg": {
+  "larghezza": 800,
+  "altezza": 800,
+  "jpg": [
+   [
+    "gallery-05-w400.jpg",
+    400
+   ],
+   [
+    "gallery-05.jpg",
+    800
+   ]
+  ],
+  "webp": [
+   [
+    "gallery-05-w400.webp",
+    400
+   ],
+   [
+    "gallery-05.webp",
+    800
+   ]
+  ]
+ },
+ "gallery-06.jpg": {
+  "larghezza": 800,
+  "altezza": 800,
+  "jpg": [
+   [
+    "gallery-06-w400.jpg",
+    400
+   ],
+   [
+    "gallery-06.jpg",
+    800
+   ]
+  ],
+  "webp": [
+   [
+    "gallery-06-w400.webp",
+    400
+   ],
+   [
+    "gallery-06.webp",
+    800
+   ]
+  ]
+ },
+ "hero-mobile.jpg": {
+  "larghezza": 1000,
+  "altezza": 1400,
+  "jpg": [
+   [
+    "hero-mobile-w500.jpg",
+    500
+   ],
+   [
+    "hero-mobile.jpg",
+    1000
+   ]
+  ],
+  "webp": [
+   [
+    "hero-mobile-w500.webp",
+    500
+   ],
+   [
+    "hero-mobile.webp",
+    1000
+   ]
+  ]
+ },
+ "hero.jpg": {
+  "larghezza": 1920,
+  "altezza": 1280,
+  "jpg": [
+   [
+    "hero-w960.jpg",
+    960
+   ],
+   [
+    "hero.jpg",
+    1920
+   ]
+  ],
+  "webp": [
+   [
+    "hero-w960.webp",
+    960
+   ],
+   [
+    "hero.webp",
+    1920
+   ]
+  ]
+ },
+ "step-01.jpg": {
+  "larghezza": 1200,
+  "altezza": 900,
+  "jpg": [
+   [
+    "step-01-w600.jpg",
+    600
+   ],
+   [
+    "step-01.jpg",
+    1200
+   ]
+  ],
+  "webp": []
+ },
+ "step-02.jpg": {
+  "larghezza": 1200,
+  "altezza": 900,
+  "jpg": [
+   [
+    "step-02-w600.jpg",
+    600
+   ],
+   [
+    "step-02.jpg",
+    1200
+   ]
+  ],
+  "webp": []
+ },
+ "step-03.jpg": {
+  "larghezza": 1200,
+  "altezza": 900,
+  "jpg": [
+   [
+    "step-03-w600.jpg",
+    600
+   ],
+   [
+    "step-03.jpg",
+    1200
+   ]
+  ],
+  "webp": [
+   [
+    "step-03-w600.webp",
+    600
+   ],
+   [
+    "step-03.webp",
+    1200
+   ]
+  ]
+ },
+ "step-04.jpg": {
+  "larghezza": 1200,
+  "altezza": 900,
+  "jpg": [
+   [
+    "step-04-w600.jpg",
+    600
+   ],
+   [
+    "step-04.jpg",
+    1200
+   ]
+  ],
+  "webp": []
+ }
+}

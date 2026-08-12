@@ -1851,11 +1851,40 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   z-index: 2;
   pointer-events: none;
   will-change: transform;
+  /* niente filter: blur() — su un elemento che si muove obbliga il telefono a
+     rifare la sfocatura a ogni fotogramma. Le sfumature sono già morbide. */
   background:
-    radial-gradient(58% 130% at 14% 108%, rgba(246, 221, 208, 0.72) 0%, rgba(246, 221, 208, 0) 68%),
-    linear-gradient(to top, rgba(251, 247, 244, 0.72) 0%, rgba(251, 247, 244, 0) 100%);
-  filter: blur(7px);
+    radial-gradient(58% 130% at 14% 108%, rgba(246, 221, 208, 0.74) 0%, rgba(246, 221, 208, 0) 70%),
+    linear-gradient(to top, rgba(251, 247, 244, 0.74) 0%, rgba(251, 247, 244, 0) 100%);
 }
+
+/* Sotto i 62em l'hero è statico: nessun piano in movimento, nessun livello
+   di composizione in più da mantenere. */
+@media (max-width: 61.99em) {
+  .hero__media,
+  .hero__wash,
+  .hero__inner,
+  .hero__fore { will-change: auto; transform: none; }
+}
+
+/* --- Area toccabile dei collegamenti di servizio ------------------------ */
+/* I link del piè di pagina erano alti 17-21 px: sotto i 24 px richiesti da
+   WCAG 2.2 per il tocco (criterio 2.5.8). L'imbottitura verticale allarga
+   l'area sensibile senza spostare il testo di una virgola. Non si applica ai
+   link dentro le frasi, dove la regola non vale e l'imbottitura
+   scompaginerebbe l'interlinea. */
+li > .link-line,
+.collection__note > .link-line,
+.cookie-prefs {
+  display: inline-block;
+  padding-block: 0.32rem;
+}
+
+/* Nota: qui è stato provato `content-visibility: auto` sulle sezioni e poi
+   tolto. Le altezze reali vanno da 493 a 2772 px e cambiano molto fra
+   telefono e computer: una sola altezza prenotata sarebbe sbagliata quasi
+   ovunque e farebbe saltare la barra di scorrimento. Su sei sezioni il
+   risparmio di disegno non ripaga quel difetto. */
 
 .hero__inner { z-index: 1; will-change: transform; }
 

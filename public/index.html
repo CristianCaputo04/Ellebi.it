@@ -6,9 +6,12 @@
 <title>ELLEBI — Borse fatte a mano | Ogni borsa esiste una volta sola</title>
 <meta name="description" content="Borse all'uncinetto fatte a mano, un pezzo alla volta. Nessuna produzione in serie: quando una borsa finisce, finisce. Guarda i pezzi ancora disponibili.">
 <meta name="author" content="ELLEBI">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="theme-color" content="#fbeae1">
 <meta name="color-scheme" content="light">
 <link rel="canonical" href="https://ellebi.it/">
+<link rel="alternate" hreflang="it-IT" href="https://ellebi.it/">
+<link rel="alternate" hreflang="x-default" href="https://ellebi.it/">
 
 <!-- SEO social -->
 <meta property="og:type" content="website">
@@ -34,8 +37,10 @@
 <!-- Risorse critiche -->
 <link rel="preload" href="/assets/fonts/jost-300-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/img/hero.jpg" as="image" fetchpriority="high" media="(min-width: 48em)">
-<link rel="preload" href="/assets/img/hero-mobile.jpg" as="image" fetchpriority="high" media="(max-width: 47.99em)">
+<!-- Si anticipa esattamente il file che il browser userà davvero: con `type`
+     chi non legge WebP salta la riga e scarica il JPEG una volta sola. -->
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-w960.webp 960w, /assets/img/hero.webp 1920w" imagesizes="100vw" fetchpriority="high" media="(min-width: 48em)">
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-mobile-w500.webp 500w, /assets/img/hero-mobile.webp 1000w" imagesizes="100vw" fetchpriority="high" media="(max-width: 47.99em)">
 <link rel="stylesheet" href="/assets/css/fonts.css">
 <link rel="stylesheet" href="/assets/css/style.css">
 <script src="/assets/js/head.js"></script>
@@ -102,9 +107,10 @@
     </nav>
 
     <a class="header__brand" href="/" aria-label="ELLEBI — torna alla home">
-      <svg viewBox="0 0 260 150" role="img" aria-hidden="true" focusable="false">
-        <use href="#ellebi-mark" x="70" y="0" width="120" height="120"></use>
-        <text x="130" y="140" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="40" letter-spacing="10" fill="currentColor">ELLEBI</text>
+      <svg viewBox="0 0 260 198" role="img" aria-hidden="true" focusable="false">
+        <use href="#ellebi-mark" x="91" y="0" width="78" height="78"></use>
+        <text x="130" y="152" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="98" fill="currentColor">LB</text>
+        <text x="134" y="190" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="27" letter-spacing="8" fill="currentColor">ELLEBI</text>
       </svg>
     </a>
 
@@ -196,6 +202,10 @@
     <div class="hero__media" data-hero-layer data-hero-shift="12">
       <picture>
         <!-- ritaglio verticale sul telefono: si vede tutta la borsa -->
+        <source type="image/webp" srcset="/assets/img/hero-mobile-w500.webp 500w, /assets/img/hero-mobile.webp 1000w" sizes="100vw" media="(max-width: 47.99em)">
+        <source type="image/jpeg" srcset="/assets/img/hero-mobile-w500.jpg 500w, /assets/img/hero-mobile.jpg 1000w" sizes="100vw" media="(max-width: 47.99em)">
+        <source type="image/webp" srcset="/assets/img/hero-w960.webp 960w, /assets/img/hero.webp 1920w" sizes="100vw" media="(min-width: 48em)">
+        <source type="image/jpeg" srcset="/assets/img/hero-w960.jpg 960w, /assets/img/hero.jpg 1920w" sizes="100vw" media="(min-width: 48em)">
         <source media="(max-width: 47.99em)" srcset="/assets/img/hero-mobile.jpg" width="1000" height="1400">
         <img src="/assets/img/hero.jpg" alt="La pouch Nuvola in filato tortora, lavorata a mano, tenuta in mano davanti a una parete chiara" width="1920" height="1280" fetchpriority="high" decoding="async">
       </picture>
@@ -254,8 +264,16 @@
         <article class="card" data-reveal="scale">
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
-            <img src="/assets/img/borsa-01.jpg" alt="Nuvola: pouch morbida in filato tortora con bordo intrecciato, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
-            <img src="/assets/img/borsa-01b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/webp" srcset="/assets/img/borsa-01-w450.webp 450w, /assets/img/borsa-01.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <source type="image/jpeg" srcset="/assets/img/borsa-01-w450.jpg 450w, /assets/img/borsa-01.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-01.jpg" alt="Nuvola: pouch morbida in filato tortora con bordo intrecciato, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
+            <picture>
+              <source type="image/webp" srcset="/assets/img/borsa-01b-w450.webp 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <source type="image/jpeg" srcset="/assets/img/borsa-01b-w450.jpg 450w, /assets/img/borsa-01b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-01b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
             <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-01.jpg" data-caption="Nuvola — tortora, morbida fuori e ferma nella forma" aria-label="Ingrandisci la foto della borsa Nuvola">
               <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
             </button>
@@ -267,8 +285,16 @@
         <article class="card" data-reveal="scale">
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
-            <img src="/assets/img/borsa-02.jpg" alt="Perla: mini bag color cacao con manico rigido e tre perle bianche cucite a mano" width="900" height="1200" loading="lazy" decoding="async">
-            <img src="/assets/img/borsa-02b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/webp" srcset="/assets/img/borsa-02-w450.webp 450w, /assets/img/borsa-02.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <source type="image/jpeg" srcset="/assets/img/borsa-02-w450.jpg 450w, /assets/img/borsa-02.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-02.jpg" alt="Perla: mini bag color cacao con manico rigido e tre perle bianche cucite a mano" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
+            <picture>
+              <source type="image/webp" srcset="/assets/img/borsa-02b-w450.webp 450w, /assets/img/borsa-02b.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <source type="image/jpeg" srcset="/assets/img/borsa-02b-w450.jpg 450w, /assets/img/borsa-02b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-02b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
             <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-02.jpg" data-caption="Perla — cacao, manico rigido e tre perle cucite a mano" aria-label="Ingrandisci la foto della borsa Perla">
               <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
             </button>
@@ -280,8 +306,15 @@
         <article class="card" data-reveal="scale">
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
-            <img src="/assets/img/borsa-03.jpg" alt="Sera: pouch in filato cioccolato attraversato da lurex dorato, appoggiata su un muretto" width="900" height="1200" loading="lazy" decoding="async">
-            <img src="/assets/img/borsa-03b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/webp" srcset="/assets/img/borsa-03-w450.webp 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <source type="image/jpeg" srcset="/assets/img/borsa-03-w450.jpg 450w, /assets/img/borsa-03.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-03.jpg" alt="Sera: pouch in filato cioccolato attraversato da lurex dorato, appoggiata su un muretto" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
+            <picture>
+              <source type="image/jpeg" srcset="/assets/img/borsa-03b-w450.jpg 450w, /assets/img/borsa-03b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-03b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
             <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-03.jpg" data-caption="Sera — cioccolato lurex, quella che si nota di sera" aria-label="Ingrandisci la foto della borsa Sera">
               <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
             </button>
@@ -293,8 +326,16 @@
         <article class="card" data-reveal="scale">
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
-            <img src="/assets/img/borsa-04.jpg" alt="Cacao: pouch capiente in filato cioccolato opaco, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
-            <img src="/assets/img/borsa-04b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/webp" srcset="/assets/img/borsa-04-w450.webp 450w, /assets/img/borsa-04.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <source type="image/jpeg" srcset="/assets/img/borsa-04-w450.jpg 450w, /assets/img/borsa-04.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-04.jpg" alt="Cacao: pouch capiente in filato cioccolato opaco, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
+            <picture>
+              <source type="image/webp" srcset="/assets/img/borsa-04b-w450.webp 450w, /assets/img/borsa-04b.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <source type="image/jpeg" srcset="/assets/img/borsa-04b-w450.jpg 450w, /assets/img/borsa-04b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
+              <img src="/assets/img/borsa-04b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
+            </picture>
             <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-04.jpg" data-caption="Cacao — cioccolato opaco, la misura che ti porti ovunque" aria-label="Ingrandisci la foto della borsa Cacao">
               <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
             </button>
@@ -369,7 +410,10 @@
   <!-- ===================== Banner ===================== -->
   <section class="banner" aria-labelledby="banner-title">
     <div class="banner__media" data-parallax="0.12">
-      <img src="/assets/img/atelier.jpg" alt="Dettaglio della borsa Sera: filato cioccolato con lurex dorato, alla luce naturale" width="1920" height="1080" loading="lazy" decoding="async">
+      <picture>
+        <source type="image/jpeg" srcset="/assets/img/atelier-w960.jpg 960w, /assets/img/atelier.jpg 1920w" sizes="100vw">
+        <img src="/assets/img/atelier.jpg" alt="Dettaglio della borsa Sera: filato cioccolato con lurex dorato, alla luce naturale" width="1920" height="1080" loading="lazy" decoding="async">
+      </picture>
     </div>
     <div class="banner__inner">
       <h2 class="banner__title" id="banner-title" data-reveal>Quando un pezzo finisce, finisce</h2>
@@ -397,7 +441,10 @@
       <ol class="steps__list" role="list">
         <li class="step" data-reveal>
           <div class="step__media">
-            <img src="/assets/img/step-01.jpg" alt="Dettaglio ravvicinato del filato tortora della borsa Nuvola" width="1200" height="900" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/jpeg" srcset="/assets/img/step-01-w600.jpg 600w, /assets/img/step-01.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
+              <img src="/assets/img/step-01.jpg" alt="Dettaglio ravvicinato del filato tortora della borsa Nuvola" width="1200" height="900" loading="lazy" decoding="async">
+            </picture>
           </div>
           <div class="step__body">
             <p class="step__index"><span class="step__num">1</span><span class="step__label">Scegliere</span></p>
@@ -409,7 +456,10 @@
 
         <li class="step" data-reveal>
           <div class="step__media">
-            <img src="/assets/img/step-02.jpg" alt="Dettaglio del punto a uncinetto sul filato cioccolato della borsa Cacao" width="1200" height="900" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/jpeg" srcset="/assets/img/step-02-w600.jpg 600w, /assets/img/step-02.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
+              <img src="/assets/img/step-02.jpg" alt="Dettaglio del punto a uncinetto sul filato cioccolato della borsa Cacao" width="1200" height="900" loading="lazy" decoding="async">
+            </picture>
           </div>
           <div class="step__body">
             <p class="step__index"><span class="step__num">2</span><span class="step__label">Intrecciare</span></p>
@@ -421,7 +471,11 @@
 
         <li class="step" data-reveal>
           <div class="step__media">
-            <img src="/assets/img/step-03.jpg" alt="Il manico rigido e le tre perle cucite a mano della borsa Perla" width="1200" height="900" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/webp" srcset="/assets/img/step-03-w600.webp 600w, /assets/img/step-03.webp 1200w" sizes="(min-width: 64em) 50vw, 95vw">
+              <source type="image/jpeg" srcset="/assets/img/step-03-w600.jpg 600w, /assets/img/step-03.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
+              <img src="/assets/img/step-03.jpg" alt="Il manico rigido e le tre perle cucite a mano della borsa Perla" width="1200" height="900" loading="lazy" decoding="async">
+            </picture>
           </div>
           <div class="step__body">
             <p class="step__index"><span class="step__num">3</span><span class="step__label">Rifinire</span></p>
@@ -433,7 +487,10 @@
 
         <li class="step" data-reveal>
           <div class="step__media">
-            <img src="/assets/img/step-04.jpg" alt="La borsa Sera finita, appoggiata su un muretto davanti a delle foglie" width="1200" height="900" loading="lazy" decoding="async">
+            <picture>
+              <source type="image/jpeg" srcset="/assets/img/step-04-w600.jpg 600w, /assets/img/step-04.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
+              <img src="/assets/img/step-04.jpg" alt="La borsa Sera finita, appoggiata su un muretto davanti a delle foglie" width="1200" height="900" loading="lazy" decoding="async">
+            </picture>
           </div>
           <div class="step__body">
             <p class="step__index"><span class="step__num">4</span><span class="step__label">Custodire</span></p>
@@ -459,22 +516,45 @@
 
       <div class="gallery__grid" data-stagger>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-01.jpg" data-caption="Nuvola — il bordo intrecciato" aria-label="Ingrandisci: il bordo intrecciato della borsa Nuvola">
-          <img src="/assets/img/gallery-01.jpg" alt="Il bordo intrecciato della borsa Nuvola visto da vicino" width="800" height="800" loading="lazy" decoding="async">
+          <picture>
+            <source type="image/webp" srcset="/assets/img/gallery-01-w400.webp 400w, /assets/img/gallery-01.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <source type="image/jpeg" srcset="/assets/img/gallery-01-w400.jpg 400w, /assets/img/gallery-01.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <img src="/assets/img/gallery-01.jpg" alt="Il bordo intrecciato della borsa Nuvola visto da vicino" width="800" height="800" loading="lazy" decoding="async">
+          </picture>
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-02.jpg" data-caption="Perla — il manico rigido" aria-label="Ingrandisci: il manico rigido della borsa Perla">
-          <img src="/assets/img/gallery-02.jpg" alt="Il manico rigido della borsa Perla, avvolto nel filato" width="800" height="800" loading="lazy" decoding="async">
+          <picture>
+            <source type="image/webp" srcset="/assets/img/gallery-02-w400.webp 400w, /assets/img/gallery-02.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <source type="image/jpeg" srcset="/assets/img/gallery-02-w400.jpg 400w, /assets/img/gallery-02.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <img src="/assets/img/gallery-02.jpg" alt="Il manico rigido della borsa Perla, avvolto nel filato" width="800" height="800" loading="lazy" decoding="async">
+          </picture>
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-03.jpg" data-caption="Sera — il lurex alla luce" aria-label="Ingrandisci: il filo lurex della borsa Sera">
-          <img src="/assets/img/gallery-03.jpg" alt="Il filo lurex dorato della borsa Sera che riflette la luce" width="800" height="800" loading="lazy" decoding="async">
+          <picture>
+            <source type="image/jpeg" srcset="/assets/img/gallery-03-w400.jpg 400w, /assets/img/gallery-03.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <img src="/assets/img/gallery-03.jpg" alt="Il filo lurex dorato della borsa Sera che riflette la luce" width="800" height="800" loading="lazy" decoding="async">
+          </picture>
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-04.jpg" data-caption="Cacao — la trama piena" aria-label="Ingrandisci: la trama della borsa Cacao">
-          <img src="/assets/img/gallery-04.jpg" alt="La trama fitta del filato cioccolato della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">
+          <picture>
+            <source type="image/webp" srcset="/assets/img/gallery-04-w400.webp 400w, /assets/img/gallery-04.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <source type="image/jpeg" srcset="/assets/img/gallery-04-w400.jpg 400w, /assets/img/gallery-04.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <img src="/assets/img/gallery-04.jpg" alt="La trama fitta del filato cioccolato della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">
+          </picture>
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-05.jpg" data-caption="Nuvola — l'apertura morbida" aria-label="Ingrandisci: l'apertura della borsa Nuvola">
-          <img src="/assets/img/gallery-05.jpg" alt="L'apertura morbida della borsa Nuvola vista dall'alto" width="800" height="800" loading="lazy" decoding="async">
+          <picture>
+            <source type="image/webp" srcset="/assets/img/gallery-05-w400.webp 400w, /assets/img/gallery-05.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <source type="image/jpeg" srcset="/assets/img/gallery-05-w400.jpg 400w, /assets/img/gallery-05.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <img src="/assets/img/gallery-05.jpg" alt="L'apertura morbida della borsa Nuvola vista dall'alto" width="800" height="800" loading="lazy" decoding="async">
+          </picture>
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-06.jpg" data-caption="Cacao — il fondo" aria-label="Ingrandisci: il fondo della borsa Cacao">
-          <img src="/assets/img/gallery-06.jpg" alt="Il fondo lavorato a mano della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">
+          <picture>
+            <source type="image/webp" srcset="/assets/img/gallery-06-w400.webp 400w, /assets/img/gallery-06.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <source type="image/jpeg" srcset="/assets/img/gallery-06-w400.jpg 400w, /assets/img/gallery-06.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
+            <img src="/assets/img/gallery-06.jpg" alt="Il fondo lavorato a mano della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">
+          </picture>
         </button>
       </div>
     </div>

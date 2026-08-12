@@ -238,9 +238,21 @@
     if (!layers.length && !heroContent && !heroLayers.length) { return; }
     if (prefersReduced()) { return; }
 
+    // La parallasse dell'hero vive solo da computer: passando al telefono i
+    // piani vanno riportati a zero, altrimenti resterebbero dove si trovavano.
+    var heroDesktop = window.matchMedia("(min-width: 62em)");
+
+    function azzeraPiani() {
+      heroLayers.forEach(function (l) { l.el.style.transform = ""; });
+    }
+
     var vh = window.innerHeight;
     var onResize = function () { vh = window.innerHeight; };
     window.addEventListener("resize", onResize, { passive: true });
+
+    var onModo = function (e) { if (!e.matches) { azzeraPiani(); } };
+    if (typeof heroDesktop.addEventListener === "function") { heroDesktop.addEventListener("change", onModo); }
+    else if (typeof heroDesktop.addListener === "function") { heroDesktop.addListener(onModo); }
 
     var update = onScrollFrame(function () {
       var y = window.scrollY;
@@ -257,7 +269,8 @@
       // i quattro piani dell'hero: più il piano è lontano, più strada percorre.
       // Lo spostamento è una percentuale dell'altezza dell'hero, così la
       // profondità resta la stessa su ogni schermo.
-      if (heroLayers.length) {
+      // Solo da computer: sul telefono l'effetto costa e rende poco.
+      if (heroLayers.length && heroDesktop.matches) {
         var hh = heroHost.offsetHeight || vh;
         var hp = Math.min(Math.max(y / hh, 0), 1);
         heroLayers.forEach(function (l) {
@@ -409,8 +422,11 @@
         var raw = window.localStorage.getItem(STORAGE_KEY);
         if (!raw) { return null; }
         var v = JSON.parse(raw);
-        if (!v || v.version !== VERSIONE) { return null; }
+        if (!v || typeof v !== "object" || v.version !== VERSIONE) { return null; }
         if (v.expiresAt && new Date(v.expiresAt).getTime() < Date.now()) { return null; }
+        // il valore arriva da una memoria modificabile a mano: si accetta solo
+        // un vero booleano, mai un contenuto qualsiasi che "sembri" un sì
+        v.analytics = v.analytics === true;
         return v;
       } catch (err) { return null; }
     }
