@@ -13,8 +13,8 @@ import hashlib
 import re
 import sys
 
-HTML = "index.html"
-HEADERS = "_headers"
+HTML = "public/index.html"
+HEADERS = "public/_headers"
 
 html = open(HTML, encoding="utf-8").read()
 match = re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)

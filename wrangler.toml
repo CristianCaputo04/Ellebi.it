@@ -1,15 +1,23 @@
+# Configurazione Cloudflare Workers — sito vetrina ELLEBI.
+#
+# Il sito non ha codice lato server: Cloudflare pubblica direttamente i file
+# della cartella "public" (funzione Workers Static Assets). Tutto ciò che sta
+# fuori da "public" — README, script di servizio, cronologia Git — resta
+# privato e non finisce online.
+#
+# I file public/_headers e public/_redirects vengono letti in automatico.
+
 name = "ellebi-it"
-type = "javascript"
-main = "src/index.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2026-08-11"
 
-[build]
-command = ""
-watch_paths = ["assets/**/*", "*.html", "*.txt", "*.xml", "*.webmanifest", "*.svg"]
+[assets]
+directory = "./public"
 
-[env.production]
-name = "ellebi-it-prod"
-routes = [
-  { pattern = "ellebi.it/*", zone_name = "ellebi.it" },
-  { pattern = "www.ellebi.it/*", zone_name = "ellebi.it" }
-]
+# Un indirizzo inesistente mostra la pagina 404 del sito
+not_found_handling = "404-page"
+
+# /privacy pubblica privacy.html senza mostrare l'estensione
+html_handling = "auto-trailing-slash"
+
+[observability]
+enabled = true

@@ -5,36 +5,43 @@ niente carrello, niente prezzi, niente moduli d'ordine. Le chiamate all'azione
 portano al profilo Vinted, dove stanno i pezzi ancora disponibili.
 
 Nessun framework, nessuna dipendenza da installare: HTML, CSS e JavaScript scritti
-a mano. Si pubblica su Cloudflare Pages a ogni commit.
+a mano. Si pubblica su Cloudflare Workers a ogni commit.
 
 ---
 
 ## 1. Struttura del progetto
 
+**Va online solo il contenuto di `public/`.** Tutto il resto — README, script di
+servizio, cronologia Git — resta privato.
+
 ```
 .
-├── index.html              pagina principale
-├── privacy.html            informativa privacy
-├── cookie.html             cookie policy + riepilogo della scelta attiva
-├── accessibilita.html      dichiarazione di accessibilità
-├── 404.html                pagina di errore
-├── _headers                intestazioni di sicurezza e cache (Cloudflare Pages)
-├── _redirects              scorciatoie e reindirizzamenti (Cloudflare Pages)
-├── robots.txt              regole per i motori di ricerca
-├── sitemap.xml             mappa del sito
-├── site.webmanifest        icone e nome per l'installazione su telefono
-├── favicon.svg             icona della scheda del browser
-├── .well-known/
-│   └── security.txt        contatto per segnalazioni di sicurezza
-├── tools/
-│   └── aggiorna-csp-hash.py  rigenera l'hash CSP del blocco dati strutturati
-└── assets/
-    ├── css/fonts.css       font self-hosted (@font-face)
-    ├── css/style.css       tutto lo stile del sito
-    ├── js/head.js          micro-script: segnala che JavaScript è attivo
-    ├── js/main.js          animazioni, menu, lightbox, consenso cookie
-    ├── fonts/              Jost e Cormorant Garamond in formato woff2
-    └── img/                foto delle borse, icone, anteprima social
+├── public/                 ← QUESTO è il sito pubblicato
+│   ├── index.html          pagina principale
+│   ├── privacy.html        informativa privacy
+│   ├── cookie.html         cookie policy + riepilogo della scelta attiva
+│   ├── accessibilita.html  dichiarazione di accessibilità
+│   ├── 404.html            pagina di errore
+│   ├── _headers            intestazioni di sicurezza e cache
+│   ├── _redirects          scorciatoie e reindirizzamenti
+│   ├── robots.txt          regole per i motori di ricerca
+│   ├── sitemap.xml         mappa del sito
+│   ├── site.webmanifest    icone e nome per l'installazione su telefono
+│   ├── favicon.svg         icona della scheda del browser
+│   ├── .well-known/
+│   │   └── security.txt    contatto per segnalazioni di sicurezza
+│   └── assets/
+│       ├── css/fonts.css   font self-hosted (@font-face)
+│       ├── css/style.css   tutto lo stile del sito
+│       ├── js/head.js      micro-script: segnala che JavaScript è attivo
+│       ├── js/main.js      animazioni, menu, lightbox, consenso cookie
+│       ├── fonts/          Jost e Cormorant Garamond in formato woff2
+│       └── img/            foto delle borse, icone, anteprima social
+│
+├── wrangler.toml           configurazione della pubblicazione su Cloudflare
+├── .github/workflows/      pubblicazione automatica a ogni commit
+└── tools/
+    └── aggiorna-csp-hash.py  rigenera l'hash CSP del blocco dati strutturati
 ```
 
 ---
@@ -50,7 +57,7 @@ I nomi sono usati nel sito, nei testi alternativi e nei dati strutturati.
 | **Sera** | Pouch cioccolato con filo lurex | `borsa-03.jpg` |
 | **Cacao** | Pouch capiente in cioccolato opaco | `borsa-04.jpg` |
 
-Per rinominare una borsa vanno aggiornati tre punti in `index.html`: la scheda
+Per rinominare una borsa vanno aggiornati tre punti in `public/index.html`: la scheda
 nella sezione “Collezione” (nome, testo `alt`, didascalia della lightbox), i testi
 alternativi nelle altre sezioni e il blocco `application/ld+json` nell'`<head>`
 (poi ricalcolare l'hash, vedi punto 4).
@@ -87,14 +94,14 @@ nell'HTML: è quello che leggono i lettori di schermo e i motori di ricerca.
 
 | Da sostituire | Dove | Nota |
 |---|---|---|
-| `info@ellebi.it` | tutte le pagine, `.well-known/security.txt` | l'indirizzo e-mail pubblico |
-| `[nome e cognome del titolare]`, `[indirizzo completo]` | `privacy.html`, `cookie.html` | obbligatori per il GDPR |
+| `info@ellebi.it` | tutte le pagine, `public/.well-known/security.txt` | l'indirizzo e-mail pubblico |
+| `[nome e cognome del titolare]`, `[indirizzo completo]` | `public/privacy.html`, `public/cookie.html` | obbligatori per il GDPR |
 | `https://ellebi.it/` | meta tag, `sitemap.xml`, `robots.txt` | se il dominio finale è diverso |
 
 Profili collegati (già corretti nel sito): Vinted
 `https://www.vinted.it/member/65695128-pinkstraw7` e Instagram `@ellebi.it`.
 
-Se modifichi il blocco `application/ld+json` in `index.html`, esegui poi:
+Se modifichi il blocco `application/ld+json` in `public/index.html`, esegui poi:
 
 ```bash
 python3 tools/aggiorna-csp-hash.py
@@ -105,22 +112,42 @@ blocca quel blocco di dati strutturati).
 
 ---
 
-## 5. Pubblicazione su Cloudflare Pages
+## 5. Pubblicazione su Cloudflare Workers
 
-Il sito è statico: **non serve alcun comando di build**.
+Il sito è statico: **non serve alcun comando di build**. Cloudflare pubblica
+direttamente i file di `public/`, secondo `wrangler.toml`.
 
-1. Cloudflare Dashboard → **Workers & Pages** → *Create* → **Pages** → *Connect to Git*.
-2. Scegli il repository `CristianCaputo04/Ellebi.it` e il ramo da pubblicare.
-3. Impostazioni di build:
-   - *Framework preset*: **None**
-   - *Build command*: **vuoto**
-   - *Build output directory*: **`/`** (la radice del repository)
-4. *Save and Deploy*. Da qui in poi ogni commit sul ramo pubblica una nuova versione.
-5. **Custom domains** → aggiungi `ellebi.it` e `www.ellebi.it`; se il dominio è già
-   su Cloudflare i record DNS vengono creati in automatico.
+La pubblicazione avviene da sola: **ogni commit sul ramo `main` manda il sito
+online**, tramite il workflow `.github/workflows/deploy.yml`.
 
-I file `_headers` e `_redirects` vengono letti da Cloudflare Pages al momento del
-deploy: non vanno reinseriti come regole del dominio.
+Perché funzioni servono due segreti nel repository GitHub
+(*Settings → Secrets and variables → Actions*):
+
+| Nome del segreto | Dove si trova su Cloudflare |
+|---|---|
+| `CLOUDFLARE_ACCOUNT_ID` | Workers & Pages → colonna di destra, *Account ID* |
+| `CLOUDFLARE_API_TOKEN` | My Profile → API Tokens → *Create Token* → modello **Edit Cloudflare Workers** |
+
+Per pubblicare a mano, dalla cartella principale:
+
+```bash
+npx wrangler@4 deploy
+```
+
+Per controllare la configurazione senza pubblicare nulla:
+
+```bash
+npx wrangler@4 deploy --dry-run
+```
+
+I file `public/_headers` e `public/_redirects` vengono letti da Cloudflare al
+momento della pubblicazione: non vanno reinseriti come regole del dominio.
+
+### Collegare il dominio
+
+Cloudflare Dashboard → il Worker `ellebi-it` → **Domini** (*Custom Domains*) →
+aggiungi `ellebi.it` e `www.ellebi.it`. Se il dominio è già su Cloudflare, i
+record DNS e il certificato HTTPS vengono creati in automatico.
 
 ### Statistiche di visita (facoltative)
 
@@ -128,7 +155,7 @@ Il sito non carica alcuno strumento di analisi. Per attivare Cloudflare Web
 Analytics (senza cookie):
 
 1. Cloudflare Dashboard → **Web Analytics** → aggiungi il sito e copia il token.
-2. In `assets/js/main.js` cerca `var ANALYTICS_TOKEN = "";` e incolla il token.
+2. In `public/assets/js/main.js` cerca `var ANALYTICS_TOKEN = "";` e incolla il token.
 
 Lo script parte **solo dopo il consenso** espresso nel banner. Lasciando il valore
 vuoto, non parte alcuna richiesta di statistica.
@@ -189,11 +216,15 @@ lightbox.
 
 ## 8. Provare il sito in locale
 
+Con lo stesso motore usato in produzione (legge anche `_headers` e `_redirects`):
+
 ```bash
-python3 -m http.server 8080
-# poi apri http://localhost:8080
+npx wrangler@4 dev
 ```
 
-Per provarlo con le intestazioni di sicurezza della produzione serve un server che
-legga `_headers`; in alternativa si controlla sull'anteprima di Cloudflare Pages,
-che le applica già.
+Oppure, per una semplice occhiata senza installare nulla:
+
+```bash
+cd public && python3 -m http.server 8080
+# poi apri http://localhost:8080
+```
