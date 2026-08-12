@@ -143,11 +143,39 @@ npx wrangler@4 deploy --dry-run
 I file `public/_headers` e `public/_redirects` vengono letti da Cloudflare al
 momento della pubblicazione: non vanno reinseriti come regole del dominio.
 
-### Collegare il dominio
+### Indirizzi del sito
 
-Cloudflare Dashboard → il Worker `ellebi-it` → **Domini** (*Custom Domains*) →
-aggiungi `ellebi.it` e `www.ellebi.it`. Se il dominio è già su Cloudflare, i
-record DNS e il certificato HTTPS vengono creati in automatico.
+| Indirizzo | A cosa serve |
+|---|---|
+| `ellebi-it.cristiancaputo04.workers.dev` | indirizzo tecnico, creato da Cloudflare |
+| `ellebi.it.capfyweb.com` | anteprima, per vedere e mostrare il sito |
+| `ellebi.it` | **indirizzo definitivo, ancora da collegare** |
+
+Le anteprime non vengono indicizzate dai motori di ricerca: ogni pagina dichiara
+`https://ellebi.it/` come proprio indirizzo canonico, quindi Google sa che quelle
+non sono la versione buona. Per questo i canonical **non vanno cambiati** finché
+l'indirizzo definitivo resta `ellebi.it`.
+
+### Collegare ellebi.it
+
+Oggi `ellebi.it` è registrato ma punta altrove e non serve alcun sito. Per
+portarlo qui:
+
+1. Cloudflare Dashboard → **Add a domain** → `ellebi.it` (piano Free).
+2. Cloudflare mostra due nameserver: vanno inseriti **presso il registrar dove
+   ellebi.it è registrato**, al posto di quelli attuali. La propagazione
+   richiede da qualche ora a un giorno.
+3. A zona attiva: Worker `ellebi-it` → **Domini** → *Aggiungi dominio* →
+   `ellebi.it`, poi di nuovo con `www.ellebi.it`. Il certificato HTTPS viene
+   emesso da solo.
+4. Infine, per spegnere l'indirizzo `workers.dev`, aggiungi a `wrangler.toml`:
+
+   ```toml
+   workers_dev = false
+   ```
+
+Nessuno di questi passaggi tocca `capfyweb.com`: i domini personalizzati valgono
+per il singolo Worker.
 
 ### Statistiche di visita (facoltative)
 
