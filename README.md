@@ -90,13 +90,22 @@ nell'HTML: è quello che leggono i lettori di schermo e i motori di ricerca.
 
 ---
 
-## 4. Testi e dati da completare prima di pubblicare
+## 4. Dati del titolare
 
-| Da sostituire | Dove | Nota |
-|---|---|---|
-| `info@ellebi.it` | tutte le pagine, `public/.well-known/security.txt` | l'indirizzo e-mail pubblico |
-| `[nome e cognome del titolare]`, `[indirizzo completo]` | `public/privacy.html`, `public/cookie.html` | obbligatori per il GDPR |
-| `https://ellebi.it/` | meta tag, `sitemap.xml`, `robots.txt` | se il dominio finale è diverso |
+Già inseriti nel sito:
+
+| Dato | Valore |
+|---|---|
+| Titolare del trattamento | ELLEBI — Lucy Basilicata |
+| E-mail pubblica | `ellebi.style@gmail.com` |
+
+L'**indirizzo postale non è pubblicato**. Il GDPR (art. 13) chiede identità e
+recapiti del titolare, non necessariamente l'indirizzo di casa: la privacy policy
+dichiara che viene comunicato a chi lo richiede via e-mail. Se in futuro ci fosse
+una sede o una partita IVA, conviene indicarla per esteso in `public/privacy.html`.
+
+Resta da aggiornare solo se il dominio finale cambiasse: `https://ellebi.it/`
+compare nei meta tag, in `sitemap.xml`, in `robots.txt` e nei dati strutturati.
 
 Profili collegati (già corretti nel sito): Vinted
 `https://www.vinted.it/member/65695128-pinkstraw7` e Instagram `@ellebi.it`.
