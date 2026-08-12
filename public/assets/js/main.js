@@ -92,16 +92,46 @@
       document.addEventListener("keydown", onKeydown);
     }
 
+    // Forme d'ambiente: affiorano dietro la voce puntata dal mouse o
+    // raggiunta con il tabulatore, così l'effetto non è solo per chi ha un
+    // dispositivo di puntamento.
+    var shapes = $$(".menu__shape", menu);
+
+    function clearShapes() {
+      shapes.forEach(function (s) { s.classList.remove("is-active"); });
+    }
+
+    $$(".menu__item[data-shape]", menu).forEach(function (item) {
+      var wanted = item.getAttribute("data-shape");
+      var target = null;
+      shapes.forEach(function (s) {
+        if (s.getAttribute("data-shape") === wanted) { target = s; }
+      });
+      if (!target) { return; }
+
+      var show = function () { clearShapes(); target.classList.add("is-active"); };
+      item.addEventListener("mouseenter", show);
+      item.addEventListener("mouseleave", clearShapes);
+
+      var link = $("a", item);
+      if (link) {
+        link.addEventListener("focus", show);
+        link.addEventListener("blur", clearShapes);
+      }
+    });
+
     function close() {
+      clearShapes();
       menu.classList.remove("is-open");
       burger.setAttribute("aria-expanded", "false");
       burger.setAttribute("aria-label", "Apri il menu");
       document.body.classList.remove("is-locked");
       if (headerEl) { headerEl.classList.remove("is-over-menu"); }
       document.removeEventListener("keydown", onKeydown);
+      // i pannelli escono uno dopo l'altro: si nasconde a uscita finita
       window.setTimeout(function () {
         if (!menu.classList.contains("is-open")) { menu.hidden = true; }
-      }, 700);
+      }, 900);
       if (lastFocused && typeof lastFocused.focus === "function") { lastFocused.focus(); }
     }
 
@@ -201,7 +231,11 @@
   (function parallax() {
     var layers = $$("[data-parallax]");
     var heroContent = $("[data-hero-content]");
-    if (!layers.length && !heroContent) { return; }
+    var heroHost = $("[data-hero-layers]");
+    var heroLayers = heroHost ? $$("[data-hero-layer]", heroHost).map(function (el) {
+      return { el: el, shift: parseFloat(el.getAttribute("data-hero-shift")) || 0 };
+    }) : [];
+    if (!layers.length && !heroContent && !heroLayers.length) { return; }
     if (prefersReduced()) { return; }
 
     var vh = window.innerHeight;
@@ -219,6 +253,18 @@
         var offset = (rect.top - vh / 2) * -speed;
         layer.style.transform = "translate3d(0," + offset.toFixed(2) + "px,0)";
       });
+
+      // i quattro piani dell'hero: più il piano è lontano, più strada percorre.
+      // Lo spostamento è una percentuale dell'altezza dell'hero, così la
+      // profondità resta la stessa su ogni schermo.
+      if (heroLayers.length) {
+        var hh = heroHost.offsetHeight || vh;
+        var hp = Math.min(Math.max(y / hh, 0), 1);
+        heroLayers.forEach(function (l) {
+          var px = hp * l.shift * hh / 100;
+          l.el.style.transform = "translate3d(0," + px.toFixed(2) + "px,0)";
+        });
+      }
 
       // il testo dell'hero sale e sfuma mentre si scorre
       if (heroContent) {

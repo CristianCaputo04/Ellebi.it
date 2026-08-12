@@ -1817,6 +1817,202 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 }
 
 /* ---------- 23. Preferenze utente --------------------------------------- */
+/* ---------- 20. Hero a piani e menu cinetico ---------------------------- */
+/* Adattamento in JavaScript nativo di due effetti pensati per GSAP + Lenis.
+   Stessa meccanica, nessuna libreria: il peso della pagina non cambia e la
+   Content-Security-Policy resta chiusa agli script esterni. */
+
+/* --- Hero: quattro piani che scorrono a velocità diverse ---------------- */
+/* I piani di sfondo sono più alti dell'hero: scorrendo verso il basso non
+   scoprono mai il bordo superiore. */
+.hero__media,
+.hero__wash {
+  inset: -12% 0;
+}
+
+.hero::after { content: none; }
+
+.hero__wash {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  will-change: transform;
+  background: linear-gradient(to bottom,
+    rgba(251, 247, 244, 0.94) 0%,
+    rgba(251, 247, 244, 0.72) 48%,
+    rgba(251, 247, 244, 0.18) 100%);
+}
+
+/* foschia in primo piano: il piano più vicino, quindi il più lento */
+.hero__fore {
+  position: absolute;
+  inset: auto 0 -6% 0;
+  height: 38%;
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform;
+  background:
+    radial-gradient(58% 130% at 14% 108%, rgba(246, 221, 208, 0.72) 0%, rgba(246, 221, 208, 0) 68%),
+    linear-gradient(to top, rgba(251, 247, 244, 0.72) 0%, rgba(251, 247, 244, 0) 100%);
+  filter: blur(7px);
+}
+
+.hero__inner { z-index: 1; will-change: transform; }
+
+@media (min-width: 48em) {
+  .hero__wash {
+    background:
+      linear-gradient(to right,
+        rgba(251, 247, 244, 0.95) 0%,
+        rgba(251, 247, 244, 0.82) 34%,
+        rgba(251, 247, 244, 0.25) 62%,
+        rgba(251, 247, 244, 0) 82%),
+      linear-gradient(to bottom, rgba(251, 247, 244, 0.5) 0%, rgba(251, 247, 244, 0) 34%);
+  }
+}
+
+/* --- Pulsante del menu: le parole si scambiano, l'icona ruota ----------- */
+.burger {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.55rem;
+  width: auto;
+  min-height: 44px;
+  padding-inline: 0.2rem;
+}
+
+.burger__label {
+  display: block;
+  overflow: hidden;
+  height: 1.2em;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.burger__word {
+  display: block;
+  height: 1.2em;
+  line-height: 1.2em;
+  transition: transform 0.55s var(--ease-out-expo);
+}
+
+.burger[aria-expanded="true"] .burger__word { transform: translateY(-100%); }
+
+.burger__icon {
+  display: block;
+  width: 13px;
+  height: 13px;
+  transition: transform 0.65s var(--ease-out-expo);
+}
+
+.burger__icon svg { display: block; width: 100%; height: 100%; }
+
+.burger[aria-expanded="true"] .burger__icon { transform: rotate(315deg); }
+
+/* il menu a tutta pagina ora è raggiungibile a ogni larghezza */
+@media (min-width: 62em) {
+  .burger { display: inline-flex; }
+  .menu { display: grid; }
+  .header__inner > .header__nav:not(.header__nav--end) { display: none; }
+}
+
+/* --- Menu: pannelli sfalsati al posto del taglio ------------------------ */
+.menu {
+  background: transparent;
+  clip-path: none;
+  overflow: hidden;
+  /* resta visibile finché l'ultimo pannello non è uscito */
+  transition: visibility 0s linear 0.85s;
+}
+
+.menu.is-open {
+  clip-path: none;
+  transition: visibility 0s;
+}
+
+.menu__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.menu__panel {
+  position: absolute;
+  inset: 0;
+  transform: translateX(101%);
+  transition: transform 0.575s var(--ease-out-expo);
+}
+
+.menu__panel:nth-child(1) { background: var(--c-terracotta); }
+.menu__panel:nth-child(2) { background: var(--c-blush); transition-delay: 0.12s; }
+.menu__panel:nth-child(3) { background: var(--c-blush-soft); transition-delay: 0.24s; }
+
+.menu.is-open .menu__panel { transform: translateX(0); }
+
+/* --- Forme che affiorano dietro la voce puntata ------------------------- */
+.menu__shapes {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.menu__shape {
+  position: absolute;
+  top: 50%;
+  right: -4%;
+  width: min(64vw, 26rem);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  color: var(--c-espresso);
+  opacity: 0;
+  transition: opacity 0.32s var(--ease);
+}
+
+.menu__shape.is-active { opacity: 1; }
+
+.menu__shape-el {
+  opacity: 0;
+  transform: scale(0.5) rotate(-10deg);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition:
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.5s var(--ease);
+}
+
+.menu__shape.is-active .menu__shape-el {
+  opacity: 0.14;
+  transform: scale(1) rotate(0deg);
+}
+
+.menu__shape-el:nth-child(2) { transition-delay: 0.07s; }
+.menu__shape-el:nth-child(3) { transition-delay: 0.14s; }
+.menu__shape-el:nth-child(4) { transition-delay: 0.21s; }
+.menu__shape-el:nth-child(5) { transition-delay: 0.28s; }
+.menu__shape-el:nth-child(6) { transition-delay: 0.35s; }
+.menu__shape-el:nth-child(7) { transition-delay: 0.42s; }
+.menu__shape-el:nth-child(8) { transition-delay: 0.49s; }
+
+/* --- Voci: entrano dal basso ruotando ---------------------------------- */
+.menu__link {
+  transform: translateY(140%) rotate(6deg);
+  transform-origin: 0% 100%;
+}
+
+.menu.is-open .menu__link { transform: translateY(0) rotate(0deg); }
+
+/* partono dopo i pannelli, una dopo l'altra */
+.menu__item:nth-child(1) .menu__link { transition-delay: 0.35s; }
+.menu__item:nth-child(2) .menu__link { transition-delay: 0.40s; }
+.menu__item:nth-child(3) .menu__link { transition-delay: 0.45s; }
+.menu__item:nth-child(4) .menu__link { transition-delay: 0.50s; }
+.menu__item:nth-child(5) .menu__link { transition-delay: 0.55s; }
+
+.menu__foot { transition-delay: 0.6s; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 
@@ -1831,13 +2027,20 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 
   [data-reveal],
   .philosophy__title .word > span,
-  .menu__link {
+  .menu__link,
+  .menu__panel {
     opacity: 1 !important;
     transform: none !important;
   }
 
   .hero__media,
+  .hero__wash,
+  .hero__inner,
+  .hero__fore,
   .banner__media { transform: none !important; }
+
+  /* le forme d'ambiente non compaiono affatto */
+  .menu__shapes { display: none !important; }
 
   .diagram__lines path { stroke-dashoffset: 0 !important; }
 }

@@ -114,22 +114,69 @@
     </nav>
 
     <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Apri il menu">
-      <span class="burger__line" aria-hidden="true"></span>
-      <span class="burger__line" aria-hidden="true"></span>
-      <span class="burger__line" aria-hidden="true"></span>
+      <span class="burger__label" aria-hidden="true">
+        <span class="burger__word">Menu</span>
+        <span class="burger__word">Chiudi</span>
+      </span>
+      <span class="burger__icon" aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" focusable="false">
+          <path d="M7.333 16V0h1.334v16H7.333Z" fill="currentColor"></path>
+          <path d="M16 8.667H0V7.333h16v1.334Z" fill="currentColor"></path>
+        </svg>
+      </span>
     </button>
   </div>
 </header>
 
 <!-- ===================== Menu mobile ===================== -->
 <div class="menu" id="menu" hidden>
-  <nav aria-label="Navigazione mobile">
+  <!-- tre pannelli che entrano da destra uno dopo l'altro -->
+  <div class="menu__bg" aria-hidden="true">
+    <span class="menu__panel"></span>
+    <span class="menu__panel"></span>
+    <span class="menu__panel"></span>
+  </div>
+
+  <!-- forme che affiorano dietro la voce sotto il puntatore -->
+  <div class="menu__shapes" aria-hidden="true">
+    <svg class="menu__shape" data-shape="1" viewBox="0 0 400 400" fill="none">
+      <circle class="menu__shape-el" fill="currentColor" cx="86" cy="118" r="42"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="298" cy="84" r="62"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="198" cy="298" r="82"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="342" cy="282" r="30"></circle>
+    </svg>
+    <svg class="menu__shape" data-shape="2" viewBox="0 0 400 400" fill="none">
+      <path class="menu__shape-el" stroke="currentColor" fill="none" d="M0 196 Q100 96, 200 196 T400 196" stroke-width="58" fill="none"></path>
+      <path class="menu__shape-el" stroke="currentColor" fill="none" d="M0 282 Q100 182, 200 282 T400 282" stroke-width="38" fill="none"></path>
+    </svg>
+    <svg class="menu__shape" data-shape="3" viewBox="0 0 400 400" fill="none">
+      <circle class="menu__shape-el" fill="currentColor" cx="70" cy="96" r="9"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="170" cy="96" r="9"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="270" cy="96" r="9"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="120" cy="196" r="13"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="220" cy="196" r="13"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="320" cy="196" r="13"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="170" cy="300" r="10"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="270" cy="300" r="10"></circle>
+    </svg>
+    <svg class="menu__shape" data-shape="4" viewBox="0 0 400 400" fill="none">
+      <path class="menu__shape-el" fill="currentColor" d="M104 104 Q154 54, 204 104 Q254 154, 204 204 Q154 254, 104 204 Q54 154, 104 104"></path>
+      <path class="menu__shape-el" fill="currentColor" d="M244 206 Q294 156, 344 206 Q394 256, 344 306 Q294 356, 244 306 Q194 256, 244 206"></path>
+    </svg>
+    <svg class="menu__shape" data-shape="5" viewBox="0 0 400 400" fill="none">
+      <line class="menu__shape-el" stroke="currentColor" x1="0" y1="104" x2="300" y2="400" stroke-width="30"></line>
+      <line class="menu__shape-el" stroke="currentColor" x1="104" y1="0" x2="400" y2="296" stroke-width="24"></line>
+      <line class="menu__shape-el" stroke="currentColor" x1="204" y1="0" x2="400" y2="196" stroke-width="18"></line>
+    </svg>
+  </div>
+
+  <nav aria-label="Navigazione del sito">
     <ul class="menu__list" role="list">
-      <li class="menu__item"><a class="menu__link" href="#collezione">Collezione</a></li>
-      <li class="menu__item"><a class="menu__link" href="#filosofia">Perché a mano</a></li>
-      <li class="menu__item"><a class="menu__link" href="#lavorazione">Lavorazione</a></li>
-      <li class="menu__item"><a class="menu__link" href="#dettagli">Dettagli</a></li>
-      <li class="menu__item"><a class="menu__link" href="#contatti">Contatti</a></li>
+      <li class="menu__item" data-shape="1"><a class="menu__link" href="#collezione">Collezione</a></li>
+      <li class="menu__item" data-shape="2"><a class="menu__link" href="#filosofia">Perché a mano</a></li>
+      <li class="menu__item" data-shape="3"><a class="menu__link" href="#lavorazione">Lavorazione</a></li>
+      <li class="menu__item" data-shape="4"><a class="menu__link" href="#dettagli">Dettagli</a></li>
+      <li class="menu__item" data-shape="5"><a class="menu__link" href="#contatti">Contatti</a></li>
     </ul>
   </nav>
   <div class="menu__foot">
@@ -142,8 +189,11 @@
 <main id="main">
 
   <!-- ===================== Hero ===================== -->
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="hero__media" data-parallax="0.14">
+  <!-- Quattro piani che scorrono a velocità diverse: foto, velatura, testo,
+       foschia in primo piano. Il numero è la distanza percorsa in percentuale
+       dell'altezza dell'hero: più il piano è lontano, più si muove. -->
+  <section class="hero" aria-labelledby="hero-title" data-hero-layers>
+    <div class="hero__media" data-hero-layer data-hero-shift="12">
       <picture>
         <!-- ritaglio verticale sul telefono: si vede tutta la borsa -->
         <source media="(max-width: 47.99em)" srcset="/assets/img/hero-mobile.jpg" width="1000" height="1400">
@@ -151,7 +201,9 @@
       </picture>
     </div>
 
-    <div class="hero__inner">
+    <div class="hero__wash" data-hero-layer data-hero-shift="9.5" aria-hidden="true"></div>
+
+    <div class="hero__inner" data-hero-layer data-hero-shift="6.5">
       <div class="hero__content" data-hero-content>
         <p class="hero__eyebrow">Fatte a mano, una alla volta</p>
         <h1 class="hero__title" id="hero-title">Ogni borsa esiste una volta sola</h1>
@@ -166,6 +218,8 @@
         </div>
       </div>
     </div>
+
+    <div class="hero__fore" data-hero-layer data-hero-shift="2" aria-hidden="true"></div>
 
     <a class="hero__scroll" href="#collezione" aria-label="Scorri alla collezione">
       <span>Scorri</span>
