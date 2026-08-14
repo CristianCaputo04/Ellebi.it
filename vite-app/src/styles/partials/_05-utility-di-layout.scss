@@ -1,0 +1,59 @@
+// 5. Utility di layout
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.wrap--narrow { max-width: calc(var(--maxw-text) + var(--gutter) * 2); }
+
+.section { padding-block: var(--sp-7); }
+
+.section--tight { padding-block: var(--sp-6); }
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--c-terracotta);
+  flex: none;
+}
+
+.eyebrow--center { justify-content: center; }
+
+.title {
+  font-weight: 300;
+  font-size: var(--fs-h2);
+  line-height: 1.04;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+.title em {
+  font-family: var(--f-serif);
+  font-weight: 300;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  color: var(--c-muted);
+  max-width: 42ch;
+}
+
+.text-center { text-align: center; }

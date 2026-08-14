@@ -1,0 +1,64 @@
+// 3. Design tokens
+:root {
+  /* Colori estratti dal logo ELLEBI */
+  --c-espresso: #3f2418;
+  --c-espresso-2: #5c3d2e;
+  --c-espresso-3: #8a6a58;
+  --c-blush: #f6ddd0;
+  --c-blush-soft: #fbeae1;
+  --c-paper: #fbf7f4;
+  --c-paper-2: #f4ece5;
+  --c-terracotta: #c2836a;
+  /* variante scura del terracotta, per i testi: contrasto AA sulle superfici chiare */
+  --c-terracotta-ink: #9c5539;
+  --c-white: #ffffff;
+
+  --c-bg: var(--c-paper);
+  --c-text: var(--c-espresso);
+  --c-muted: #6f5346;
+  --c-line: rgba(63, 36, 24, 0.16);
+  --c-line-soft: rgba(63, 36, 24, 0.08);
+  --c-overlay: rgba(35, 19, 12, 0.32);
+  --c-focus: #8a4a2c;
+
+  /* Tipografia */
+  --f-sans: "Jost", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --f-serif: "Cormorant Garamond", Iowan Old Style, Georgia, "Times New Roman", serif;
+
+  --fs-micro: clamp(0.66rem, 0.62rem + 0.16vw, 0.74rem);
+  --fs-small: clamp(0.8rem, 0.76rem + 0.2vw, 0.9rem);
+  --fs-body: clamp(0.94rem, 0.9rem + 0.24vw, 1.06rem);
+  --fs-lead: clamp(1.06rem, 0.98rem + 0.5vw, 1.32rem);
+  --fs-h3: clamp(1.3rem, 1.1rem + 0.9vw, 1.9rem);
+  --fs-h2: clamp(1.9rem, 1.3rem + 2.7vw, 4rem);
+  --fs-h1: clamp(2.3rem, 1.3rem + 4.6vw, 5.6rem);
+  --fs-giant: clamp(4rem, 1rem + 15vw, 15rem);
+
+  /* Spaziature e layout */
+  --sp-1: 0.5rem;
+  --sp-2: 1rem;
+  --sp-3: 1.5rem;
+  --sp-4: 2.25rem;
+  --sp-5: 3.5rem;
+  --sp-6: 5rem;
+  --sp-7: clamp(4.5rem, 3rem + 7vw, 10rem);
+
+  --gutter: clamp(1.15rem, 0.6rem + 2.6vw, 4rem);
+  --maxw: 82.5rem;
+  --maxw-text: 46rem;
+  --radius: 2px;
+  --radius-lg: 1.25rem;
+
+  --header-h: 4.5rem;
+
+  /* Movimento */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 0.25s;
+  --dur-2: 0.5s;
+  --dur-3: 0.9s;
+}
+
+@media (min-width: 60em) {
+  :root { --header-h: 5.25rem; }
+}

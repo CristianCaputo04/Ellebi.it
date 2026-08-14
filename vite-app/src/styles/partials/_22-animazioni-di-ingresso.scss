@@ -1,0 +1,21 @@
+// 22. Animazioni di ingresso (scroll reveal)
+/* Senza JavaScript il contenuto resta visibile: nulla viene mai nascosto. */
+[data-reveal] {
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.js [data-reveal="left"] { transform: translateX(-28px); }
+.js [data-reveal="right"] { transform: translateX(28px); }
+.js [data-reveal="scale"] { transform: scale(0.96); }
+
+.js [data-reveal].is-inview,
+[data-reveal].is-inview {
+  opacity: 1;
+  transform: none;
+}

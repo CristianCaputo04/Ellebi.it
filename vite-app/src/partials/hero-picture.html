@@ -1,0 +1,27 @@
+<%
+/* Hero con art-direction: sul telefono viene servito un ritaglio verticale
+   dedicato (hero-mobile.*), non solo l'immagine desktop rimpicciolita,
+   così sul telefono si vede tutta la borsa invece di un taglio casuale. */
+const mobile = { base: "hero-mobile", widths: [480, 800, 1000], w: 1000, h: 1400 };
+const desktop = { base: "hero", widths: [480, 800, 1200, 1920], w: 1920, h: 1280 };
+const srcset = (img, ext) =>
+  img.widths
+    .map((w) => `/assets/img/${img.base}${w === img.w ? "" : `-w${w}`}.${ext} ${w}w`)
+    .join(", ");
+%>
+<picture>
+  <source type="image/avif" media="(max-width: 47.99em)" srcset="<%= srcset(mobile, "avif") %>" sizes="100vw">
+  <source type="image/webp" media="(max-width: 47.99em)" srcset="<%= srcset(mobile, "webp") %>" sizes="100vw">
+  <source type="image/jpeg" media="(max-width: 47.99em)" srcset="<%= srcset(mobile, "jpg") %>" sizes="100vw">
+  <source type="image/avif" media="(min-width: 48em)" srcset="<%= srcset(desktop, "avif") %>" sizes="100vw">
+  <source type="image/webp" media="(min-width: 48em)" srcset="<%= srcset(desktop, "webp") %>" sizes="100vw">
+  <img
+    src="/assets/img/hero.jpg"
+    srcset="<%= srcset(desktop, "jpg") %>"
+    sizes="100vw"
+    alt="La pouch Nuvola in filato tortora, lavorata a mano, tenuta in mano davanti a una parete chiara"
+    width="1920" height="1280"
+    fetchpriority="high"
+    decoding="async"
+  >
+</picture>

@@ -1,0 +1,43 @@
+// 10. Marquee
+.marquee {
+  overflow: hidden;
+  padding-block: var(--sp-3);
+  border-block: 1px solid var(--c-line-soft);
+  background: var(--c-blush-soft);
+  --marquee-duration: 34s;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-duration) linear infinite;
+}
+
+.marquee:hover .marquee__track { animation-play-state: paused; }
+
+.marquee__group {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding-inline: clamp(0.75rem, 2vw, 1.75rem);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--c-espresso-2);
+  white-space: nowrap;
+}
+
+.marquee__group span { display: inline-flex; align-items: center; gap: clamp(1.5rem, 4vw, 3.5rem); }
+
+.marquee__group span::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--c-terracotta);
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}

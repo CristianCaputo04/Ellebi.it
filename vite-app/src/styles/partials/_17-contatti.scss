@@ -1,0 +1,35 @@
+// 17. Contatti
+.contact {
+  background: var(--c-paper);
+  text-align: center;
+}
+
+.contact__title {
+  margin-top: var(--sp-2);
+  font-size: clamp(1.8rem, 1rem + 3.6vw, 3.8rem);
+  font-weight: 300;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.contact__text {
+  margin: var(--sp-2) auto 0;
+  max-width: 48ch;
+  color: var(--c-muted);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  justify-content: center;
+  margin-top: var(--sp-4);
+}
+
+.contact__note {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}

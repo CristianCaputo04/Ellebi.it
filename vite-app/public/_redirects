@@ -1,0 +1,35 @@
+# Reindirizzamenti Cloudflare Pages (origine  destinazione  codice).
+# Le regole vengono valutate nell'ordine in cui compaiono: la prima che
+# corrisponde vince, le successive vengono ignorate.
+
+# Scorciatoie comode da scrivere in bio o in direct.
+/instagram   https://www.instagram.com/ellebi.it/                 302
+/ig          https://www.instagram.com/ellebi.it/                 302
+/vinted      https://www.vinted.it/member/65695128-pinkstraw7     302
+
+# Varianti di scrittura delle pagine informative.
+# Gli indirizzi canonici (/privacy, /cookie, /accessibilita) NON vanno
+# elencati qui: Cloudflare Pages serve già il file .html corrispondente,
+# e una regola in più creerebbe un rimbalzo con il redirect automatico
+# dell'estensione .html.
+/cookie-policy   /cookie          301
+/accessibilità   /accessibilita   301
+
+# Pagina 404 personalizzata: Cloudflare Pages la serve automaticamente per
+# qualunque percorso non trovato SOLO se questa regola non è sovrascritta
+# da un fallback SPA più sotto — con un sito multi-pagina come questo la
+# regola implicita basta, la riga è qui solo per essere esplicita.
+/404   /404.html   404
+
+# ---------------------------------------------------------------------------
+# Esempio di fallback SPA (commentato: qui non serve, il sito è multi-pagina
+# statica). Se in futuro una sezione del sito diventasse un'app lato client
+# (es. un configuratore borse) montata sotto /app/*, la regola sotto
+# instraderebbe ogni sotto-percorso non fisico verso l'index dell'app,
+# lasciando al router JS il compito di decidere cosa mostrare:
+#
+# /app/*   /app/index.html   200
+#
+# Il codice 200 (non 301/302) è ciò che rende la regola un vero fallback
+# SPA: il browser resta sull'URL richiesto, Cloudflare serve solo l'HTML.
+# ---------------------------------------------------------------------------
