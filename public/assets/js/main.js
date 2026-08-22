@@ -396,6 +396,62 @@
     }, { passive: true });
   })();
 
+  /* ---------------------------------------------------- cookie banner */
+  (function cookieBanner() {
+    var banner = $("#cookie-banner");
+    var acceptBtn = $("#cookie-accept");
+    var rejectBtn = $("#cookie-reject");
+    if (!banner || !acceptBtn || !rejectBtn) { return; }
+
+    var consentKey = "ellebi_cookie_consent";
+
+    function hideBanner() {
+      banner.classList.add("hidden");
+    }
+
+    function showBanner() {
+      banner.classList.remove("hidden");
+    }
+
+    function setConsent(value) {
+      localStorage.setItem(consentKey, value ? "1" : "0");
+      if (window._iub && window._iub.cs) {
+        window._iub.cs.setSiteConsent(value);
+      }
+    }
+
+    function getConsent() {
+      var stored = localStorage.getItem(consentKey);
+      return stored !== null ? stored === "1" : null;
+    }
+
+    // mostra il banner solo se il consenso non è ancora stato scelto
+    if (getConsent() === null) {
+      showBanner();
+    } else {
+      hideBanner();
+    }
+
+    acceptBtn.addEventListener("click", function () {
+      setConsent(true);
+      hideBanner();
+    });
+
+    rejectBtn.addEventListener("click", function () {
+      setConsent(false);
+      hideBanner();
+    });
+
+    // se iubenda è caricato, ascolta i cambiamenti di consenso
+    if (window._iub) {
+      window._iub.on("consentUpdated", function () {
+        if (getConsent() !== null) {
+          hideBanner();
+        }
+      });
+    }
+  })();
+
   /* Il consenso cookie (banner, categorie, blocco degli script non essenziali
      finché non c'è una scelta, e la sua conservazione come prova) è gestito
      dalla Cookie Solution di iubenda, caricata nell'<head> di ogni pagina.

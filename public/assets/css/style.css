@@ -1976,6 +1976,131 @@ li > .link-line,
 
 .menu__foot { transition-delay: 0.6s; }
 
+/* ========== 21. Banner Cookie gestito da iubenda ========== */
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  background: var(--c-blush-soft);
+  border-top: 1px solid var(--c-line);
+  padding: var(--sp-3);
+  font-size: var(--fs-small);
+  box-shadow: 0 -4px 12px var(--c-overlay);
+  animation: slideUp 0.3s ease-out;
+}
+
+.cookie-banner.hidden {
+  display: none;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cookie-banner__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.cookie-banner__text {
+  flex: 1;
+  min-width: 200px;
+}
+
+.cookie-banner__text p {
+  margin: 0;
+  color: var(--c-text);
+  line-height: 1.5;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cookie-banner__btn {
+  padding: 0.5rem 1.25rem;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  border-radius: 0.25rem;
+  border: 1px solid var(--c-text);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.cookie-banner__btn:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+.cookie-banner__btn--accept {
+  background: var(--c-espresso);
+  color: var(--c-white);
+  border-color: var(--c-espresso);
+}
+
+.cookie-banner__btn--accept:hover {
+  background: var(--c-espresso-2);
+  border-color: var(--c-espresso-2);
+}
+
+.cookie-banner__btn--reject {
+  background: transparent;
+  color: var(--c-text);
+  border-color: var(--c-text);
+}
+
+.cookie-banner__btn--reject:hover {
+  background: var(--c-paper-2);
+}
+
+.cookie-banner__btn--settings {
+  background: transparent;
+  color: var(--c-terracotta-ink);
+  border-color: var(--c-terracotta-ink);
+  text-decoration: underline;
+}
+
+.cookie-banner__btn--settings:hover {
+  background: rgba(156, 85, 57, 0.08);
+}
+
+@media (max-width: 640px) {
+  .cookie-banner {
+    padding: var(--sp-2);
+  }
+
+  .cookie-banner__content {
+    gap: var(--sp-2);
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cookie-banner__actions {
+    flex-direction: column;
+  }
+
+  .cookie-banner__btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 
@@ -2006,6 +2131,10 @@ li > .link-line,
   .menu__shapes { display: none !important; }
 
   .diagram__lines path { stroke-dashoffset: 0 !important; }
+
+  .cookie-banner {
+    animation: none !important;
+  }
 }
 
 @media (prefers-contrast: more) {
@@ -2018,7 +2147,7 @@ li > .link-line,
 }
 
 @media print {
-  .header, .menu, .to-top, .cookie, .preloader, .lightbox, .hero__scroll, .marquee { display: none !important; }
+  .header, .menu, .to-top, .cookie-banner, .cookie, .preloader, .lightbox, .hero__scroll, .marquee { display: none !important; }
   body { background: #fff; color: #000; }
   .section { padding-block: 1.5rem; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }
