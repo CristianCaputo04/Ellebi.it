@@ -1977,7 +1977,21 @@ li > .link-line,
 .menu__foot { transition-delay: 0.6s; }
 
 /* ========== 21. Banner Cookie gestito da iubenda ========== */
+/* Il banner nativo di iubenda resta attivo (autoblocking, registrazione del
+   consenso, conformità) ma la sua interfaccia visiva viene sostituita da
+   quella qui sotto: i pulsanti restano nascosti anche via csConfiguration
+   (banner.acceptButtonDisplay ecc.), questa regola è un secondo strato di
+   sicurezza nel caso il contenitore renda comunque qualcosa. */
+#iubenda-cs-banner {
+  display: none !important;
+}
+
+/* Nascosto finché lo script non lo mostra esplicitamente: senza questa
+   regola il banner comparirebbe per un istante anche a chi ha già scelto,
+   perché lo stato "visibile" sarebbe quello di partenza invece che
+   un'eccezione richiesta di proposito. */
 .cookie-banner {
+  display: none;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -1988,12 +2002,12 @@ li > .link-line,
   padding: var(--sp-3);
   font-size: var(--fs-small);
   box-shadow: 0 -4px 12px var(--c-overlay);
-  animation: slideUp 0.3s ease-out;
   pointer-events: auto;
 }
 
-.cookie-banner.hidden {
-  display: none;
+.cookie-banner.is-visible {
+  display: block;
+  animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {

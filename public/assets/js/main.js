@@ -396,63 +396,59 @@
     }, { passive: true });
   })();
 
-  /* ---------------------------------------------------- cookie banner */
+  /* ---------------------------------------------------- cookie banner
+     L'interfaccia è nostra, ma il consenso vero e proprio (autoblocking,
+     registrazione, conformità) resta gestito da iubenda tramite le sue
+     API pubbliche _iub.cs.api.acceptAll() / rejectAll()
+     (https://www.iubenda.com/it/help/1205). Il banner nativo di iubenda è
+     nascosto via configurazione e CSS: qui si pilota solo il suo motore. */
   (function cookieBanner() {
     var banner = $("#cookie-banner");
     var acceptBtn = $("#cookie-accept");
     var rejectBtn = $("#cookie-reject");
-    if (!banner || !acceptBtn || !rejectBtn) {
-      console.warn("Cookie banner: elementi non trovati", {banner: !!banner, acceptBtn: !!acceptBtn, rejectBtn: !!rejectBtn});
-      return;
-    }
+    if (!banner || !acceptBtn || !rejectBtn) { return; }
 
-    var consentKey = "ellebi_cookie_consent";
+    // Solo per decidere subito se mostrare il banner, senza aspettare che
+    // iubenda_cs.js (asincrono) sia pronto: evita un lampo del banner a
+    // chi ha già scelto in una visita precedente. La fonte di verità del
+    // consenso resta comunque iubenda, non questa chiave.
+    var seenKey = "ellebi_cookie_seen";
 
     function hideBanner() {
-      banner.classList.add("hidden");
+      banner.classList.remove("is-visible");
+      localStorage.setItem(seenKey, "1");
     }
 
     function showBanner() {
-      banner.classList.remove("hidden");
+      banner.classList.add("is-visible");
     }
 
-    function setConsent(value) {
-      localStorage.setItem(consentKey, value ? "1" : "0");
-      if (window._iub && window._iub.cs) {
-        window._iub.cs.setSiteConsent(value);
+    // iubenda_cs.js è caricato in modo asincrono: se la persona clicca
+    // prima che sia pronto, si riprova per un paio di secondi.
+    function withIubendaApi(fn, attempt) {
+      attempt = attempt || 0;
+      if (window._iub && window._iub.cs && window._iub.cs.api) {
+        fn(window._iub.cs.api);
+        return;
+      }
+      if (attempt < 40) {
+        window.setTimeout(function () { withIubendaApi(fn, attempt + 1); }, 50);
       }
     }
 
-    function getConsent() {
-      var stored = localStorage.getItem(consentKey);
-      return stored !== null ? stored === "1" : null;
-    }
-
-    // mostra il banner solo se il consenso non è ancora stato scelto
-    if (getConsent() === null) {
-      showBanner();
-    } else {
+    function choose(accept) {
       hideBanner();
-    }
-
-    acceptBtn.addEventListener("click", function () {
-      setConsent(true);
-      hideBanner();
-    });
-
-    rejectBtn.addEventListener("click", function () {
-      setConsent(false);
-      hideBanner();
-    });
-
-    // se iubenda è caricato, ascolta i cambiamenti di consenso
-    if (window._iub) {
-      window._iub.on("consentUpdated", function () {
-        if (getConsent() !== null) {
-          hideBanner();
-        }
+      withIubendaApi(function (api) {
+        if (accept) { api.acceptAll(); } else { api.rejectAll(); }
       });
     }
+
+    if (localStorage.getItem(seenKey) !== "1") {
+      showBanner();
+    }
+
+    acceptBtn.addEventListener("click", function () { choose(true); });
+    rejectBtn.addEventListener("click", function () { choose(false); });
   })();
 
   /* Il consenso cookie (banner, categorie, blocco degli script non essenziali
