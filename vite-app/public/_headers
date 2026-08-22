@@ -1,12 +1,20 @@
 # Intestazioni HTTP servite da Cloudflare Pages.
 # Sintassi: un percorso, poi le intestazioni indentate di due spazi.
 # Il segnaposto __JSONLD_HASHES__ viene sostituito da scripts/csp-hash.mjs
-# subito dopo "vite build", con gli hash SHA-256 reali dei blocchi JSON-LD
-# presenti nell'HTML compilato: senza quello script il CSP qui sotto blocca
-# lo structured data invece di autorizzarlo in modo puntuale.
+# subito dopo "vite build", con gli hash SHA-256 reali dei blocchi inline
+# (JSON-LD e il frammento di configurazione di iubenda) presenti nell'HTML
+# compilato: senza quello script il CSP qui sotto li blocca in silenzio.
+#
+# Il consenso cookie è delegato a iubenda (Cookie Solution + Privacy/Cookie
+# Policy incorporata): script-src/connect-src/style-src/frame-src/img-src
+# concedono *.iubenda.com secondo la guida ufficiale
+# https://www.iubenda.com/it/help/12260 — 'unsafe-eval' e 'unsafe-inline'
+# (stile) sono richiesti dai loro script, non da codice nostro.
+# Cross-Origin-Embedder-Policy è stato rimosso: l'iframe di incorporamento
+# della policy iubenda non garantisce l'header CORP richiesto da COEP.
 
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' '__JSONLD_HASHES__'; connect-src 'self'; manifest-src 'self'; frame-src 'none'; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https://*.iubenda.com; style-src 'self' 'unsafe-inline' https://*.iubenda.com; font-src 'self'; script-src 'self' 'unsafe-eval' https://*.iubenda.com '__JSONLD_HASHES__'; connect-src 'self' https://*.iubenda.com; manifest-src 'self'; frame-src https://*.iubenda.com; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -14,7 +22,6 @@
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), interest-cohort=()
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
-  Cross-Origin-Embedder-Policy: credentialless
   X-Permitted-Cross-Domain-Policies: none
   X-DNS-Prefetch-Control: off
 

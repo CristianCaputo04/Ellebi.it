@@ -17,6 +17,15 @@ const _extraPreload = typeof extraPreload === "undefined" ? "" : extraPreload;
 const _jsonld = typeof jsonld === "undefined" ? null : jsonld;
 %>
 <meta charset="utf-8">
+<!-- Cookie Solution iubenda: deve restare il primo script del documento,
+     così l'autoblocking impedisce a qualunque altro script di partire
+     prima che la persona scelga (https://www.iubenda.com/it/help/1205). -->
+<script type="text/javascript">
+var _iub = _iub || [];
+_iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it"};
+</script>
+<script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4652493.js"></script>
+<script type="text/javascript" src="https://cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title><%= title %></title>
 <meta name="description" content="<%= description %>">
