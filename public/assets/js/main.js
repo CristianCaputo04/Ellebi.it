@@ -401,7 +401,10 @@
     var banner = $("#cookie-banner");
     var acceptBtn = $("#cookie-accept");
     var rejectBtn = $("#cookie-reject");
-    if (!banner || !acceptBtn || !rejectBtn) { return; }
+    if (!banner || !acceptBtn || !rejectBtn) {
+      console.warn("Cookie banner: elementi non trovati", {banner: !!banner, acceptBtn: !!acceptBtn, rejectBtn: !!rejectBtn});
+      return;
+    }
 
     var consentKey = "ellebi_cookie_consent";
 

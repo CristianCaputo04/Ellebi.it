@@ -1989,6 +1989,7 @@ li > .link-line,
   font-size: var(--fs-small);
   box-shadow: 0 -4px 12px var(--c-overlay);
   animation: slideUp 0.3s ease-out;
+  pointer-events: auto;
 }
 
 .cookie-banner.hidden {
@@ -2013,6 +2014,8 @@ li > .link-line,
   align-items: center;
   gap: var(--sp-4);
   flex-wrap: wrap;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 .cookie-banner__text {
@@ -2041,6 +2044,10 @@ li > .link-line,
   border: 1px solid var(--c-text);
   white-space: nowrap;
   transition: all 0.2s ease;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .cookie-banner__btn:focus-visible {
