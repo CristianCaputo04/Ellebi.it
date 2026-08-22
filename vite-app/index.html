@@ -1,0 +1,366 @@
+<%
+const jsonld = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": "https://ellebi.it/#org", "name": "ELLEBI", "alternateName": "ELLEBI | Handmade & Style", "url": "https://ellebi.it/", "logo": "https://ellebi.it/assets/img/logo-badge.svg", "image": "https://ellebi.it/assets/img/og-cover.jpg", "description": "Borse all'uncinetto fatte a mano in Italia, un pezzo alla volta, senza produzione in serie.", "email": "ellebi.style@gmail.com", "areaServed": "IT", "sameAs": ["https://www.instagram.com/ellebi.it/", "https://www.vinted.it/member/65695128-pinkstraw7"], "slogan": "Stile • Armonia • Autenticità" },
+    { "@type": "WebSite", "@id": "https://ellebi.it/#site", "url": "https://ellebi.it/", "name": "ELLEBI", "inLanguage": "it-IT", "publisher": { "@id": "https://ellebi.it/#org" } },
+    { "@type": "WebPage", "@id": "https://ellebi.it/#page", "url": "https://ellebi.it/", "name": "ELLEBI — Ogni borsa esiste una volta sola", "isPartOf": { "@id": "https://ellebi.it/#site" }, "about": { "@id": "https://ellebi.it/#org" }, "inLanguage": "it-IT", "primaryImageOfPage": "https://ellebi.it/assets/img/hero.jpg" },
+    { "@type": "ItemList", "@id": "https://ellebi.it/#collezione", "name": "La collezione ELLEBI", "itemListOrder": "https://schema.org/ItemListUnordered", "numberOfItems": 4, "itemListElement": [
+      { "@type": "ListItem", "position": 1, "item": { "@type": "CreativeWork", "name": "Nuvola", "description": "Pouch morbida in filato tortora, lavorata a mano all'uncinetto.", "image": "https://ellebi.it/assets/img/borsa-01.jpg", "creator": { "@id": "https://ellebi.it/#org" } } },
+      { "@type": "ListItem", "position": 2, "item": { "@type": "CreativeWork", "name": "Perla", "description": "Mini bag color cacao con manico rigido e tre perle cucite a mano.", "image": "https://ellebi.it/assets/img/borsa-02.jpg", "creator": { "@id": "https://ellebi.it/#org" } } },
+      { "@type": "ListItem", "position": 3, "item": { "@type": "CreativeWork", "name": "Sera", "description": "Pouch in filato cioccolato con filo lurex, per le occasioni serali.", "image": "https://ellebi.it/assets/img/borsa-03.jpg", "creator": { "@id": "https://ellebi.it/#org" } } },
+      { "@type": "ListItem", "position": 4, "item": { "@type": "CreativeWork", "name": "Cacao", "description": "Pouch capiente in filato cioccolato opaco, lavorata a mano.", "image": "https://ellebi.it/assets/img/borsa-04.jpg", "creator": { "@id": "https://ellebi.it/#org" } } }
+    ] }
+  ]
+});
+
+const extraPreload = `
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-w800.webp 800w, /assets/img/hero-w1200.webp 1200w, /assets/img/hero.webp 1920w" imagesizes="100vw" fetchpriority="high" media="(min-width: 48em)">
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-mobile-w480.webp 480w, /assets/img/hero-mobile-w800.webp 800w, /assets/img/hero-mobile.webp 1000w" imagesizes="100vw" fetchpriority="high" media="(max-width: 47.99em)">`;
+
+// Dati delle 4 borse: pilota sia il markup sia il JSON-LD sopra, in un solo posto.
+const collezione = [
+  { base: "borsa-01", baseB: "borsa-01b", widths: [480, 800, 900], name: "Nuvola", meta: "Tortora · morbida fuori, ferma nella forma", alt: "Nuvola: pouch morbida in filato tortora con bordo intrecciato, tenuta in mano", caption: "Nuvola — tortora, morbida fuori e ferma nella forma" },
+  { base: "borsa-02", baseB: "borsa-02b", widths: [480, 800, 900], name: "Perla", meta: "Cacao · manico rigido, tre perle cucite a mano", alt: "Perla: mini bag color cacao con manico rigido e tre perle bianche cucite a mano", caption: "Perla — cacao, manico rigido e tre perle cucite a mano" },
+  { base: "borsa-03", baseB: "borsa-03b", widths: [480, 800, 900], name: "Sera", meta: "Cioccolato lurex · quella che si nota di sera", alt: "Sera: pouch in filato cioccolato attraversato da lurex dorato, appoggiata su un muretto", caption: "Sera — cioccolato lurex, quella che si nota di sera" },
+  { base: "borsa-04", baseB: "borsa-04b", widths: [480, 800, 900], name: "Cacao", meta: "Cioccolato opaco · la misura che ti porti ovunque", alt: "Cacao: pouch capiente in filato cioccolato opaco, tenuta in mano", caption: "Cacao — cioccolato opaco, la misura che ti porti ovunque" },
+];
+const cardSizes = "(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw";
+
+const passaggi = [
+  { base: "step-01", num: "1", label: "Scegliere", name: "Il filato decide tutto", text: "Fettuccia di cotone pesante: è il filato che tiene in piedi la borsa senza rinforzi rigidi. Sbagli qui, e la forma cede al primo utilizzo.", tags: ["Fettuccia di cotone", "Tenuta della forma", "Mano morbida"], alt: "Dettaglio ravvicinato del filato tortora della borsa Nuvola" },
+  { base: "step-02", num: "2", label: "Intrecciare", name: "Punto dopo punto, a mano", text: "Nessuna macchina: la tensione la decide la mano. Ed è la tensione a fare la differenza tra un tessuto compatto e uno che si affloscia dopo un mese.", tags: ["Uncinetto", "Tensione costante", "Ore di lavoro"], alt: "Dettaglio del punto a uncinetto sul filato cioccolato della borsa Cacao" },
+  { base: "step-03", num: "3", label: "Rifinire", name: "Dove si vede la differenza", text: "Bordo, manico, chiusura, dettagli cuciti uno a uno. È la parte che nessuno fotografa, ed è esattamente quella che fa durare la borsa.", tags: ["Bordo intrecciato", "Manico", "Perle cucite a mano"], alt: "Il manico rigido e le tre perle cucite a mano della borsa Perla" },
+  { base: "step-04", num: "4", label: "Custodire", name: "Come farla durare anni", text: "Riempila quando riposa, tienila lontana dall'umidità, pulisci a mano con poca acqua tiepida. Tre gesti, e resta come il primo giorno.", tags: ["Forma piena", "Lontana dall'umidità", "Pulizia a mano"], alt: "La borsa Sera finita, appoggiata su un muretto davanti a delle foglie" },
+];
+const stepSizes = "(min-width: 64em) 50vw, 95vw";
+
+const galleria = [
+  { base: "gallery-01", caption: "Nuvola — il bordo intrecciato", label: "il bordo intrecciato della borsa Nuvola", alt: "Il bordo intrecciato della borsa Nuvola visto da vicino" },
+  { base: "gallery-02", caption: "Perla — il manico rigido", label: "il manico rigido della borsa Perla", alt: "Il manico rigido della borsa Perla, avvolto nel filato" },
+  { base: "gallery-03", caption: "Sera — il lurex alla luce", label: "il filo lurex della borsa Sera", alt: "Il filo lurex dorato della borsa Sera che riflette la luce" },
+  { base: "gallery-04", caption: "Cacao — la trama piena", label: "la trama della borsa Cacao", alt: "La trama fitta del filato cioccolato della borsa Cacao" },
+  { base: "gallery-05", caption: "Nuvola — l'apertura morbida", label: "l'apertura della borsa Nuvola", alt: "L'apertura morbida della borsa Nuvola vista dall'alto" },
+  { base: "gallery-06", caption: "Cacao — il fondo", label: "il fondo della borsa Cacao", alt: "Il fondo lavorato a mano della borsa Cacao" },
+];
+const gallerySizes = "(min-width: 48em) 28vw, 40vw";
+%><!DOCTYPE html>
+<html lang="it">
+<head>
+<%- include('./src/partials/head-meta.html', {
+  title: "ELLEBI — Borse fatte a mano | Ogni borsa esiste una volta sola",
+  description: "Borse all'uncinetto fatte a mano, un pezzo alla volta. Nessuna produzione in serie: quando una borsa finisce, finisce. Guarda i pezzi ancora disponibili.",
+  canonical: "/",
+  ogType: "website",
+  ogTitle: "ELLEBI — Ogni borsa esiste una volta sola",
+  ogDescription: "Borse all'uncinetto fatte a mano, un nodo alla volta. Nessuna serie, nessuna copia.",
+  ogImageWidth: 1200, ogImageHeight: 630,
+  ogImageAlt: "Una borsa ELLEBI fatta a mano in filato tortora",
+  extraPreload,
+  jsonld,
+}) %>
+</head>
+
+<body>
+<a class="skip-link" href="#main">Vai al contenuto principale</a>
+
+<div class="preloader" role="status" aria-live="polite">
+  <span class="visually-hidden">Caricamento in corso…</span>
+  <svg class="preloader__mark" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+    <use href="#ellebi-mark"></use>
+  </svg>
+  <span class="preloader__bar" aria-hidden="true"></span>
+</div>
+
+<%- include('./src/partials/svg-symbols.html') %>
+
+<%- include('./src/partials/header.html', { variant: "home" }) %>
+
+<div class="menu" id="menu" hidden>
+  <div class="menu__bg" aria-hidden="true">
+    <span class="menu__panel"></span>
+    <span class="menu__panel"></span>
+    <span class="menu__panel"></span>
+  </div>
+  <div class="menu__shapes" aria-hidden="true">
+    <svg class="menu__shape" data-shape="1" viewBox="0 0 400 400" fill="none">
+      <circle class="menu__shape-el" fill="currentColor" cx="86" cy="118" r="42"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="298" cy="84" r="62"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="198" cy="298" r="82"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="342" cy="282" r="30"></circle>
+    </svg>
+    <svg class="menu__shape" data-shape="2" viewBox="0 0 400 400" fill="none">
+      <path class="menu__shape-el" stroke="currentColor" fill="none" d="M0 196 Q100 96, 200 196 T400 196" stroke-width="58" fill="none"></path>
+      <path class="menu__shape-el" stroke="currentColor" fill="none" d="M0 282 Q100 182, 200 282 T400 282" stroke-width="38" fill="none"></path>
+    </svg>
+    <svg class="menu__shape" data-shape="3" viewBox="0 0 400 400" fill="none">
+      <circle class="menu__shape-el" fill="currentColor" cx="70" cy="96" r="9"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="170" cy="96" r="9"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="270" cy="96" r="9"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="120" cy="196" r="13"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="220" cy="196" r="13"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="320" cy="196" r="13"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="170" cy="300" r="10"></circle>
+      <circle class="menu__shape-el" fill="currentColor" cx="270" cy="300" r="10"></circle>
+    </svg>
+    <svg class="menu__shape" data-shape="4" viewBox="0 0 400 400" fill="none">
+      <path class="menu__shape-el" fill="currentColor" d="M104 104 Q154 54, 204 104 Q254 154, 204 204 Q154 254, 104 204 Q54 154, 104 104"></path>
+      <path class="menu__shape-el" fill="currentColor" d="M244 206 Q294 156, 344 206 Q394 256, 344 306 Q294 356, 244 306 Q194 256, 244 206"></path>
+    </svg>
+    <svg class="menu__shape" data-shape="5" viewBox="0 0 400 400" fill="none">
+      <line class="menu__shape-el" stroke="currentColor" x1="0" y1="104" x2="300" y2="400" stroke-width="30"></line>
+      <line class="menu__shape-el" stroke="currentColor" x1="104" y1="0" x2="400" y2="296" stroke-width="24"></line>
+      <line class="menu__shape-el" stroke="currentColor" x1="204" y1="0" x2="400" y2="196" stroke-width="18"></line>
+    </svg>
+  </div>
+  <nav aria-label="Navigazione del sito">
+    <ul class="menu__list" role="list">
+      <li class="menu__item" data-shape="1"><a class="menu__link" href="#collezione">Collezione</a></li>
+      <li class="menu__item" data-shape="2"><a class="menu__link" href="#filosofia">Perché a mano</a></li>
+      <li class="menu__item" data-shape="3"><a class="menu__link" href="#lavorazione">Lavorazione</a></li>
+      <li class="menu__item" data-shape="4"><a class="menu__link" href="#dettagli">Dettagli</a></li>
+      <li class="menu__item" data-shape="5"><a class="menu__link" href="#contatti">Contatti</a></li>
+    </ul>
+  </nav>
+  <div class="menu__foot">
+    <a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Pezzi disponibili</a>
+    <a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a>
+    <a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <section class="hero" aria-labelledby="hero-title" data-hero-layers>
+    <div class="hero__media" data-hero-layer data-hero-shift="12">
+      <%- include('./src/partials/hero-picture.html') %>
+    </div>
+
+    <div class="hero__wash" data-hero-layer data-hero-shift="9.5" aria-hidden="true"></div>
+
+    <div class="hero__inner" data-hero-layer data-hero-shift="6.5">
+      <div class="hero__content" data-hero-content>
+        <p class="hero__eyebrow">Fatte a mano, una alla volta</p>
+        <h1 class="hero__title" id="hero-title">Ogni borsa esiste una volta sola</h1>
+        <p class="hero__sub">Filato, mani, ore. Nessuna serie, nessuna copia: <em>quando un pezzo finisce, finisce.</em></p>
+        <div class="hero__actions">
+          <a class="btn btn--solid" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
+            Vedi i pezzi disponibili
+            <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+          </a>
+          <a class="btn" href="#collezione">Guarda la collezione</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__fore" data-hero-layer data-hero-shift="2" aria-hidden="true"></div>
+
+    <a class="hero__scroll" href="#collezione" aria-label="Scorri alla collezione">
+      <span>Scorri</span>
+    </a>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <div class="marquee__group">
+        <span>Fatto a mano in Italia</span><span>Un pezzo alla volta</span><span>Nessuna produzione in serie</span><span>Stile</span><span>Armonia</span><span>Autenticità</span>
+      </div>
+      <div class="marquee__group">
+        <span>Fatto a mano in Italia</span><span>Un pezzo alla volta</span><span>Nessuna produzione in serie</span><span>Stile</span><span>Armonia</span><span>Autenticità</span>
+      </div>
+    </div>
+  </div>
+  <p class="visually-hidden">Fatto a mano in Italia, un pezzo alla volta, senza produzione in serie. Stile, armonia, autenticità.</p>
+
+  <section class="section collection" id="collezione" aria-labelledby="collezione-title">
+    <div class="wrap">
+      <div class="collection__head">
+        <div data-reveal>
+          <p class="eyebrow">La collezione</p>
+          <h2 class="title" id="collezione-title">Quattro borse.<br>Zero copie.</h2>
+        </div>
+        <p class="lead" data-reveal data-reveal-delay="120">Dietro non c'è un magazzino: c'è un tavolo, un uncinetto e il tempo che serve. Ogni pezzo nasce una volta e resta com'è.</p>
+      </div>
+
+      <div class="collection__grid" data-stagger>
+        <% collezione.forEach((b) => { %>
+        <article class="card" data-reveal="scale">
+          <div class="card__media">
+            <span class="card__badge">Pezzo unico</span>
+            <%- include('./src/partials/picture.html', { base: b.base, widths: b.widths, realWidth: 900, realHeight: 1200, alt: b.alt, sizes: cardSizes, loading: "lazy" }) %>
+            <%- include('./src/partials/picture.html', { base: b.baseB, widths: b.widths, realWidth: 900, realHeight: 1200, alt: "", decorative: true, sizes: cardSizes, loading: "lazy" }) %>
+            <button class="card__zoom" type="button" data-lightbox="/assets/img/<%= b.base %>.jpg" data-caption="<%= b.caption %>" aria-label="Ingrandisci la foto della borsa <%= b.name %>">
+              <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
+            </button>
+          </div>
+          <h3 class="card__name"><%= b.name %></h3>
+          <p class="card__meta"><%= b.meta %></p>
+        </article>
+        <% }) %>
+      </div>
+
+      <div class="collection__note" data-reveal>
+        <p>Questo sito mostra, non vende. I pezzi ancora disponibili stanno sul mio profilo Vinted.</p>
+        <a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Guarda cosa c'è adesso</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section philosophy" id="filosofia" aria-labelledby="filosofia-title">
+    <div class="wrap wrap--narrow">
+      <p class="eyebrow eyebrow--center" data-reveal>Perché fatte a mano</p>
+      <h2 class="philosophy__title" id="filosofia-title" data-split>Una macchina ne farebbe mille uguali. Io ne faccio una.</h2>
+      <p class="philosophy__text" data-reveal data-reveal-delay="200">Dal primo giro all'ultimo filo tirato dentro passano ore, tutte con le stesse due mani. È per questo che due ELLEBI non saranno mai identiche: cambia la tensione del punto, cambia il filato, e quello che ne esce resta tuo e basta.</p>
+    </div>
+  </section>
+
+  <section class="section pillars" aria-labelledby="pilastri-title">
+    <div class="wrap">
+      <h2 class="visually-hidden" id="pilastri-title">I tre valori di ELLEBI</h2>
+      <div class="diagram" data-diagram>
+        <svg class="diagram__lines" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path d="M410 230 C 340 230, 300 150, 210 140"></path>
+          <path d="M590 230 C 660 230, 700 140, 790 130"></path>
+          <path d="M590 250 C 670 260, 700 330, 790 345"></path>
+        </svg>
+        <ul class="diagram__items diagram__items--left" role="list">
+          <li class="pillar" data-reveal="left">
+            <h3 class="pillar__name">Armonia <small>equilibrio</small></h3>
+            <p class="pillar__text">Colori caldi scelti per stare bene con quello che hai già nell'armadio, senza rubare la scena.</p>
+          </li>
+        </ul>
+        <div class="diagram__core" data-reveal="scale">
+          <svg viewBox="0 0 120 120" role="img" aria-label="Marchio ELLEBI" focusable="false">
+            <use href="#ellebi-mark"></use>
+          </svg>
+        </div>
+        <ul class="diagram__items diagram__items--right" role="list">
+          <li class="pillar" data-reveal="right">
+            <h3 class="pillar__name">Stile <small>forma</small></h3>
+            <p class="pillar__text">Forme essenziali che non scadono a fine stagione: le porti quest'anno e anche il prossimo.</p>
+          </li>
+          <li class="pillar" data-reveal="right" data-reveal-delay="140">
+            <h3 class="pillar__name">Autenticità <small>unicità</small></h3>
+            <p class="pillar__text">Nessun pezzo è uguale a un altro: la mano che lavora lascia sempre una firma diversa.</p>
+          </li>
+        </ul>
+      </div>
+      <div class="pillars__cta" data-reveal>
+        <a class="btn" href="#lavorazione">
+          Guarda come nasce
+          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="banner" aria-labelledby="banner-title">
+    <div class="banner__media" data-parallax="0.12">
+      <%- include('./src/partials/picture.html', { base: "atelier", widths: [480, 800, 1200, 1920], realWidth: 1920, realHeight: 1080, alt: "Dettaglio della borsa Sera: filato cioccolato con lurex dorato, alla luce naturale", sizes: "100vw", loading: "lazy" }) %>
+    </div>
+    <div class="banner__inner">
+      <h2 class="banner__title" id="banner-title" data-reveal>Quando un pezzo finisce, finisce</h2>
+      <p class="banner__text" data-reveal data-reveal-delay="150">Non riordino, non replico, non produco in serie. Se una borsa è ancora lì, è perché nessuno se l'è portata via.</p>
+      <div class="banner__actions" data-reveal data-reveal-delay="240">
+        <a class="btn btn--light" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
+          Vedi cosa è ancora disponibile
+          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section steps" id="lavorazione" aria-labelledby="lavorazione-title">
+    <div class="wrap">
+      <div class="steps__head">
+        <p class="steps__figure" aria-hidden="true" data-reveal>4</p>
+        <div>
+          <h2 class="steps__title" id="lavorazione-title" data-reveal data-reveal-delay="80">Passaggi, nessuna scorciatoia</h2>
+          <p class="steps__intro" data-reveal data-reveal-delay="160">Dal gomitolo alla borsa che tieni in mano. È qui che si decide se durerà una stagione o dieci anni.</p>
+        </div>
+      </div>
+
+      <ol class="steps__list" role="list">
+        <% passaggi.forEach((s) => { %>
+        <li class="step" data-reveal>
+          <div class="step__media">
+            <%- include('./src/partials/picture.html', { base: s.base, widths: [480, 800, 1200], realWidth: 1200, realHeight: 900, alt: s.alt, sizes: stepSizes, loading: "lazy" }) %>
+          </div>
+          <div class="step__body">
+            <p class="step__index"><span class="step__num"><%= s.num %></span><span class="step__label"><%= s.label %></span></p>
+            <h3 class="step__name"><%= s.name %></h3>
+            <p class="step__text"><%= s.text %></p>
+            <ul class="step__tags" role="list"><% s.tags.forEach((t) => { %><li><%= t %></li><% }) %></ul>
+          </div>
+        </li>
+        <% }) %>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section gallery" id="dettagli" aria-labelledby="dettagli-title">
+    <div class="wrap">
+      <div class="gallery__head">
+        <div data-reveal>
+          <p class="eyebrow">Dettagli</p>
+          <h2 class="title" id="dettagli-title">Guarda da vicino <em>il punto</em></h2>
+        </div>
+        <a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer" data-reveal>Altri scatti su Instagram</a>
+      </div>
+
+      <div class="gallery__grid" data-stagger>
+        <% galleria.forEach((g) => { %>
+        <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/<%= g.base %>.jpg" data-caption="<%= g.caption %>" aria-label="Ingrandisci: <%= g.label %>">
+          <%- include('./src/partials/picture.html', { base: g.base, widths: [480, 800], realWidth: 800, realHeight: 800, alt: g.alt, sizes: gallerySizes, loading: "lazy" }) %>
+        </button>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" id="contatti" aria-labelledby="contatti-title">
+    <div class="wrap wrap--narrow">
+      <p class="eyebrow eyebrow--center" data-reveal>Dove trovarle</p>
+      <h2 class="contact__title" id="contatti-title" data-reveal data-reveal-delay="80">Se te ne innamori,<br>fammelo sapere</h2>
+      <p class="contact__text" data-reveal data-reveal-delay="140">Qui non c'è un carrello: c'è il mio profilo Vinted con i pezzi ancora disponibili e i miei messaggi aperti per tutto il resto — colori, misure, tempi di lavorazione. Rispondo io, non un assistente automatico.</p>
+      <div class="contact__actions" data-reveal data-reveal-delay="200">
+        <a class="btn btn--solid" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
+          Vedi i pezzi su Vinted
+          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </a>
+        <a class="btn" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Scrivimi su Instagram</a>
+        <a class="btn" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
+      </div>
+      <p class="contact__note" data-reveal data-reveal-delay="260">Nessun modulo, nessun dato raccolto da questo sito.</p>
+    </div>
+  </section>
+</main>
+
+<%- include('./src/partials/footer.html', { variant: "home" }) %>
+
+<button class="to-top" type="button" id="to-top" aria-label="Torna all'inizio della pagina">
+  <svg aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+</button>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Immagine ingrandita" hidden>
+  <div class="lightbox__bar">
+    <span id="lightbox-counter">1 / 1</span>
+    <button class="lightbox__close" type="button" data-lightbox-close aria-label="Chiudi l'immagine ingrandita">
+      <svg aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+    </button>
+  </div>
+  <div class="lightbox__stage">
+    <img id="lightbox-img" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="1" height="1">
+  </div>
+  <p class="lightbox__caption" id="lightbox-caption"></p>
+  <button class="lightbox__nav lightbox__nav--prev" type="button" data-lightbox-prev aria-label="Immagine precedente">
+    <svg aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg>
+  </button>
+  <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Immagine successiva">
+    <svg aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+  </button>
+</div>
+
+<script type="module" src="/src/scripts/main.js"></script>
+</body>
+</html>

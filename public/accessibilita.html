@@ -2,6 +2,15 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
+<!-- Cookie Solution iubenda: deve restare il primo script del documento,
+     così l'autoblocking impedisce a qualunque altro script di partire
+     prima che la persona scelga (https://www.iubenda.com/it/help/1205). -->
+<script type="text/javascript">
+var _iub = _iub || [];
+_iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it"};
+</script>
+<script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4652493.js"></script>
+<script type="text/javascript" src="https://cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dichiarazione di accessibilità — ELLEBI</title>
 <meta name="description" content="Come ELLEBI rende il sito utilizzabile da tutte le persone: criteri WCAG 2.2 AA, accorgimenti e contatti.">
@@ -119,7 +128,7 @@
         <li><a class="link-line" href="/">Home</a></li>
         <li><a class="link-line" href="/cookie">Cookie</a></li>
         <li><a class="link-line" href="/accessibilita">Accessibilità</a></li>
-        <li><button class="cookie-prefs" type="button" data-cookie-open>Preferenze cookie</button></li>
+        <li><button class="cookie-prefs iubenda-cs-preferences-link" type="button">Preferenze cookie</button></li>
       </ul>
     </div>
   </div>
@@ -128,28 +137,6 @@
 <button class="to-top" type="button" id="to-top" aria-label="Torna all'inizio della pagina">
   <svg aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
 </button>
-
-<div class="cookie" id="cookie-banner" role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-text" hidden>
-  <h2 class="cookie__title" id="cookie-title">Cookie e privacy</h2>
-  <p class="cookie__text" id="cookie-text">Questo sito usa solo cookie tecnici necessari al funzionamento. Le statistiche anonime sono facoltative e restano spente finché non dai il consenso: rifiutare costa un clic quanto accettare, e puoi cambiare idea in ogni momento. <a class="link-line" href="/cookie">Cookie policy</a></p>
-
-  <div class="cookie__options">
-    <label class="cookie__option">
-      <input type="checkbox" checked disabled>
-      <span><strong>Necessari</strong> — indispensabili per la visualizzazione del sito. Sempre attivi.</span>
-    </label>
-    <label class="cookie__option">
-      <input type="checkbox" id="consent-analytics">
-      <span><strong>Statistiche anonime</strong> — conteggio delle visite senza cookie di profilazione e senza dati personali.</span>
-    </label>
-  </div>
-
-  <div class="cookie__actions">
-    <button class="btn btn--solid" type="button" data-cookie-accept>Accetta tutto</button>
-    <button class="btn" type="button" data-cookie-reject>Rifiuta tutto</button>
-    <button class="btn" type="button" data-cookie-save>Salva scelte</button>
-  </div>
-</div>
 
 <script src="/assets/js/main.js" defer></script>
 </body>

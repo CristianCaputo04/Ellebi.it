@@ -1,0 +1,38 @@
+// 12. Filosofia (titolo rivelato parola per parola)
+.philosophy {
+  text-align: center;
+  background: linear-gradient(to bottom, var(--c-paper) 0%, var(--c-blush-soft) 100%);
+}
+
+.philosophy__title {
+  margin-top: var(--sp-3);
+  font-size: clamp(1.9rem, 1rem + 4.2vw, 4.4rem);
+  font-weight: 300;
+  line-height: 1.06;
+  text-transform: uppercase;
+  max-width: 18ch;
+  margin-inline: auto;
+}
+
+.philosophy__title .word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.philosophy__title .word > span {
+  display: inline-block;
+  transition: transform 0.9s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+.js .philosophy__title .word > span { transform: translateY(105%); }
+
+.philosophy__title.is-inview .word > span { transform: translateY(0); }
+
+.philosophy__text {
+  margin: var(--sp-3) auto 0;
+  max-width: 52ch;
+  color: var(--c-muted);
+  font-size: var(--fs-lead);
+}

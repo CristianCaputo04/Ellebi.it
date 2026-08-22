@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copre solo le pagine effettivamente migrate a Vite in questo scaffold
+     (index, accessibilita). Quando privacy.html e cookie.html verranno
+     portate con lo stesso schema di partial, aggiungile qui seguendo
+     l'esempio di /accessibilita. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://ellebi.it/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/borsa-01.jpg</image:loc>
+      <image:title>Nuvola — pouch in filato tortora</image:title>
+      <image:caption>Pouch morbida in filato tortora, lavorata a mano all'uncinetto.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/borsa-02.jpg</image:loc>
+      <image:title>Perla — mini bag color cacao</image:title>
+      <image:caption>Mini bag color cacao con manico rigido e tre perle cucite a mano.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/borsa-03.jpg</image:loc>
+      <image:title>Sera — pouch cioccolato con filo lurex</image:title>
+      <image:caption>Pouch in filato cioccolato con filo lurex, per le occasioni serali.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/borsa-04.jpg</image:loc>
+      <image:title>Cacao — pouch capiente in cioccolato opaco</image:title>
+      <image:caption>Pouch capiente in filato cioccolato opaco, lavorata a mano.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
+      <image:title>La lavorazione a mano ELLEBI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ellebi.it/accessibilita</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

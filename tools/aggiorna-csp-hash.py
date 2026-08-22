@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Ricalcola gli hash CSP dei blocchi di dati strutturati e aggiorna _headers.
+"""Ricalcola gli hash CSP dei blocchi inline e aggiorna _headers.
 
 La Content-Security-Policy del sito non consente script inline generici:
-ogni blocco JSON-LD è autorizzato singolarmente tramite il suo hash SHA-256.
-Se un blocco cambia — o se ne aggiunge uno su una nuova pagina — l'hash va
-rigenerato, altrimenti il browser lo blocca in silenzio.
+ogni blocco (JSON-LD, ma anche il frammento di configurazione di iubenda)
+è autorizzato singolarmente tramite il suo hash SHA-256. Se un blocco
+cambia — o se ne aggiunge uno su una nuova pagina — l'hash va rigenerato,
+altrimenti il browser lo blocca in silenzio.
 
 Vengono esaminate tutte le pagine, non solo la principale.
 
@@ -21,7 +22,11 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUB = os.path.join(BASE, "public")
 HEADERS = os.path.join(PUB, "_headers")
 
-RX_LD = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
+# Qualsiasi <script> privo di attributo src: copre sia i blocchi JSON-LD sia
+# il frammento inline di configurazione di iubenda (_iub.csConfiguration).
+# Gli script con src (main.js, head.js, gli script esterni di iubenda) sono
+# già coperti da 'self' o dal dominio esplicito e non hanno bisogno di hash.
+RX_LD = re.compile(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', re.S)
 
 
 def hash_di(contenuto):

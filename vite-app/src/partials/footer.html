@@ -1,0 +1,69 @@
+<%
+const isHome = typeof variant === "undefined" || variant === "home";
+%>
+<footer class="footer" id="footer">
+  <% if (isHome) { %>
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__col" data-reveal>
+        <h2>ELLEBI</h2>
+        <p class="footer__text">Borse fatte a mano, un nodo alla volta. Nessuna serie, nessuna copia.</p>
+      </div>
+
+      <div class="footer__col" data-reveal data-reveal-delay="80">
+        <h3>Naviga</h3>
+        <ul class="footer__list" role="list">
+          <li><a class="link-line" href="#collezione">Collezione</a></li>
+          <li><a class="link-line" href="#filosofia">Perché a mano</a></li>
+          <li><a class="link-line" href="#lavorazione">Lavorazione</a></li>
+          <li><a class="link-line" href="#dettagli">Dettagli</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col" data-reveal data-reveal-delay="160">
+        <h3>Trovami</h3>
+        <ul class="footer__list" role="list">
+          <li><a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Vinted</a></li>
+          <li><a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col" data-reveal data-reveal-delay="240">
+        <h3>Informazioni</h3>
+        <ul class="footer__list" role="list">
+          <li><a class="link-line" href="/privacy">Privacy policy</a></li>
+          <li><a class="link-line" href="/cookie">Cookie policy</a></li>
+          <li><a class="link-line" href="/accessibilita">Accessibilità</a></li>
+          <li><button class="cookie-prefs iubenda-cs-preferences-link" type="button">Preferenze cookie</button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer__wordmark" aria-hidden="true">Ellebi</p>
+
+  <div class="wrap">
+    <div class="footer__bottom">
+      <p>© <span data-year>2026</span> ELLEBI — Borse fatte a mano</p>
+      <ul class="footer__legal" role="list">
+        <li><a class="link-line" href="/privacy">Privacy</a></li>
+        <li><a class="link-line" href="/cookie">Cookie</a></li>
+        <li><a class="link-line" href="#main">Torna su</a></li>
+      </ul>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="wrap">
+    <div class="footer__bottom">
+      <p>© <span data-year>2026</span> ELLEBI — Borse fatte a mano</p>
+      <ul class="footer__legal" role="list">
+        <li><a class="link-line" href="/">Home</a></li>
+        <li><a class="link-line" href="/cookie">Cookie</a></li>
+        <li><a class="link-line" href="/accessibilita">Accessibilità</a></li>
+        <li><button class="cookie-prefs iubenda-cs-preferences-link" type="button">Preferenze cookie</button></li>
+      </ul>
+    </div>
+  </div>
+  <% } %>
+</footer>

@@ -1,0 +1,60 @@
+<%
+/* Partial parametrico: variant "home" mostra le ancore interne e i link
+   social; variant "inner" (pagine legali) mostra Home/Collezione e i
+   collegamenti alle altre pagine informative, escludendo quella corrente. */
+const isHome = typeof variant === "undefined" || variant === "home";
+const _currentPath = typeof currentPath === "undefined" ? null : currentPath;
+const legalLinks = [
+  { href: "/privacy", label: "Privacy" },
+  { href: "/cookie", label: "Cookie" },
+  { href: "/accessibilita", label: "Accessibilità" },
+].filter((l) => l.href !== _currentPath);
+%>
+<header class="header<%= isHome ? "" : " is-stuck" %>" id="site-header">
+  <div class="header__inner">
+    <nav class="header__nav" aria-label="Navigazione principale">
+      <% if (isHome) { %>
+      <a class="header__link" href="#collezione">Collezione</a>
+      <a class="header__link" href="#filosofia">Perché a mano</a>
+      <a class="header__link" href="#lavorazione">Lavorazione</a>
+      <% } else { %>
+      <a class="header__link" href="/">Home</a>
+      <a class="header__link" href="/#collezione">Collezione</a>
+      <% } %>
+    </nav>
+
+    <a class="header__brand" href="/" aria-label="ELLEBI — torna alla home">
+      <svg viewBox="0 0 260 198" role="img" aria-hidden="true" focusable="false">
+        <use href="#ellebi-mark" x="91" y="0" width="78" height="78"></use>
+        <text x="130" y="152" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="98" fill="currentColor">LB</text>
+        <text x="134" y="190" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="27" letter-spacing="8" fill="currentColor">ELLEBI</text>
+      </svg>
+    </a>
+
+    <nav class="header__nav header__nav--end" aria-label="<%= isHome ? 'Collegamenti esterni' : 'Collegamenti legali' %>">
+      <% if (isHome) { %>
+      <a class="header__link" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a class="header__link" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Pezzi disponibili</a>
+      <% } else { %>
+      <% legalLinks.slice(0, 2).forEach((l) => { %>
+      <a class="header__link" href="<%= l.href %>"><%= l.label %></a>
+      <% }) %>
+      <% } %>
+    </nav>
+
+    <% if (isHome) { %>
+    <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Apri il menu">
+      <span class="burger__label" aria-hidden="true">
+        <span class="burger__word">Menu</span>
+        <span class="burger__word">Chiudi</span>
+      </span>
+      <span class="burger__icon" aria-hidden="true">
+        <svg viewBox="0 0 16 16" fill="none" focusable="false">
+          <path d="M7.333 16V0h1.334v16H7.333Z" fill="currentColor"></path>
+          <path d="M16 8.667H0V7.333h16v1.334Z" fill="currentColor"></path>
+        </svg>
+      </span>
+    </button>
+    <% } %>
+  </div>
+</header>

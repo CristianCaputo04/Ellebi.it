@@ -1,8 +1,18 @@
 # Intestazioni HTTP servite da Cloudflare Pages.
 # Sintassi: un percorso, poi le intestazioni indentate di due spazi.
+#
+# Il consenso cookie è delegato a iubenda (Cookie Solution + Privacy/Cookie
+# Policy incorporata): script-src/connect-src/style-src/frame-src/img-src
+# concedono *.iubenda.com secondo la guida ufficiale
+# https://www.iubenda.com/it/help/12260 — 'unsafe-eval' e 'unsafe-inline'
+# (stile) sono richiesti dai loro script, non da codice nostro. L'hash del
+# frammento di configurazione inline (_iub.csConfiguration) è calcolato da
+# tools/aggiorna-csp-hash.py insieme a quelli dei blocchi JSON-LD.
+# Cross-Origin-Embedder-Policy è stato rimosso: l'iframe di incorporamento
+# della policy iubenda non garantisce l'header CORP richiesto da COEP.
 
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self' 'sha256-pI95qKXRYXqkPcLotjiz3zwu0VcYIsqdt9rWYqUclE8=' 'sha256-FQtiB8mnvR11sGcNWoz7N70RwpCmV5Bfr3Zw4YqaiiI=' 'sha256-HiHsofHJfLYeej89W05QFwWk/T12MEc8Fwjvfh7ITu8=' 'sha256-bh3Xi4ByTN/1VcJqV94LaqN+CEqLKB9hNfuSSxBH+6I=' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; manifest-src 'self'; frame-src 'none'; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https://*.iubenda.com; style-src 'self' 'unsafe-inline' https://*.iubenda.com; font-src 'self'; script-src 'self' 'sha256-XPdotk8qoa/0yOK7E5F/fURYacC0srX7xKET9EdbhrY=' 'sha256-pI95qKXRYXqkPcLotjiz3zwu0VcYIsqdt9rWYqUclE8=' 'sha256-FQtiB8mnvR11sGcNWoz7N70RwpCmV5Bfr3Zw4YqaiiI=' 'sha256-mhbzR5i9em+LtkdP0dOBptC2fXEAFPqnAEosBHJ3328=' 'sha256-HiHsofHJfLYeej89W05QFwWk/T12MEc8Fwjvfh7ITu8=' 'sha256-bh3Xi4ByTN/1VcJqV94LaqN+CEqLKB9hNfuSSxBH+6I=' 'unsafe-eval' https://*.iubenda.com; connect-src 'self' https://*.iubenda.com; manifest-src 'self'; frame-src https://*.iubenda.com; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -10,7 +20,6 @@
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), interest-cohort=()
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
-  Cross-Origin-Embedder-Policy: credentialless
   X-Permitted-Cross-Domain-Policies: none
   X-DNS-Prefetch-Control: off
 

@@ -1,0 +1,65 @@
+# Intestazioni HTTP servite da Cloudflare Pages.
+# Sintassi: un percorso, poi le intestazioni indentate di due spazi.
+# Il segnaposto __JSONLD_HASHES__ viene sostituito da scripts/csp-hash.mjs
+# subito dopo "vite build", con gli hash SHA-256 reali dei blocchi inline
+# (JSON-LD e il frammento di configurazione di iubenda) presenti nell'HTML
+# compilato: senza quello script il CSP qui sotto li blocca in silenzio.
+#
+# Il consenso cookie è delegato a iubenda (Cookie Solution + Privacy/Cookie
+# Policy incorporata): script-src/connect-src/style-src/frame-src/img-src
+# concedono *.iubenda.com secondo la guida ufficiale
+# https://www.iubenda.com/it/help/12260 — 'unsafe-eval' e 'unsafe-inline'
+# (stile) sono richiesti dai loro script, non da codice nostro.
+# Cross-Origin-Embedder-Policy è stato rimosso: l'iframe di incorporamento
+# della policy iubenda non garantisce l'header CORP richiesto da COEP.
+
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https://*.iubenda.com; style-src 'self' 'unsafe-inline' https://*.iubenda.com; font-src 'self'; script-src 'self' 'unsafe-eval' https://*.iubenda.com '__JSONLD_HASHES__'; connect-src 'self' https://*.iubenda.com; manifest-src 'self'; frame-src https://*.iubenda.com; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Permitted-Cross-Domain-Policies: none
+  X-DNS-Prefetch-Control: off
+
+# Le pagine HTML vanno sempre riconvalidate: un nuovo deploy deve comparire
+# subito, senza attendere la scadenza di una cache lunga.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Bundle JS/CSS con hash del contenuto nel nome file (vedi rollupOptions.output
+# in vite.config.js): un contenuto diverso produce sempre un nome diverso,
+# quindi la cache può essere "immutable" per un anno intero senza rischi.
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Le immagini generate da scripts/optimize-images.mjs mantengono lo stesso
+# nome quando il sorgente non cambia: cache lunga ma rivalidata dal CDN,
+# non "immutable", per lasciare margine a una sostituzione manuale del file.
+/assets/img/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+# I font non cambiano mai a parità di nome file: cache massima.
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# File di servizio: rivalidati spesso, sono piccoli e cambiano di rado
+# ma devono riflettere subito eventuali aggiornamenti (nuove pagine, icone).
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400

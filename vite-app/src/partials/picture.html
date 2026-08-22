@@ -1,0 +1,37 @@
+<%
+/* Partial riutilizzabile per ogni immagine responsive del sito.
+   Parametri attesi:
+     base         nome file senza estensione, es. "borsa-01"
+     widths       array di larghezze generate, es. [480, 800, 900]
+                   (l'ultima deve coincidere con realWidth: è la variante
+                   a piena risoluzione, senza suffisso "-wN", generata
+                   da scripts/optimize-images.mjs)
+     realWidth/realHeight  dimensioni intrinseche, per width/height (niente CLS)
+     alt          testo alternativo ("" per immagini puramente decorative)
+     sizes        attributo sizes, calcolato sulla larghezza resa a schermo
+     decorative   true per le immagini di sfondo/variante senza valore informativo
+     loading      "lazy" (default) o "eager"
+     fetchpriority "high" per l'immagine più critica della pagina (es. hero)
+     className    classe CSS opzionale sul <picture>
+*/
+const srcset = (ext) =>
+  widths
+    .map((w) => `/assets/img/${base}${w === realWidth ? "" : `-w${w}`}.${ext} ${w}w`)
+    .join(", ");
+%>
+<picture<%= typeof className !== "undefined" ? ` class="${className}"` : "" %>>
+  <source type="image/avif" srcset="<%= srcset("avif") %>" sizes="<%= sizes %>">
+  <source type="image/webp" srcset="<%= srcset("webp") %>" sizes="<%= sizes %>">
+  <img
+    src="/assets/img/<%= base %>.jpg"
+    srcset="<%= srcset("jpg") %>"
+    sizes="<%= sizes %>"
+    alt="<%= alt %>"
+    <%- typeof decorative !== "undefined" && decorative ? 'aria-hidden="true"' : "" %>
+    width="<%= realWidth %>"
+    height="<%= realHeight %>"
+    loading="<%= typeof loading !== "undefined" ? loading : "lazy" %>"
+    <%- typeof fetchpriority !== "undefined" ? `fetchpriority="${fetchpriority}"` : "" %>
+    decoding="async"
+  >
+</picture>

@@ -1,0 +1,97 @@
+// 21. Pagine legali
+.legal {
+  padding-top: calc(var(--header-h) + var(--sp-6));
+  padding-bottom: var(--sp-7);
+}
+
+.legal__meta {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin-top: var(--sp-2);
+}
+
+.legal__body { margin-top: var(--sp-5); }
+
+.legal__body h2 {
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-1);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.legal__body h3 {
+  margin-top: var(--sp-3);
+  margin-bottom: 0.35rem;
+  font-size: var(--fs-body);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.legal__body p,
+.legal__body ul,
+.legal__body ol { margin-top: 0.75rem; color: var(--c-muted); }
+
+.legal__body ul,
+.legal__body ol { padding-left: 1.2rem; display: grid; gap: 0.4rem; }
+
+.legal__body a { color: var(--c-espresso); text-underline-offset: 3px; }
+
+/* riepilogo della scelta sui cookie, in cima alla cookie policy */
+.legal__body .legal__status {
+  margin-top: var(--sp-2);
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--c-line);
+  border-left: 3px solid var(--c-terracotta-ink);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: var(--c-blush-soft);
+  color: var(--c-espresso);
+}
+
+.legal__table {
+  width: 100%;
+  margin-top: var(--sp-2);
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+.legal__table th,
+.legal__table td {
+  padding: 0.7rem 0.6rem;
+  border-bottom: 1px solid var(--c-line-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal__table th {
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: var(--fs-micro);
+  color: var(--c-muted);
+}
+
+.legal__scroll { overflow-x: auto; }
+
+/* Pagina 404 */
+.error-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: calc(var(--header-h) + var(--sp-5)) var(--gutter) var(--sp-6);
+  background: var(--c-blush-soft);
+}
+
+.error-page .lead { margin-inline: auto; }
+
+.error-page__code {
+  font-family: var(--f-serif);
+  font-size: var(--fs-giant);
+  line-height: 0.8;
+  color: var(--c-terracotta-ink);
+}

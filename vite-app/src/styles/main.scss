@@ -1,0 +1,43 @@
+@charset "utf-8";
+// =========================================================================
+// ELLEBI — Borse fatte a mano
+// Stile: minimal editoriale, palette del logo (blush + espresso)
+//
+// Architettura: un partial SCSS per sezione (7-1 pattern semplificato).
+// I font self-hosted sono importati separatamente in fonts.scss, prima
+// di questo foglio, così i due file si scaricano in parallelo.
+// =========================================================================
+
+// 1. Design tokens — deve entrare per primo: tutte le sezioni successive
+//    leggono le custom property definite qui (colori, spaziature, font).
+@use "partials/03-design-tokens" as *;
+
+// 2. Reset e base
+@use "partials/02-reset" as *;
+@use "partials/04-base" as *;
+@use "partials/05-utility-di-layout" as *;
+@use "partials/06-bottoni-e-link" as *;
+
+// 3. Componenti trasversali
+@use "partials/07-preloader" as *;
+@use "partials/08-header" as *;
+
+// 4. Sezioni di pagina, nell'ordine in cui compaiono nel markup
+@use "partials/09-hero" as *;
+@use "partials/24-hero-a-piani-e-menu-cinetico" as *;
+@use "partials/10-marquee" as *;
+@use "partials/11-collezione" as *;
+@use "partials/12-filosofia" as *;
+@use "partials/13-pilastri" as *;
+@use "partials/14-banner-immagine-a-tutta-larghezza" as *;
+@use "partials/15-passaggi" as *;
+@use "partials/16-galleria" as *;
+@use "partials/17-contatti" as *;
+@use "partials/18-footer" as *;
+
+// 5. Overlay e utility globali
+@use "partials/19-lightbox" as *;
+@use "partials/20-banner-cookie" as *;
+@use "partials/21-pagine-legali" as *;
+@use "partials/22-animazioni-di-ingresso" as *;
+@use "partials/23-preferenze-utente" as *;

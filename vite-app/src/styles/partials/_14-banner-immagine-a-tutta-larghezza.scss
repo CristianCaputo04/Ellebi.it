@@ -1,0 +1,69 @@
+// 14. Banner immagine a tutta larghezza
+.banner {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: clamp(24rem, 65vh, 42rem);
+  overflow: clip;
+  isolation: isolate;
+  background: var(--c-espresso-2);
+  text-align: center;
+  color: var(--c-paper);
+}
+
+.banner__media {
+  position: absolute;
+  inset: -12% 0;
+  z-index: -2;
+  will-change: transform;
+}
+
+.banner__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* la foto sotto è molto ricca di dettaglio: il velo è più scuro al centro,
+   dove cadono titolo e testo, così restano leggibili ovunque */
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    rgba(35, 19, 12, 0.42) 0%,
+    rgba(35, 19, 12, 0.66) 45%,
+    rgba(35, 19, 12, 0.66) 70%,
+    rgba(35, 19, 12, 0.42) 100%
+  );
+}
+
+.banner__inner {
+  padding: var(--sp-6) var(--gutter);
+  max-width: var(--maxw);
+}
+
+.banner__title {
+  font-size: clamp(1.6rem, 0.9rem + 3.4vw, 3.6rem);
+  font-weight: 300;
+  line-height: 1.1;
+  text-transform: uppercase;
+  text-shadow: 0 2px 30px rgba(35, 19, 12, 0.4);
+}
+
+.banner__text {
+  margin: var(--sp-2) auto 0;
+  max-width: 46ch;
+  font-size: var(--fs-body);
+  color: rgba(251, 247, 244, 0.92);
+}
+
+.banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  justify-content: center;
+  margin-top: var(--sp-4);
+}

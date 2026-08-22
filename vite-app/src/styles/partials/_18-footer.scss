@@ -1,0 +1,117 @@
+// 18. Footer
+.footer {
+  position: relative;
+  background: var(--c-espresso);
+  color: var(--c-blush-soft);
+  padding-top: var(--sp-6);
+  overflow: clip;
+}
+
+.footer a { text-decoration: none; }
+
+.footer__grid {
+  display: grid;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-5);
+}
+
+@media (min-width: 48em) {
+  .footer__grid {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--sp-5);
+  }
+}
+
+.footer__col h2,
+.footer__col h3 {
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(246, 221, 208, 0.72);
+  margin-bottom: var(--sp-2);
+}
+
+.footer__list {
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+}
+
+.footer__text {
+  font-size: var(--fs-small);
+  color: rgba(246, 221, 208, 0.82);
+  max-width: 34ch;
+}
+
+.footer__wordmark {
+  display: block;
+  width: 100%;
+  margin-top: var(--sp-3);
+  color: rgba(246, 221, 208, 0.16);
+  font-weight: 300;
+  font-size: var(--fs-giant);
+  line-height: 0.78;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
+  transform: translateY(12%);
+}
+
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding-block: var(--sp-3);
+  border-top: 1px solid rgba(246, 221, 208, 0.18);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.1em;
+  color: rgba(246, 221, 208, 0.78);
+}
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  list-style: none;
+}
+
+.to-top {
+  position: fixed;
+  right: clamp(0.9rem, 2.5vw, 2rem);
+  bottom: clamp(0.9rem, 2.5vw, 2rem);
+  z-index: 80;
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--c-line);
+  border-radius: 50%;
+  background: rgba(251, 247, 244, 0.92);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--c-espresso);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease-out-expo),
+    visibility 0s linear var(--dur-2), background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+
+.to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease-out-expo),
+    visibility 0s, background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+
+.to-top:hover { background: var(--c-espresso); color: var(--c-blush-soft); }
+
+.to-top svg { width: 1rem; height: 1rem; }
