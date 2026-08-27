@@ -856,17 +856,20 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   transition: transform 0.9s var(--ease-out-expo), opacity 0.6s var(--ease);
 }
 
-.card__media img + img {
+/* Ogni foto è avvolta in <picture>: il secondo elemento adiacente da
+   selezionare è la picture, non l'img (altrimenti la regola non trova mai
+   corrispondenza, perché ogni img resta unico figlio della propria picture). */
+.card__media picture + picture img {
   position: absolute;
   inset: 0;
   opacity: 0;
 }
 
-.card:hover .card__media img:first-child,
-.card:focus-within .card__media img:first-child { transform: scale(1.06); opacity: 0; }
+.card:hover .card__media picture:first-child img,
+.card:focus-within .card__media picture:first-child img { transform: scale(1.06); opacity: 0; }
 
-.card:hover .card__media img + img,
-.card:focus-within .card__media img + img { opacity: 1; transform: scale(1.06); }
+.card:hover .card__media picture + picture img,
+.card:focus-within .card__media picture + picture img { opacity: 1; transform: scale(1.06); }
 
 .card__badge {
   position: absolute;
