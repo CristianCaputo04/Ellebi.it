@@ -443,6 +443,10 @@
       });
     }
 
+    // Debug: reset-cookies=true nel URL forza il banner a mostrare
+    var resetCookies = new URLSearchParams(window.location.search).has("reset-cookies");
+    if (resetCookies) { localStorage.removeItem(seenKey); }
+
     if (localStorage.getItem(seenKey) !== "1") {
       showBanner();
     }
