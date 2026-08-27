@@ -7,9 +7,9 @@
      prima che la persona scelga (https://www.iubenda.com/it/help/1205). -->
 <script type="text/javascript">
 var _iub = _iub || [];
-_iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","banner":{"acceptButtonDisplay":false,"rejectButtonDisplay":false,"customizeButtonDisplay":false,"closeButtonDisplay":false},"callback":{"onPreferenceExpressed":function(){var b=document.getElementById("cookie-banner");if(b){b.classList.remove("is-visible");localStorage.setItem("ellebi_cookie_seen","1");}}}};
+_iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","consentOnScroll":false,"banner":{"acceptButtonDisplay":false,"rejectButtonDisplay":false,"customizeButtonDisplay":false,"closeButtonDisplay":false},"callback":{"onPreferenceExpressed":function(){var b=document.getElementById("cookie-banner");if(b){b.classList.remove("is-visible");localStorage.setItem("ellebi_cookie_seen","1");}}}};
 </script>
-<script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4652493.js"></script>
+<script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4652493.js" async></script>
 <script type="text/javascript" src="https://cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ELLEBI — Borse fatte a mano | Ogni borsa esiste una volta sola</title>
@@ -47,11 +47,13 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
 <link rel="preload" href="/assets/fonts/jost-300-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <!-- Si anticipa esattamente il file che il browser userà davvero: con `type`
-     chi non legge WebP salta la riga e scarica il JPEG una volta sola. -->
-<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-w960.webp 960w, /assets/img/hero.webp 1920w" imagesizes="100vw" fetchpriority="high" media="(min-width: 48em)">
-<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-mobile-w500.webp 500w, /assets/img/hero-mobile.webp 1000w" imagesizes="100vw" fetchpriority="high" media="(max-width: 47.99em)">
+     chi non legge AVIF salta la riga e scarica il WebP/JPEG del <picture>
+     una volta sola, senza doppio download. Un solo formato per non far
+     scaricare due copie dell'hero a chi supporta sia AVIF sia WebP. -->
+<link rel="preload" as="image" type="image/avif" imagesrcset="/assets/img/hero-w960.avif 960w, /assets/img/hero.avif 1920w" imagesizes="100vw" fetchpriority="high" media="(min-width: 48em)">
+<link rel="preload" as="image" type="image/avif" imagesrcset="/assets/img/hero-mobile-w500.avif 500w, /assets/img/hero-mobile.avif 1000w" imagesizes="100vw" fetchpriority="high" media="(max-width: 47.99em)">
 <link rel="stylesheet" href="/assets/css/fonts.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=18edf4165b">
+<link rel="stylesheet" href="/assets/css/style.css?v=6a773dfb9f">
 <script src="/assets/js/head.js"></script>
 
 <script type="application/ld+json">
@@ -225,8 +227,10 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
     <div class="hero__media" data-hero-layer data-hero-shift="12">
       <picture>
         <!-- ritaglio verticale sul telefono: si vede tutta la borsa -->
+        <source type="image/avif" srcset="/assets/img/hero-mobile-w500.avif 500w, /assets/img/hero-mobile.avif 1000w" sizes="100vw" media="(max-width: 47.99em)">
         <source type="image/webp" srcset="/assets/img/hero-mobile-w500.webp 500w, /assets/img/hero-mobile.webp 1000w" sizes="100vw" media="(max-width: 47.99em)">
         <source type="image/jpeg" srcset="/assets/img/hero-mobile-w500.jpg 500w, /assets/img/hero-mobile.jpg 1000w" sizes="100vw" media="(max-width: 47.99em)">
+        <source type="image/avif" srcset="/assets/img/hero-w960.avif 960w, /assets/img/hero.avif 1920w" sizes="100vw" media="(min-width: 48em)">
         <source type="image/webp" srcset="/assets/img/hero-w960.webp 960w, /assets/img/hero.webp 1920w" sizes="100vw" media="(min-width: 48em)">
         <source type="image/jpeg" srcset="/assets/img/hero-w960.jpg 960w, /assets/img/hero.jpg 1920w" sizes="100vw" media="(min-width: 48em)">
         <source media="(max-width: 47.99em)" srcset="/assets/img/hero-mobile.jpg" width="1000" height="1400">
@@ -238,17 +242,18 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
 
     <div class="hero__inner" data-hero-layer data-hero-shift="6.5">
       <div class="hero__content" data-hero-content>
-        <p class="hero__eyebrow">Fatte a mano, una alla volta</p>
+        <p class="hero__eyebrow">Borse all'uncinetto fatte a mano, una alla volta</p>
         <h1 class="hero__title" id="hero-title">Ogni borsa esiste una volta sola</h1>
         <p class="hero__sub">Filato, mani, ore. Nessuna serie, nessuna copia: <em>quando un pezzo finisce, finisce.</em></p>
 
         <div class="hero__actions">
           <a class="btn btn--solid" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
-            Vedi i pezzi disponibili
+            Vedi i pezzi disponibili su Vinted
             <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
           </a>
           <a class="btn" href="#collezione">Guarda la collezione</a>
         </div>
+        <p class="hero__note">Questo sito mostra il lavoro — l'acquisto avviene su Vinted.</p>
       </div>
     </div>
 
@@ -288,11 +293,13 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-01-w450.avif 450w, /assets/img/borsa-01.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/webp" srcset="/assets/img/borsa-01-w450.webp 450w, /assets/img/borsa-01.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-01-w450.jpg 450w, /assets/img/borsa-01.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-01.jpg" alt="Nuvola: pouch morbida in filato tortora con bordo intrecciato, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
             </picture>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-01b-w450.avif 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/webp" srcset="/assets/img/borsa-01b-w450.webp 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-01b-w450.jpg 450w, /assets/img/borsa-01b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-01b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
@@ -309,11 +316,13 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-02-w450.avif 450w, /assets/img/borsa-02.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/webp" srcset="/assets/img/borsa-02-w450.webp 450w, /assets/img/borsa-02.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-02-w450.jpg 450w, /assets/img/borsa-02.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-02.jpg" alt="Perla: mini bag color cacao con manico rigido e tre perle bianche cucite a mano" width="900" height="1200" loading="lazy" decoding="async">
             </picture>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-02b-w450.avif 450w, /assets/img/borsa-02b.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/webp" srcset="/assets/img/borsa-02b-w450.webp 450w, /assets/img/borsa-02b.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-02b-w450.jpg 450w, /assets/img/borsa-02b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-02b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
@@ -330,11 +339,13 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-03-w450.avif 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/webp" srcset="/assets/img/borsa-03-w450.webp 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-03-w450.jpg 450w, /assets/img/borsa-03.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-03.jpg" alt="Sera: pouch in filato cioccolato attraversato da lurex dorato, appoggiata su un muretto" width="900" height="1200" loading="lazy" decoding="async">
             </picture>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-03b-w450.avif 450w, /assets/img/borsa-03b.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-03b-w450.jpg 450w, /assets/img/borsa-03b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-03b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
             </picture>
@@ -350,11 +361,13 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
           <div class="card__media">
             <span class="card__badge">Pezzo unico</span>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-04-w450.avif 450w, /assets/img/borsa-04.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/webp" srcset="/assets/img/borsa-04-w450.webp 450w, /assets/img/borsa-04.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-04-w450.jpg 450w, /assets/img/borsa-04.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-04.jpg" alt="Cacao: pouch capiente in filato cioccolato opaco, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
             </picture>
             <picture>
+              <source type="image/avif" srcset="/assets/img/borsa-04b-w450.avif 450w, /assets/img/borsa-04b.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/webp" srcset="/assets/img/borsa-04b-w450.webp 450w, /assets/img/borsa-04b.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <source type="image/jpeg" srcset="/assets/img/borsa-04b-w450.jpg 450w, /assets/img/borsa-04b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
               <img src="/assets/img/borsa-04b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
@@ -434,6 +447,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
   <section class="banner" aria-labelledby="banner-title">
     <div class="banner__media" data-parallax="0.12">
       <picture>
+        <source type="image/avif" srcset="/assets/img/atelier-w960.avif 960w, /assets/img/atelier.avif 1920w" sizes="100vw">
         <source type="image/jpeg" srcset="/assets/img/atelier-w960.jpg 960w, /assets/img/atelier.jpg 1920w" sizes="100vw">
         <img src="/assets/img/atelier.jpg" alt="Dettaglio della borsa Sera: filato cioccolato con lurex dorato, alla luce naturale" width="1920" height="1080" loading="lazy" decoding="async">
       </picture>
@@ -465,6 +479,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         <li class="step" data-reveal>
           <div class="step__media">
             <picture>
+              <source type="image/avif" srcset="/assets/img/step-01-w600.avif 600w, /assets/img/step-01.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <source type="image/jpeg" srcset="/assets/img/step-01-w600.jpg 600w, /assets/img/step-01.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <img src="/assets/img/step-01.jpg" alt="Dettaglio ravvicinato del filato tortora della borsa Nuvola" width="1200" height="900" loading="lazy" decoding="async">
             </picture>
@@ -480,6 +495,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         <li class="step" data-reveal>
           <div class="step__media">
             <picture>
+              <source type="image/avif" srcset="/assets/img/step-02-w600.avif 600w, /assets/img/step-02.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <source type="image/jpeg" srcset="/assets/img/step-02-w600.jpg 600w, /assets/img/step-02.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <img src="/assets/img/step-02.jpg" alt="Dettaglio del punto a uncinetto sul filato cioccolato della borsa Cacao" width="1200" height="900" loading="lazy" decoding="async">
             </picture>
@@ -495,6 +511,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         <li class="step" data-reveal>
           <div class="step__media">
             <picture>
+              <source type="image/avif" srcset="/assets/img/step-03-w600.avif 600w, /assets/img/step-03.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <source type="image/webp" srcset="/assets/img/step-03-w600.webp 600w, /assets/img/step-03.webp 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <source type="image/jpeg" srcset="/assets/img/step-03-w600.jpg 600w, /assets/img/step-03.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <img src="/assets/img/step-03.jpg" alt="Il manico rigido e le tre perle cucite a mano della borsa Perla" width="1200" height="900" loading="lazy" decoding="async">
@@ -511,6 +528,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         <li class="step" data-reveal>
           <div class="step__media">
             <picture>
+              <source type="image/avif" srcset="/assets/img/step-04-w600.avif 600w, /assets/img/step-04.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <source type="image/jpeg" srcset="/assets/img/step-04-w600.jpg 600w, /assets/img/step-04.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
               <img src="/assets/img/step-04.jpg" alt="La borsa Sera finita, appoggiata su un muretto davanti a delle foglie" width="1200" height="900" loading="lazy" decoding="async">
             </picture>
@@ -540,6 +558,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
       <div class="gallery__grid" data-stagger>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-01.jpg" data-caption="Nuvola — il bordo intrecciato" aria-label="Ingrandisci: il bordo intrecciato della borsa Nuvola">
           <picture>
+            <source type="image/avif" srcset="/assets/img/gallery-01-w400.avif 400w, /assets/img/gallery-01.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/webp" srcset="/assets/img/gallery-01-w400.webp 400w, /assets/img/gallery-01.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/jpeg" srcset="/assets/img/gallery-01-w400.jpg 400w, /assets/img/gallery-01.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <img src="/assets/img/gallery-01.jpg" alt="Il bordo intrecciato della borsa Nuvola visto da vicino" width="800" height="800" loading="lazy" decoding="async">
@@ -547,6 +566,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-02.jpg" data-caption="Perla — il manico rigido" aria-label="Ingrandisci: il manico rigido della borsa Perla">
           <picture>
+            <source type="image/avif" srcset="/assets/img/gallery-02-w400.avif 400w, /assets/img/gallery-02.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/webp" srcset="/assets/img/gallery-02-w400.webp 400w, /assets/img/gallery-02.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/jpeg" srcset="/assets/img/gallery-02-w400.jpg 400w, /assets/img/gallery-02.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <img src="/assets/img/gallery-02.jpg" alt="Il manico rigido della borsa Perla, avvolto nel filato" width="800" height="800" loading="lazy" decoding="async">
@@ -554,12 +574,14 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-03.jpg" data-caption="Sera — il lurex alla luce" aria-label="Ingrandisci: il filo lurex della borsa Sera">
           <picture>
+            <source type="image/avif" srcset="/assets/img/gallery-03-w400.avif 400w, /assets/img/gallery-03.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/jpeg" srcset="/assets/img/gallery-03-w400.jpg 400w, /assets/img/gallery-03.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <img src="/assets/img/gallery-03.jpg" alt="Il filo lurex dorato della borsa Sera che riflette la luce" width="800" height="800" loading="lazy" decoding="async">
           </picture>
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-04.jpg" data-caption="Cacao — la trama piena" aria-label="Ingrandisci: la trama della borsa Cacao">
           <picture>
+            <source type="image/avif" srcset="/assets/img/gallery-04-w400.avif 400w, /assets/img/gallery-04.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/webp" srcset="/assets/img/gallery-04-w400.webp 400w, /assets/img/gallery-04.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/jpeg" srcset="/assets/img/gallery-04-w400.jpg 400w, /assets/img/gallery-04.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <img src="/assets/img/gallery-04.jpg" alt="La trama fitta del filato cioccolato della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">
@@ -567,6 +589,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-05.jpg" data-caption="Nuvola — l'apertura morbida" aria-label="Ingrandisci: l'apertura della borsa Nuvola">
           <picture>
+            <source type="image/avif" srcset="/assets/img/gallery-05-w400.avif 400w, /assets/img/gallery-05.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/webp" srcset="/assets/img/gallery-05-w400.webp 400w, /assets/img/gallery-05.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/jpeg" srcset="/assets/img/gallery-05-w400.jpg 400w, /assets/img/gallery-05.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <img src="/assets/img/gallery-05.jpg" alt="L'apertura morbida della borsa Nuvola vista dall'alto" width="800" height="800" loading="lazy" decoding="async">
@@ -574,6 +597,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
         </button>
         <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-06.jpg" data-caption="Cacao — il fondo" aria-label="Ingrandisci: il fondo della borsa Cacao">
           <picture>
+            <source type="image/avif" srcset="/assets/img/gallery-06-w400.avif 400w, /assets/img/gallery-06.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/webp" srcset="/assets/img/gallery-06-w400.webp 400w, /assets/img/gallery-06.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <source type="image/jpeg" srcset="/assets/img/gallery-06-w400.jpg 400w, /assets/img/gallery-06.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
             <img src="/assets/img/gallery-06.jpg" alt="Il fondo lavorato a mano della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">

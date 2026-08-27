@@ -421,6 +421,18 @@ body.is-loaded .preloader {
   box-shadow: 0 1px 0 var(--c-line-soft);
 }
 
+/* Il vetro sfocato sull'header fisso costringe il telefono a ricalcolare
+   la sfocatura del contenuto sottostante a ogni fotogramma di scroll: è
+   la causa più probabile dello scroll poco fluido segnalato su mobile.
+   Sotto i 62em si passa a uno sfondo pieno, senza sfocatura da ricalcolare. */
+@media (max-width: 61.99em) {
+  .header.is-stuck {
+    background: rgba(251, 247, 244, 0.97);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
 .header.is-stuck::before { opacity: 0; }
 
 .header.is-hidden { transform: translateY(-105%); }
@@ -717,6 +729,13 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   flex-wrap: wrap;
   gap: var(--sp-2);
   margin-top: var(--sp-4);
+}
+
+.hero__note {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  color: var(--c-muted);
 }
 
 .hero__scroll {
