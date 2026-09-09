@@ -12,7 +12,7 @@
 # della policy iubenda non garantisce l'header CORP richiesto da COEP.
 
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https://*.iubenda.com; style-src 'self' 'unsafe-inline' https://*.iubenda.com; font-src 'self'; script-src 'self' 'sha256-7DPDQbR1c4IOi4ZBrAo2vm20MTunG8m/3/RrnGf0RVA=' 'sha256-pI95qKXRYXqkPcLotjiz3zwu0VcYIsqdt9rWYqUclE8=' 'sha256-FQtiB8mnvR11sGcNWoz7N70RwpCmV5Bfr3Zw4YqaiiI=' 'sha256-mhbzR5i9em+LtkdP0dOBptC2fXEAFPqnAEosBHJ3328=' 'sha256-HiHsofHJfLYeej89W05QFwWk/T12MEc8Fwjvfh7ITu8=' 'sha256-bh3Xi4ByTN/1VcJqV94LaqN+CEqLKB9hNfuSSxBH+6I=' 'unsafe-eval' https://*.iubenda.com; connect-src 'self' https://*.iubenda.com; manifest-src 'self'; frame-src https://*.iubenda.com; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https://*.iubenda.com; style-src 'self' 'unsafe-inline' https://*.iubenda.com; font-src 'self'; script-src 'self' 'sha256-qqe3tqPOh4CN+wgKqrup+NbS9e4DaJ7ICy7aLqjLmWY=' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U=' 'sha256-pI95qKXRYXqkPcLotjiz3zwu0VcYIsqdt9rWYqUclE8=' 'sha256-FQtiB8mnvR11sGcNWoz7N70RwpCmV5Bfr3Zw4YqaiiI=' 'sha256-mhbzR5i9em+LtkdP0dOBptC2fXEAFPqnAEosBHJ3328=' 'sha256-9YTj3EfSo2WAryQfYnP9BzbcoEfBk9djwIz6OIOuryo=' 'sha256-bh3Xi4ByTN/1VcJqV94LaqN+CEqLKB9hNfuSSxBH+6I=' 'sha256-OaT/q/XM/6tC5+3xFT4xwxDsyQ/DQoPkFa0yXcYLyng=' 'unsafe-eval' https://*.iubenda.com; connect-src 'self' https://*.iubenda.com; manifest-src 'self'; frame-src https://*.iubenda.com; media-src 'none'; worker-src 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
@@ -31,12 +31,19 @@
 /
   Cache-Control: public, max-age=0, must-revalidate
 
-# Risorse con nome stabile: cache lunga ma riconvalidata dal CDN.
+# CSS e JS sono richiamati con una marca di versione calcolata dal contenuto
+# (style.css?v=4a7e365431): a ogni modifica l'indirizzo cambia, quindi il file
+# a un dato indirizzo non cambierà mai più e si può tenere per un anno senza
+# nemmeno chiedere al server se è ancora buono. Le visite successive partono
+# senza toccare la rete.
+# La marca la riallinea tools/aggiorna-versioni.py, e la pubblicazione si
+# ferma se qualcuno se ne dimentica: senza quel controllo "immutable" sarebbe
+# un modo per lasciare le persone con lo stile vecchio per un anno.
 /assets/css/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /assets/js/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  Cache-Control: public, max-age=31536000, immutable
 
 /assets/img/*
   Cache-Control: public, max-age=2592000, stale-while-revalidate=604800

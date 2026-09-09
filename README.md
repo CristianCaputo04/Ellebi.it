@@ -2,7 +2,8 @@
 
 Landing page statica che mostra le borse artigianali ELLEBI. **Non è un negozio**:
 niente carrello, niente prezzi, niente moduli d'ordine. Le chiamate all'azione
-portano al profilo Vinted, dove stanno i pezzi ancora disponibili.
+portano ai contatti diretti — Instagram e e-mail — dove si chiede quali pezzi
+sono ancora disponibili.
 
 Nessun framework, nessuna dipendenza da installare: HTML, CSS e JavaScript scritti
 a mano. Si pubblica su Cloudflare Workers a ogni commit.
@@ -33,15 +34,16 @@ servizio, cronologia Git — resta privato.
 │   └── assets/
 │       ├── css/fonts.css   font self-hosted (@font-face)
 │       ├── css/style.css   tutto lo stile del sito
-│       ├── js/head.js      micro-script: segnala che JavaScript è attivo
 │       ├── js/main.js      animazioni, menu, lightbox, consenso cookie
-│       ├── fonts/          Jost e Cormorant Garamond in formato woff2
+│       ├── fonts/          Jost 300/400/500 e Cormorant Garamond 300, woff2
 │       └── img/            foto delle borse, icone, anteprima social
 │
 ├── wrangler.toml           configurazione della pubblicazione su Cloudflare
 ├── .github/workflows/      pubblicazione automatica a ogni commit
 └── tools/
-    └── aggiorna-csp-hash.py  rigenera l'hash CSP del blocco dati strutturati
+    ├── aggiorna-csp-hash.py   rigenera gli hash CSP degli script inline
+    ├── aggiorna-versioni.py   riallinea il ?v= di CSS e JS al loro contenuto
+    └── ottimizza-immagini.mjs genera le varianti responsive delle foto
 ```
 
 ---
@@ -107,17 +109,42 @@ una sede o una partita IVA, conviene indicarla per esteso in `public/privacy.htm
 Resta da aggiornare solo se il dominio finale cambiasse: `https://ellebi.it/`
 compare nei meta tag, in `sitemap.xml`, in `robots.txt` e nei dati strutturati.
 
-Profili collegati (già corretti nel sito): Vinted
-`https://www.vinted.it/member/65695128-pinkstraw7` e Instagram `@ellebi.it`.
+Profilo collegato (già corretto nel sito): Instagram `@ellebi.it`. Il profilo
+Vinted non è più collegato da nessuna pagina né dalla scorciatoia `/vinted`.
 
-Se modifichi il blocco `application/ld+json` in `public/index.html`, esegui poi:
+Se modifichi il blocco `application/ld+json` in `public/index.html` — o
+qualunque altro `<script>` scritto dentro la pagina — esegui poi:
 
 ```bash
 python3 tools/aggiorna-csp-hash.py
 ```
 
 così l'hash nella Content-Security-Policy torna corretto (altrimenti il browser
-blocca quel blocco di dati strutturati).
+blocca quello script senza dire niente).
+
+Se modifichi `style.css` o `main.js`, esegui invece:
+
+```bash
+python3 tools/aggiorna-versioni.py
+```
+
+Riscrive la marca `?v=...` con cui le pagine richiamano quei due file. Serve
+perché `public/_headers` dice ai browser di tenerli in cache per un anno senza
+mai richiederli: l'indirizzo deve cambiare a ogni modifica, altrimenti chi ha
+già visitato il sito resta con la versione vecchia. La pubblicazione su
+Cloudflare si ferma da sola se te ne dimentichi.
+
+Se aggiungi o sostituisci una foto, mettine la versione a piena risoluzione in
+`public/assets/img/` come `.jpg` e genera le altre:
+
+```bash
+npm i --no-save sharp
+node tools/ottimizza-immagini.mjs
+```
+
+Crea le larghezze responsive e le versioni AVIF e WebP, saltando le WebP che
+risulterebbero più pesanti del JPEG (su queste foto molto dettagliate capita).
+Con `--check` elenca soltanto ciò che manca.
 
 ---
 

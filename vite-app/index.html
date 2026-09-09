@@ -2,7 +2,7 @@
 const jsonld = JSON.stringify({
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "Organization", "@id": "https://ellebi.it/#org", "name": "ELLEBI", "alternateName": "ELLEBI | Handmade & Style", "url": "https://ellebi.it/", "logo": "https://ellebi.it/assets/img/logo-badge.svg", "image": "https://ellebi.it/assets/img/og-cover.jpg", "description": "Borse all'uncinetto fatte a mano in Italia, un pezzo alla volta, senza produzione in serie.", "email": "ellebi.style@gmail.com", "areaServed": "IT", "sameAs": ["https://www.instagram.com/ellebi.it/", "https://www.vinted.it/member/65695128-pinkstraw7"], "slogan": "Stile • Armonia • Autenticità" },
+    { "@type": "Organization", "@id": "https://ellebi.it/#org", "name": "ELLEBI", "alternateName": "ELLEBI | Handmade & Style", "url": "https://ellebi.it/", "logo": "https://ellebi.it/assets/img/logo-badge.svg", "image": "https://ellebi.it/assets/img/og-cover.jpg", "description": "Borse all'uncinetto fatte a mano in Italia, un pezzo alla volta, senza produzione in serie.", "email": "ellebi.style@gmail.com", "areaServed": "IT", "sameAs": ["https://www.instagram.com/ellebi.it/"], "slogan": "Stile • Armonia • Autenticità" },
     { "@type": "WebSite", "@id": "https://ellebi.it/#site", "url": "https://ellebi.it/", "name": "ELLEBI", "inLanguage": "it-IT", "publisher": { "@id": "https://ellebi.it/#org" } },
     { "@type": "WebPage", "@id": "https://ellebi.it/#page", "url": "https://ellebi.it/", "name": "ELLEBI — Ogni borsa esiste una volta sola", "isPartOf": { "@id": "https://ellebi.it/#site" }, "about": { "@id": "https://ellebi.it/#org" }, "inLanguage": "it-IT", "primaryImageOfPage": "https://ellebi.it/assets/img/hero.jpg" },
     { "@type": "ItemList", "@id": "https://ellebi.it/#collezione", "name": "La collezione ELLEBI", "itemListOrder": "https://schema.org/ItemListUnordered", "numberOfItems": 4, "itemListElement": [
@@ -123,7 +123,7 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
     </ul>
   </nav>
   <div class="menu__foot">
-    <a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Pezzi disponibili</a>
+    <a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
     <a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a>
     <a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
   </div>
@@ -144,8 +144,8 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
         <h1 class="hero__title" id="hero-title">Ogni borsa esiste una volta sola</h1>
         <p class="hero__sub">Filato, mani, ore. Nessuna serie, nessuna copia: <em>quando un pezzo finisce, finisce.</em></p>
         <div class="hero__actions">
-          <a class="btn btn--solid" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
-            Vedi i pezzi disponibili
+          <a class="btn btn--solid" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">
+            Scrivimi su Instagram
             <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
           </a>
           <a class="btn" href="#collezione">Guarda la collezione</a>
@@ -200,8 +200,8 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
       </div>
 
       <div class="collection__note" data-reveal>
-        <p>Questo sito mostra, non vende. I pezzi ancora disponibili stanno sul mio profilo Vinted.</p>
-        <a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Guarda cosa c'è adesso</a>
+        <p>Questo sito mostra, non vende. Per sapere quali pezzi sono ancora disponibili basta un messaggio.</p>
+        <a class="link-line" href="#contatti">Chiedimi cosa c'è adesso</a>
       </div>
     </div>
   </section>
@@ -262,8 +262,8 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
       <h2 class="banner__title" id="banner-title" data-reveal>Quando un pezzo finisce, finisce</h2>
       <p class="banner__text" data-reveal data-reveal-delay="150">Non riordino, non replico, non produco in serie. Se una borsa è ancora lì, è perché nessuno se l'è portata via.</p>
       <div class="banner__actions" data-reveal data-reveal-delay="240">
-        <a class="btn btn--light" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
-          Vedi cosa è ancora disponibile
+        <a class="btn btn--light" href="#contatti">
+          Chiedi cosa è ancora disponibile
           <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
         </a>
       </div>
@@ -322,10 +322,10 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
     <div class="wrap wrap--narrow">
       <p class="eyebrow eyebrow--center" data-reveal>Dove trovarle</p>
       <h2 class="contact__title" id="contatti-title" data-reveal data-reveal-delay="80">Se te ne innamori,<br>fammelo sapere</h2>
-      <p class="contact__text" data-reveal data-reveal-delay="140">Qui non c'è un carrello: c'è il mio profilo Vinted con i pezzi ancora disponibili e i miei messaggi aperti per tutto il resto — colori, misure, tempi di lavorazione. Rispondo io, non un assistente automatico.</p>
+      <p class="contact__text" data-reveal data-reveal-delay="140">Qui non c'è un carrello: ci sono i miei messaggi aperti. Scrivimi su Instagram o via email per sapere quali pezzi sono ancora disponibili, e per tutto il resto — colori, misure, tempi di lavorazione. Rispondo io, non un assistente automatico.</p>
       <div class="contact__actions" data-reveal data-reveal-delay="200">
-        <a class="btn btn--solid" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
-          Vedi i pezzi su Vinted
+        <a class="btn btn--solid" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">
+          Scrivimi su Instagram
           <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
         </a>
         <a class="btn" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Scrivimi su Instagram</a>

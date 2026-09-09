@@ -34,7 +34,7 @@ const legalLinks = [
     <nav class="header__nav header__nav--end" aria-label="<%= isHome ? 'Collegamenti esterni' : 'Collegamenti legali' %>">
       <% if (isHome) { %>
       <a class="header__link" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a>
-      <a class="header__link" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Pezzi disponibili</a>
+      <a class="header__link" href="mailto:ellebi.style@gmail.com">Scrivimi</a>
       <% } else { %>
       <% legalLinks.slice(0, 2).forEach((l) => { %>
       <a class="header__link" href="<%= l.href %>"><%= l.label %></a>
