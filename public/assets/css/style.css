@@ -24,6 +24,11 @@ html {
      overflow:hidden — non crea un contenitore di scorrimento, quindi
      l'header fisso e lo scorrimento alle ancore restano intatti. */
   overflow-x: clip;
+  /* Sul telefono lo scroll "di troppo" in cima o in fondo passerebbe alla
+     pagina del browser (pull-to-refresh, rimbalzo della barra): lo tiene
+     tutto dentro il sito, che così sembra rispondere sempre lui e non un
+     livello sopra. Non incide sulle prestazioni, solo sulla sensazione. */
+  overscroll-behavior-y: contain;
 }
 
 body,
@@ -880,6 +885,12 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  /* Isola dal resto della pagina il ricalcolo di stile e layout innescato
+     dallo zoom al passaggio del mouse o dalla rivelazione all'ingresso:
+     il browser non deve più controllare se cambia qualcos'altro intorno.
+     Niente "paint": l'ombra del focus e altri dettagli che sconfinano
+     appena fuori dal bordo restano visibili. */
+  contain: layout style;
 }
 
 .card__media {
@@ -1452,6 +1463,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   display: block;
   aspect-ratio: 1;
   overflow: hidden;
+  contain: layout style paint;
   border-radius: calc(var(--radius-lg) * 0.6);
   background: var(--c-paper-2);
 }
@@ -1485,7 +1497,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   border-top: 1px solid var(--c-line-soft);
 }
 
-.faq__item { border-bottom: 1px solid var(--c-line-soft); }
+.faq__item { border-bottom: 1px solid var(--c-line-soft); contain: layout style; }
 
 .faq__q {
   display: flex;
