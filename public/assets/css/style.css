@@ -61,6 +61,12 @@ a { color: inherit; }
 /* l'attributo hidden deve vincere su qualsiasi display dichiarato dopo */
 [hidden] { display: none !important; }
 
+/* I titoli non devono mai chiedere il grassetto predefinito del browser: un
+   <h2 class="visually-hidden"> senza peso dichiarato ereditava il 700, che
+   corrisponde alla faccia Jost 600 e faceva scaricare 26 KB di font per un
+   testo che nessuno vede. :where() ha specificità zero, quindi ogni regola
+   già scritta continua a vincere. */
+:where(h1, h2, h3, h4, h5, h6) { font-weight: 300; }
 :where(h1, h2, h3, h4) { text-wrap: balance; }
 :where(p, li) { text-wrap: pretty; }
 
@@ -884,17 +890,67 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   transition: transform 0.9s var(--ease-out-expo), opacity 0.6s var(--ease);
 }
 
-.card__media img + img {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
+/* Seconda foto, quella che compare al passaggio del mouse.
+   Non sta più nell'HTML per un motivo di peso: come <img loading="lazy"> il
+   browser la scaricava all'apertura della pagina — quattro file, 175 KB —
+   anche su un telefono, dove il passaggio del mouse non esiste.
+
+   L'indirizzo vive in una proprietà personalizzata: finché --card-hover-img
+   non viene sostituita dentro una proprietà vera resta semplice testo e il
+   browser non scarica nulla. La sostituzione avviene quando lo script
+   aggiunge .has-hover alla scheda, cioè al primo ingresso del puntatore. La
+   classe poi resta, così anche la dissolvenza in uscita ha la sua immagine.
+
+   L'immagine è decorativa (nel markup era aria-hidden): senza JavaScript, o
+   navigando col dito, semplicemente non compare e non costa niente. */
+@media (hover: hover) and (pointer: fine) {
+  .card__media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.9s var(--ease-out-expo), opacity 0.6s var(--ease);
+  }
+
+  .card.has-hover .card__media::after { background-image: var(--card-hover-img); }
+
+  .card.has-hover:hover .card__media img:first-child,
+  .card.has-hover:focus-within .card__media img:first-child { transform: scale(1.06); opacity: 0; }
+
+  .card.has-hover:hover .card__media::after,
+  .card.has-hover:focus-within .card__media::after { opacity: 1; transform: scale(1.06); }
+
+  .card:nth-child(1) {
+    --card-hover-img: image-set(
+      url("/assets/img/borsa-01b-w450.avif") type("image/avif"),
+      url("/assets/img/borsa-01b-w450.webp") type("image/webp"),
+      url("/assets/img/borsa-01b-w450.jpg") type("image/jpeg"));
+  }
+
+  .card:nth-child(2) {
+    --card-hover-img: image-set(
+      url("/assets/img/borsa-02b-w450.avif") type("image/avif"),
+      url("/assets/img/borsa-02b-w450.webp") type("image/webp"),
+      url("/assets/img/borsa-02b-w450.jpg") type("image/jpeg"));
+  }
+
+  .card:nth-child(3) {
+    --card-hover-img: image-set(
+      url("/assets/img/borsa-03b-w450.avif") type("image/avif"),
+      url("/assets/img/borsa-03b-w450.webp") type("image/webp"),
+      url("/assets/img/borsa-03b-w450.jpg") type("image/jpeg"));
+  }
+
+  .card:nth-child(4) {
+    --card-hover-img: image-set(
+      url("/assets/img/borsa-04b-w450.avif") type("image/avif"),
+      url("/assets/img/borsa-04b-w450.webp") type("image/webp"),
+      url("/assets/img/borsa-04b-w450.jpg") type("image/jpeg"));
+  }
 }
-
-.card:hover .card__media img:first-child,
-.card:focus-within .card__media img:first-child { transform: scale(1.06); opacity: 0; }
-
-.card:hover .card__media img + img,
-.card:focus-within .card__media img + img { opacity: 1; transform: scale(1.06); }
 
 .card__badge {
   position: absolute;
@@ -1870,7 +1926,29 @@ li > .link-line,
    tolto. Le altezze reali vanno da 493 a 2772 px e cambiano molto fra
    telefono e computer: una sola altezza prenotata sarebbe sbagliata quasi
    ovunque e farebbe saltare la barra di scorrimento. Su sei sezioni il
-   risparmio di disegno non ripaga quel difetto. */
+   risparmio di disegno non ripaga quel difetto.
+
+   Riprovato e rimisurato: il risparmio c'è ed è grosso — con la CPU
+   rallentata 6x l'impaginazione scende da 228 a 144 ms e il ricalcolo di
+   stile da 250 a 155 ms. Ma il difetto è peggiore di quanto scritto sopra:
+   finché il contenuto di una sezione non è mai stato disegnato conta
+   l'altezza prenotata, e il salto a un'ancora atterra fino a 800 px fuori
+   bersaglio senza mai correggersi. Con la barra delle sezioni nell'header
+   quelle ancore sono la navigazione principale del sito, quindi la scelta
+   resta questa. Sul piè di pagina invece è sicuro: sotto di lui non c'è
+   niente la cui posizione possa sbagliare. */
+.footer {
+  content-visibility: auto;
+  /* `auto` davanti alla misura: il browser usa 700 px finché non ha mai
+     disegnato il piè di pagina, poi ricorda l'altezza vera. */
+  contain-intrinsic-size: auto 700px;
+}
+
+/* Il nastro scorrevole è un'animazione infinita: fuori schermo continuerebbe
+   a far lavorare il compositore per nulla. Lo script aggiunge .is-onscreen
+   solo quando è in vista. */
+.marquee__track { animation-play-state: paused; }
+.marquee.is-onscreen .marquee__track { animation-play-state: running; }
 
 .hero__inner { z-index: 1; will-change: transform; }
 
@@ -2099,10 +2177,14 @@ li > .link-line,
   flex-wrap: wrap;
 }
 
+/* Peso 400 e non 500: era l'unico elemento della home a chiedere la faccia
+   Jost 500, 26 KB scaricati sul percorso critico della prima visita per tre
+   pulsanti. Il 500 resta dichiarato per i titoli delle pagine legali, dove
+   il font arriva comunque dopo il primo disegno. */
 .cookie-banner__btn {
   padding: 0.5rem 1.25rem;
   font-size: var(--fs-small);
-  font-weight: 500;
+  font-weight: 400;
   border-radius: 0.25rem;
   border: 1px solid var(--c-text);
   white-space: nowrap;

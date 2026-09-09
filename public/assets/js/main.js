@@ -241,6 +241,43 @@
     else if (typeof desktop.addListener === "function") { desktop.addListener(onChange); }
   })();
 
+  /* ------------------------------------------------- nastro scorrevole */
+  // Animazione infinita: quando il nastro esce dalla vista non c'è motivo di
+  // tenere sveglio il compositore. Senza IntersectionObserver resta acceso,
+  // come prima.
+  (function marquee() {
+    var el = $(".marquee");
+    if (!el) { return; }
+    if (!supportsIO) { el.classList.add("is-onscreen"); return; }
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { el.classList.toggle("is-onscreen", e.isIntersecting); });
+    }, { rootMargin: "150px 0px" }).observe(el);
+  })();
+
+  /* ------------------------------------- seconda foto delle schede (hover) */
+  // La foto che compare al passaggio del mouse è dichiarata nel CSS come
+  // --card-hover-img e non viene scaricata finché quella variabile non entra
+  // in una proprietà vera. Qui si aggiunge .has-hover alla prima intenzione —
+  // puntatore che entra nella scheda o focus da tastiera — e da lì in poi la
+  // classe resta, così anche la dissolvenza in uscita ha la sua immagine.
+  // Su telefono e tablet l'evento non arriva mai: zero byte scaricati.
+  (function fotoAlPassaggio() {
+    var cards = $$(".card");
+    if (!cards.length) { return; }
+    var fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    if (!fine.matches) { return; }
+
+    cards.forEach(function (card) {
+      var arma = function () {
+        card.classList.add("has-hover");
+        card.removeEventListener("pointerenter", arma);
+        card.removeEventListener("focusin", arma);
+      };
+      card.addEventListener("pointerenter", arma);
+      card.addEventListener("focusin", arma);
+    });
+  })();
+
   /* --------------------------------------------------- rivelazioni scroll */
   (function reveal() {
     var items = $$("[data-reveal]");
