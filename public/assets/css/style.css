@@ -475,11 +475,19 @@ body.is-loaded .preloader {
 .header__nav--sections { grid-column: 1; grid-row: 1; }
 .header__nav--end { grid-column: 3; grid-row: 1; }
 
-/* Soglia della barra desktop: 70em (1120 px). Le cinque voci più il marchio
-   centrato e i collegamenti esterni chiedono all'incirca 1100 px; più stretto
-   di così le voci finirebbero sotto il marchio, che è esattamente il difetto
-   da cui si parte. Sotto la soglia comanda il menu a tutta pagina. */
-@media (min-width: 70em) {
+/* Soglia della barra desktop: 76em (1216 px). Le sei voci più il marchio
+   centrato e i collegamenti esterni chiedono spazio, e le colonne 1fr si
+   allargano fino a toccare esattamente il marchio, lasciando come unico
+   margine il gap della griglia — 16px, zero scorta reale. Va bene in un
+   browser senza barra di scorrimento riservata, ma su Windows/Linux quella
+   barra toglie ~15-17px alla larghezza utile per i breakpoint (mentre i
+   font e le spaziature qui sotto, calcolati in vw, non la considerano):
+   la differenza basta a far toccare il testo al marchio. Il gap più largo
+   sotto e la soglia spostata più in là tengono un margine vero anche in
+   quelle condizioni. Sotto la soglia comanda il menu a tutta pagina. */
+@media (min-width: 76em) {
+  .header__inner { column-gap: var(--sp-4); }
+
   .header__nav {
     display: flex;
     align-items: center;
@@ -557,7 +565,7 @@ body.is-loaded .preloader {
   align-items: flex-end;
 }
 
-@media (min-width: 70em) { .burger { display: none; } }
+@media (min-width: 76em) { .burger { display: none; } }
 
 /* Senza JavaScript il menu a scomparsa non sarebbe apribile:
    l'header diventa statico e mostra tutti i collegamenti. */
@@ -661,7 +669,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 
 .menu.is-open .menu__foot { opacity: 1; }
 
-@media (min-width: 70em) { .menu { display: none; } }
+@media (min-width: 76em) { .menu { display: none; } }
 
 /* ---------- 9. Hero ----------------------------------------------------- */
 /* La foto è chiara e la borsa sta a destra: il testo vive sulla parete
@@ -2051,7 +2059,7 @@ li > .link-line,
 
 .burger[aria-expanded="true"] .burger__icon { transform: rotate(315deg); }
 
-/* Da 70em in su la navigazione è la barra delle sezioni nell'header:
+/* Da 76em in su la navigazione è la barra delle sezioni nell'header:
    il bottone Menu e il pannello a tutta pagina restano al telefono e al
    tablet, dove la barra non ci starebbe. */
 

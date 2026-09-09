@@ -87,11 +87,11 @@
     if (!el) { return; }
     var last = window.scrollY;
     var menuOpen = function () { return document.body.classList.contains("is-locked"); };
-    // Da 70em in su l'header contiene la barra delle sezioni: è la
+    // Da 76em in su l'header contiene la barra delle sezioni: è la
     // navigazione della pagina e resta sempre a portata di clic. Sotto,
     // dove al suo posto c'è il bottone Menu, continua a sparire scendendo
     // per lasciare più schermo alle foto. La soglia è la stessa del CSS.
-    var barraSezioni = window.matchMedia("(min-width: 70em)");
+    var barraSezioni = window.matchMedia("(min-width: 76em)");
 
     onScroll(function (y) {
       el.classList.toggle("is-stuck", y > 40);
@@ -235,7 +235,7 @@
 
     // tornando al layout desktop il menu non deve restare aperto
     // (stessa soglia del CSS che lo nasconde)
-    var desktop = window.matchMedia("(min-width: 70em)");
+    var desktop = window.matchMedia("(min-width: 76em)");
     var onChange = function (e) { if (e.matches && menu.classList.contains("is-open")) { close(); } };
     if (typeof desktop.addEventListener === "function") { desktop.addEventListener("change", onChange); }
     else if (typeof desktop.addListener === "function") { desktop.addListener(onChange); }
