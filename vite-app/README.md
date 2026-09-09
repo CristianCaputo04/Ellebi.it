@@ -181,7 +181,7 @@ a `script-src` e `https://cloudflareinsights.com` a `connect-src` in
 `public/_headers` — qui sono stati tolti perché questo scaffold non carica
 ancora nessuno script di terze parti.
 
-`public/_redirects` gestisce le scorciatoie (`/instagram`, `/vinted`), le
+`public/_redirects` gestisce le scorciatoie (`/instagram`, `/ig`), le
 varianti di scrittura delle pagine legali, e include un esempio commentato
 di fallback SPA (`/app/* /app/index.html 200`) da attivare solo se in futuro
 una sezione del sito diventasse un'app lato client.

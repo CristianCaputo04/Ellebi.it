@@ -15,7 +15,15 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem;
+  /* l'ancora si ferma sotto l'header fisso, qualunque sia la sua altezza */
+  scroll-padding-top: calc(var(--header-h) + 1.5rem);
+  /* Le animazioni d'ingresso partono spostate di 28 px lateralmente
+     ([data-reveal="left"|"right"]): sui pilastri quello sbordo apriva una
+     barra di scorrimento orizzontale sul telefono. "clip" taglia l'eccedenza
+     senza rendere la pagina scorrevole in orizzontale e — a differenza di
+     overflow:hidden — non crea un contenitore di scorrimento, quindi
+     l'header fisso e lo scorrimento alle ancore restano intatti. */
+  overflow-x: clip;
 }
 
 body,
@@ -458,27 +466,59 @@ body.is-loaded .preloader {
 .header { color: var(--c-espresso); }
 
 .header__nav { display: none; }
+.header__nav--sections { grid-column: 1; grid-row: 1; }
+.header__nav--end { grid-column: 3; grid-row: 1; }
 
-@media (min-width: 62em) {
+/* Soglia della barra desktop: 70em (1120 px). Le cinque voci più il marchio
+   centrato e i collegamenti esterni chiedono all'incirca 1100 px; più stretto
+   di così le voci finirebbero sotto il marchio, che è esattamente il difetto
+   da cui si parte. Sotto la soglia comanda il menu a tutta pagina. */
+@media (min-width: 70em) {
   .header__nav {
     display: flex;
     align-items: center;
-    gap: clamp(1rem, 2.2vw, 2.4rem);
+    gap: clamp(0.75rem, 1.4vw, 1.5rem);
+    min-width: 0;
   }
   .header__nav--end { justify-content: flex-end; }
 }
 
 .header__link {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.4rem;
   font-size: var(--fs-micro);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  opacity: 0.92;
+  opacity: 0.82;
   transition: opacity var(--dur-1) var(--ease);
 }
 
-.header__link:hover { opacity: 1; }
+/* Sottolineatura che cresce dal centro: passaggio del mouse, focus da
+   tastiera e sezione in lettura usano lo stesso segno grafico. */
+.header__link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0.05rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+  transition: transform var(--dur-2) var(--ease-out-expo);
+}
+
+.header__link:hover,
+.header__link:focus-visible { opacity: 1; }
+
+.header__link:hover::after,
+.header__link:focus-visible::after { transform: scaleX(1); }
+
+/* Sezione attualmente sotto gli occhi: la marca lo script di scroll-spy */
+.header__link[aria-current="true"] { opacity: 1; }
+.header__link[aria-current="true"]::after { transform: scaleX(1); }
 
 .header__brand {
   grid-column: 2;
@@ -511,23 +551,7 @@ body.is-loaded .preloader {
   align-items: flex-end;
 }
 
-@media (min-width: 62em) { .burger { display: none; } }
-
-.burger__line {
-  display: block;
-  width: 26px;
-  height: 1.5px;
-  background: currentColor;
-  transition: transform 0.4s var(--ease-out-expo), opacity 0.25s var(--ease), width 0.4s var(--ease);
-}
-
-.burger__line:nth-child(2) { width: 18px; }
-
-.burger:hover .burger__line:nth-child(2) { width: 26px; }
-
-.burger[aria-expanded="true"] .burger__line:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-.burger[aria-expanded="true"] .burger__line:nth-child(2) { opacity: 0; }
-.burger[aria-expanded="true"] .burger__line:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+@media (min-width: 70em) { .burger { display: none; } }
 
 /* Senza JavaScript il menu a scomparsa non sarebbe apribile:
    l'header diventa statico e mostra tutti i collegamenti. */
@@ -555,6 +579,10 @@ html:not(.js) .header__nav {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.6rem 1.4rem;
+  /* l'header senza JavaScript è a colonna singola: le collocazioni
+     esplicite della barra desktop creerebbero colonne inesistenti */
+  grid-column: auto;
+  grid-row: auto;
 }
 
 html:not(.js) .hero__inner { padding-top: var(--sp-5); }
@@ -627,7 +655,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 
 .menu.is-open .menu__foot { opacity: 1; }
 
-@media (min-width: 62em) { .menu { display: none; } }
+@media (min-width: 70em) { .menu { display: none; } }
 
 /* ---------- 9. Hero ----------------------------------------------------- */
 /* La foto è chiara e la borsa sta a destra: il testo vive sulla parete
@@ -1594,6 +1622,11 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   min-height: 0;
 }
 
+/* Il <picture> serve solo a scegliere il formato: non deve introdurre una
+   scatola in più fra la griglia dello stage e l'immagine, altrimenti il
+   centraggio e il clic sullo sfondo per chiudere cambierebbero comportamento. */
+.lightbox__stage picture { display: contents; }
+
 .lightbox__stage img {
   max-width: 100%;
   max-height: 100%;
@@ -1892,12 +1925,9 @@ li > .link-line,
 
 .burger[aria-expanded="true"] .burger__icon { transform: rotate(315deg); }
 
-/* il menu a tutta pagina ora è raggiungibile a ogni larghezza */
-@media (min-width: 62em) {
-  .burger { display: inline-flex; }
-  .menu { display: grid; }
-  .header__inner > .header__nav:not(.header__nav--end) { display: none; }
-}
+/* Da 70em in su la navigazione è la barra delle sezioni nell'header:
+   il bottone Menu e il pannello a tutta pagina restano al telefono e al
+   tablet, dove la barra non ci starebbe. */
 
 /* --- Menu: pannelli sfalsati al posto del taglio ------------------------ */
 .menu {

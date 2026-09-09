@@ -2,7 +2,8 @@
 
 Landing page statica che mostra le borse artigianali ELLEBI. **Non è un negozio**:
 niente carrello, niente prezzi, niente moduli d'ordine. Le chiamate all'azione
-portano al profilo Vinted, dove stanno i pezzi ancora disponibili.
+portano ai contatti diretti — Instagram e e-mail — dove si chiede quali pezzi
+sono ancora disponibili.
 
 Nessun framework, nessuna dipendenza da installare: HTML, CSS e JavaScript scritti
 a mano. Si pubblica su Cloudflare Workers a ogni commit.
@@ -107,8 +108,8 @@ una sede o una partita IVA, conviene indicarla per esteso in `public/privacy.htm
 Resta da aggiornare solo se il dominio finale cambiasse: `https://ellebi.it/`
 compare nei meta tag, in `sitemap.xml`, in `robots.txt` e nei dati strutturati.
 
-Profili collegati (già corretti nel sito): Vinted
-`https://www.vinted.it/member/65695128-pinkstraw7` e Instagram `@ellebi.it`.
+Profilo collegato (già corretto nel sito): Instagram `@ellebi.it`. Il profilo
+Vinted non è più collegato da nessuna pagina né dalla scorciatoia `/vinted`.
 
 Se modifichi il blocco `application/ld+json` in `public/index.html`, esegui poi:
 
