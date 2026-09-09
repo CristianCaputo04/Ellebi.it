@@ -25,6 +25,9 @@ jobs:
       - name: Controlla le marche di versione di CSS e JS
         run: python3 tools/aggiorna-versioni.py --check
 
+      - name: Controlla che la sitemap elenchi tutte le pagine
+        run: python3 tools/aggiorna-sitemap.py --check
+
       - name: Controlla la configurazione
         run: npx --yes wrangler@4 deploy --dry-run
 

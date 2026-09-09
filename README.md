@@ -43,6 +43,7 @@ servizio, cronologia Git — resta privato.
 └── tools/
     ├── aggiorna-csp-hash.py   rigenera gli hash CSP degli script inline
     ├── aggiorna-versioni.py   riallinea il ?v= di CSS e JS al loro contenuto
+    ├── aggiorna-sitemap.py    rigenera sitemap.xml dalle pagine pubblicate
     └── ottimizza-immagini.mjs genera le varianti responsive delle foto
 ```
 
@@ -134,6 +135,20 @@ mai richiederli: l'indirizzo deve cambiare a ogni modifica, altrimenti chi ha
 già visitato il sito resta con la versione vecchia. La pubblicazione su
 Cloudflare si ferma da sola se te ne dimentichi.
 
+Se aggiungi, togli o rinomini una pagina, esegui:
+
+```bash
+python3 tools/aggiorna-sitemap.py
+```
+
+Rigenera `sitemap.xml` leggendo le pagine vere: entra nell'elenco ogni file HTML
+che non sia marcato `noindex`, con l'indirizzo preso dal suo stesso
+`<link rel="canonical">`. Le foto delle borse si ricavano dai dati strutturati
+della home, così non esistono due elenchi da tenere allineati a mano. Anche qui
+la pubblicazione si ferma se la sitemap non è completa: era già successo che
+`/termini` restasse fuori dall'elenco pur essendo online, e Google non la
+indicizzasse.
+
 Se aggiungi o sostituisci una foto, mettine la versione a piena risoluzione in
 `public/assets/img/` come `.jpg` e genera le altre:
 
@@ -212,6 +227,38 @@ portarlo qui:
 
 Nessuno di questi passaggi tocca `capfyweb.com`: i domini personalizzati valgono
 per il singolo Worker.
+
+### Farsi trovare su Google (da fare una volta)
+
+Il sito è predisposto per essere indicizzato, ma Google va avvisato che esiste,
+e soprattutto serve un posto dove **vedere** se sta funzionando. Quel posto è
+Search Console, gratuita:
+
+1. Vai su `search.google.com/search-console` e aggiungi la proprietà scegliendo
+   **Dominio** (non "Prefisso URL"): copre insieme `ellebi.it` e `www`.
+2. Google chiede di aggiungere un record **TXT** al dominio. Si fa da Cloudflare
+   Dashboard → DNS → *Add record* → tipo `TXT`, nome `@`, contenuto la stringa
+   che ti dà Google. Non serve toccare il sito.
+3. Torna su Search Console e premi *Verifica*.
+4. A verifica fatta, menu **Sitemap** → inserisci `sitemap.xml` → *Invia*.
+5. Sempre lì, usa *Controllo URL* su `https://ellebi.it/` e premi
+   *Richiedi indicizzazione*: accorcia l'attesa della prima scansione.
+
+Da quel momento, in **Rendimento** vedi le ricerche con cui la gente arriva sul
+sito, quante volte compare e quante volte viene cliccato. È il posto dove si
+verifica davvero se il lavoro sta portando visite, e i primi dati compaiono
+dopo qualche giorno.
+
+Due cose utili nello stesso pannello:
+
+- **Risultati avanzati** dice se Google ha letto correttamente i dati
+  strutturati delle borse e delle domande frequenti.
+- **Indicizzazione delle pagine** segnala se qualche pagina è rimasta fuori.
+
+Vale la pena registrare il sito anche su `bing.com/webmasters`: si può importare
+tutto da Search Console con un clic, e copre Bing e le risposte di ChatGPT.
+
+---
 
 ### Statistiche di visita (facoltative)
 

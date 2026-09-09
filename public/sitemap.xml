@@ -1,54 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- L'estensione "image" segnala esplicitamente le foto delle borse: su un
-     sito che vive di immagini è ciò che le porta su Google Immagini. -->
+<!-- Generata da tools/aggiorna-sitemap.py: non modificare a mano. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ellebi.it/</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-09-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-01.jpg</image:loc>
-      <image:title>Nuvola — pouch in filato tortora</image:title>
-      <image:caption>Pouch morbida in filato tortora, lavorata a mano all'uncinetto.</image:caption>
+      <image:title>Nuvola</image:title>
+      <image:caption>Pouch morbida in fettuccia di cotone tortora, lavorata a mano all'uncinetto: morbida fuori, ferma nella forma. Pezzo unico, senza produzione in serie.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-02.jpg</image:loc>
-      <image:title>Perla — mini bag color cacao</image:title>
-      <image:caption>Mini bag color cacao con manico rigido e tre perle cucite a mano.</image:caption>
+      <image:title>Perla</image:title>
+      <image:caption>Mini bag all'uncinetto color cacao con manico rigido e tre perle cucite a mano, in fettuccia di cotone. Pezzo unico, senza produzione in serie.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-03.jpg</image:loc>
-      <image:title>Sera — pouch cioccolato con filo lurex</image:title>
-      <image:caption>Pouch in filato cioccolato con filo lurex, per le occasioni serali.</image:caption>
+      <image:title>Sera</image:title>
+      <image:caption>Pouch all'uncinetto in fettuccia di cotone cioccolato attraversata da filo lurex dorato, pensata per le occasioni serali. Pezzo unico.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-04.jpg</image:loc>
-      <image:title>Cacao — pouch capiente in cioccolato opaco</image:title>
-      <image:caption>Pouch capiente in filato cioccolato opaco, lavorata a mano.</image:caption>
+      <image:title>Cacao</image:title>
+      <image:caption>Pouch capiente all'uncinetto in fettuccia di cotone cioccolato opaco, la misura da portare ovunque. Pezzo unico, senza produzione in serie.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
       <image:title>La lavorazione a mano ELLEBI</image:title>
+      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ellebi.it/accessibilita</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
+      <image:title>La lavorazione a mano ELLEBI</image:title>
+      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ellebi.it/cookie</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
+      <image:title>La lavorazione a mano ELLEBI</image:title>
+      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://ellebi.it/privacy</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-09-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
+      <image:title>La lavorazione a mano ELLEBI</image:title>
+      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+    </image:image>
   </url>
   <url>
-    <loc>https://ellebi.it/cookie</loc>
-    <lastmod>2026-08-12</lastmod>
+    <loc>https://ellebi.it/termini</loc>
+    <lastmod>2026-09-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://ellebi.it/accessibilita</loc>
-    <lastmod>2026-08-12</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
+      <image:title>La lavorazione a mano ELLEBI</image:title>
+      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+    </image:image>
   </url>
 </urlset>

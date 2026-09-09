@@ -1469,6 +1469,54 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 .gallery__item:hover::after,
 .gallery__item:focus-visible::after { background: rgba(35, 19, 12, 0.16); }
 
+/* ---------- Domande frequenti ------------------------------------------- */
+/* Le risposte stanno in <details>: si aprono senza JavaScript e restano nel
+   documento anche da chiuse, quindi i motori di ricerca le leggono comunque. */
+.faq__list {
+  margin-top: var(--sp-5);
+  border-top: 1px solid var(--c-line-soft);
+}
+
+.faq__item { border-bottom: 1px solid var(--c-line-soft); }
+
+.faq__q {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  padding: var(--sp-3) 0;
+  font-size: var(--fs-lead);
+  color: var(--c-text);
+  cursor: pointer;
+  transition: color var(--dur-2) var(--ease);
+  /* via il triangolino nativo, qui e su Safari */
+  list-style: none;
+}
+
+.faq__q::-webkit-details-marker { display: none; }
+
+/* Un "+" che ruota di 45° e diventa "×" da aperto: un carattere soltanto,
+   nessuna icona da scaricare. */
+.faq__q::after {
+  content: "+";
+  margin-left: auto;
+  flex: none;
+  font-size: 1.5em;
+  line-height: 1;
+  color: var(--c-terracotta-ink);
+  transition: transform var(--dur-2) var(--ease);
+}
+
+.faq__item[open] .faq__q::after { transform: rotate(45deg); }
+
+.faq__q:hover { color: var(--c-terracotta-ink); }
+
+.faq__a {
+  padding-bottom: var(--sp-3);
+  max-width: 62ch;
+}
+
+.faq__a p { color: var(--c-muted); }
+
 /* ---------- 17. Contatti ------------------------------------------------ */
 .contact {
   background: var(--c-paper);
