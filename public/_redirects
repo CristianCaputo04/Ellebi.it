@@ -1,8 +1,8 @@
 # Reindirizzamenti Cloudflare (origine  destinazione  codice)
 
 # Scorciatoie comode da scrivere in bio o in direct
-/instagram   https://www.instagram.com/ellebi.it/   302
-/ig          https://www.instagram.com/ellebi.it/   302
+/instagram   https://www.instagram.com/emmeluofficial/   302
+/ig          https://www.instagram.com/emmeluofficial/   302
 
 # Varianti di scrittura delle pagine informative.
 # Gli indirizzi /privacy, /cookie e /accessibilita NON vanno elencati qui:
@@ -10,3 +10,7 @@
 # un rimbalzo infinito con il reindirizzamento automatico da .html.
 /cookie-policy   /cookie          301
 /accessibilità   /accessibilita   301
+
+# Vecchio ancoraggio della home (#collezione), linkato da fuori prima del
+# rebrand: ora i pezzi disponibili stanno in #pezzi.
+/collezione      /#pezzi          301

@@ -1,30 +1,38 @@
-// 13. Pilastri (diagramma circolare)
+// 13. Pilastri (griglia a 5)
+/* I pilastri sono cinque. Il vecchio "diagramma" con le linee di collegamento
+   in SVG era tarato su tre voci (una a sinistra, due a destra): con cinque la
+   composizione non regge — le curve andrebbero ridisegnate a ogni cambio di
+   testo — e le linee costavano una lettura di getTotalLength() per tracciato
+   al primo ingresso in vista. Ora è una griglia: si adatta da sola al numero
+   di voci, non misura niente e non ha SVG da tenere allineato. */
 .pillars {
   background: var(--c-blush-soft);
   padding-block-end: var(--sp-7);
 }
 
-.diagram {
-  position: relative;
-  display: grid;
-  gap: var(--sp-4);
-  margin-top: var(--sp-5);
-}
-
-.diagram__core {
+.pillars__mark {
   position: relative;
   justify-self: center;
   display: grid;
   place-items: center;
-  width: clamp(11rem, 34vw, 17rem);
+  width: clamp(7rem, 18vw, 10.5rem);
   aspect-ratio: 1;
+  margin: var(--sp-4) auto var(--sp-5);
   border-radius: 50%;
   background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.92), rgba(246, 221, 208, 0.55) 62%, rgba(246, 221, 208, 0.15) 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 24px 60px -30px rgba(63, 36, 24, 0.55);
-  animation: float 9s var(--ease) infinite;
 }
 
-.diagram__core::before {
+.pillars__mark svg {
+  width: 54%;
+  height: auto;
+  color: var(--c-espresso);
+}
+
+/* L'anello tratteggiato ruota: solo transform, quindi resta sul compositore.
+   Con "riduzione del movimento" attiva viene fermato dalla regola globale in
+   _24-hero-a-piani-e-menu-cinetico.scss. */
+.pillars__mark::before {
   content: "";
   position: absolute;
   inset: -6%;
@@ -33,25 +41,17 @@
   animation: spin 46s linear infinite;
 }
 
-.diagram__core svg,
-.diagram__core img {
-  width: 58%;
-  height: auto;
-  color: var(--c-espresso);
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-.diagram__items {
+/* auto-fit + minmax: tre colonne da schermo largo (3 + 2 sulla seconda riga),
+   due da tablet, una sul telefono. Nessun media query da tenere allineato al
+   numero di voci: se domani i valori diventano sei, la griglia si adatta. */
+.pillars__grid {
   display: grid;
-  gap: var(--sp-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: clamp(1.75rem, 3.5vw, 3rem) clamp(1.5rem, 3vw, 3rem);
   list-style: none;
 }
 
@@ -67,6 +67,7 @@
 .pillar__name {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 0.6rem;
   font-size: var(--fs-h3);
   font-weight: 300;
@@ -94,49 +95,4 @@
   display: flex;
   justify-content: center;
   margin-top: var(--sp-5);
-}
-
-@media (min-width: 60em) {
-  .diagram {
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: clamp(2rem, 5vw, 5rem);
-    min-height: 30rem;
-  }
-  .diagram__core { grid-column: 2; grid-row: 1; }
-  .diagram__items { gap: var(--sp-5); }
-  .diagram__items--left { grid-column: 1; grid-row: 1; text-align: right; }
-  .diagram__items--right { grid-column: 3; grid-row: 1; }
-  .diagram__items--left .pillar {
-    padding-left: 0;
-    padding-right: var(--sp-3);
-    border-left: 0;
-    border-right: 1px solid var(--c-line);
-  }
-  .diagram__items--left .pillar__name { justify-content: flex-end; }
-  .diagram__items--left .pillar__text { margin-left: auto; }
-  /* linee di collegamento disegnate in SVG */
-  .diagram__lines {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: visible;
-  }
-  .diagram__lines path {
-    fill: none;
-    stroke: rgba(63, 36, 24, 0.3);
-    stroke-width: 1;
-    stroke-dasharray: var(--len, 600);
-    stroke-dashoffset: var(--len, 600);
-    transition: stroke-dashoffset 1.4s var(--ease-out-expo);
-  }
-  .diagram.is-inview .diagram__lines path { stroke-dashoffset: 0; }
-  .diagram__lines path:nth-child(2) { transition-delay: 0.15s; }
-  .diagram__lines path:nth-child(3) { transition-delay: 0.3s; }
-}
-
-@media (max-width: 59.99em) {
-  .diagram__lines { display: none; }
 }

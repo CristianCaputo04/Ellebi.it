@@ -127,6 +127,18 @@ li > .link-line,
   .header__inner > .header__nav:not(.header__nav--end) { display: none; }
 }
 
+/* Senza JavaScript il pulsante non può aprire il menu: sparisce, e al suo
+   posto tornano visibili le voci di sezione dell'header, così la navigazione
+   resta possibile anche a script disattivati. */
+html:not(.js) .burger { display: none; }
+
+html:not(.js) .header__inner > .header__nav--sections {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(0.7rem, 1.5vw, 1.6rem);
+}
+
 /* --- Menu: pannelli sfalsati al posto del taglio ------------------------ */
 .menu {
   background: transparent;
@@ -220,8 +232,9 @@ li > .link-line,
 .menu__item:nth-child(3) .menu__link { transition-delay: 0.45s; }
 .menu__item:nth-child(4) .menu__link { transition-delay: 0.50s; }
 .menu__item:nth-child(5) .menu__link { transition-delay: 0.55s; }
+.menu__item:nth-child(6) .menu__link { transition-delay: 0.60s; }
 
-.menu__foot { transition-delay: 0.6s; }
+.menu__foot { transition-delay: 0.65s; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -251,8 +264,6 @@ li > .link-line,
 
   /* le forme d'ambiente non compaiono affatto */
   .menu__shapes { display: none !important; }
-
-  .diagram__lines path { stroke-dashoffset: 0 !important; }
 }
 
 @media (prefers-contrast: more) {

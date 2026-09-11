@@ -54,8 +54,8 @@ def applica(percorso, info):
         html = re.sub(r'<meta name="robots" content="[^"]*">',
                       '<meta name="robots" content="%s">' % ROBOTS, html)
     else:
-        html = html.replace('<meta name="author" content="ELLEBI">',
-                            '<meta name="author" content="ELLEBI">\n'
+        html = html.replace('<meta name="author" content="EmmeLù">',
+                            '<meta name="author" content="EmmeLù">\n'
                             '<meta name="robots" content="%s">' % ROBOTS)
 
     # 2. lingua del contenuto

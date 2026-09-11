@@ -4,77 +4,77 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ellebi.it/</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-01.jpg</image:loc>
       <image:title>Nuvola</image:title>
-      <image:caption>Pouch morbida in fettuccia di cotone tortora, lavorata a mano all'uncinetto: morbida fuori, ferma nella forma. Pezzo unico, senza produzione in serie.</image:caption>
+      <image:caption>Pouch morbida in fettuccia di cotone tortora, cucita a mano: morbida fuori, ferma nella forma. Capsule limited edition, pezzo unico.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-02.jpg</image:loc>
       <image:title>Perla</image:title>
-      <image:caption>Mini bag all'uncinetto color cacao con manico rigido e tre perle cucite a mano, in fettuccia di cotone. Pezzo unico, senza produzione in serie.</image:caption>
+      <image:caption>Mini bag color cacao con manico rigido e tre perle cucite a mano, in fettuccia di cotone. Capsule limited edition, pezzo unico.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-03.jpg</image:loc>
       <image:title>Sera</image:title>
-      <image:caption>Pouch all'uncinetto in fettuccia di cotone cioccolato attraversata da filo lurex dorato, pensata per le occasioni serali. Pezzo unico.</image:caption>
+      <image:caption>Pouch in fettuccia di cotone cioccolato attraversata da filo lurex dorato, pensata per le occasioni serali. Capsule limited edition, pezzo unico.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/borsa-04.jpg</image:loc>
       <image:title>Cacao</image:title>
-      <image:caption>Pouch capiente all'uncinetto in fettuccia di cotone cioccolato opaco, la misura da portare ovunque. Pezzo unico, senza produzione in serie.</image:caption>
+      <image:caption>Pouch capiente in fettuccia di cotone cioccolato opaco, la misura da portare ovunque. Capsule limited edition, pezzo unico.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
-      <image:title>La lavorazione a mano ELLEBI</image:title>
-      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+      <image:title>La lavorazione a mano EmmeLù</image:title>
+      <image:caption>Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://ellebi.it/accessibilita</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
-      <image:title>La lavorazione a mano ELLEBI</image:title>
-      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+      <image:title>La lavorazione a mano EmmeLù</image:title>
+      <image:caption>Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://ellebi.it/cookie</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
-      <image:title>La lavorazione a mano ELLEBI</image:title>
-      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+      <image:title>La lavorazione a mano EmmeLù</image:title>
+      <image:caption>Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://ellebi.it/privacy</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
-      <image:title>La lavorazione a mano ELLEBI</image:title>
-      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+      <image:title>La lavorazione a mano EmmeLù</image:title>
+      <image:caption>Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://ellebi.it/termini</loc>
-    <lastmod>2026-09-09</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
       <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
-      <image:title>La lavorazione a mano ELLEBI</image:title>
-      <image:caption>Le mani al lavoro sulla fettuccia di cotone, un punto alla volta.</image:caption>
+      <image:title>La lavorazione a mano EmmeLù</image:title>
+      <image:caption>Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.</image:caption>
     </image:image>
   </url>
 </urlset>

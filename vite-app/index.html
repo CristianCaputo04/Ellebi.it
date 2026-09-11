@@ -1,29 +1,41 @@
 <%
-const jsonld = JSON.stringify({
-  "@context": "https://schema.org",
-  "@graph": [
-    { "@type": "Organization", "@id": "https://ellebi.it/#org", "name": "ELLEBI", "alternateName": "ELLEBI | Handmade & Style", "url": "https://ellebi.it/", "logo": "https://ellebi.it/assets/img/logo-badge.svg", "image": "https://ellebi.it/assets/img/og-cover.jpg", "description": "Borse all'uncinetto fatte a mano in Italia, un pezzo alla volta, senza produzione in serie.", "email": "ellebi.style@gmail.com", "areaServed": "IT", "sameAs": ["https://www.instagram.com/ellebi.it/"], "slogan": "Stile • Armonia • Autenticità" },
-    { "@type": "WebSite", "@id": "https://ellebi.it/#site", "url": "https://ellebi.it/", "name": "ELLEBI", "inLanguage": "it-IT", "publisher": { "@id": "https://ellebi.it/#org" } },
-    { "@type": "WebPage", "@id": "https://ellebi.it/#page", "url": "https://ellebi.it/", "name": "ELLEBI — Ogni borsa esiste una volta sola", "isPartOf": { "@id": "https://ellebi.it/#site" }, "about": { "@id": "https://ellebi.it/#org" }, "inLanguage": "it-IT", "primaryImageOfPage": "https://ellebi.it/assets/img/hero.jpg" },
-    { "@type": "ItemList", "@id": "https://ellebi.it/#collezione", "name": "La collezione ELLEBI", "itemListOrder": "https://schema.org/ItemListUnordered", "numberOfItems": 4, "itemListElement": [
-      { "@type": "ListItem", "position": 1, "item": { "@type": "CreativeWork", "name": "Nuvola", "description": "Pouch morbida in filato tortora, lavorata a mano all'uncinetto.", "image": "https://ellebi.it/assets/img/borsa-01.jpg", "creator": { "@id": "https://ellebi.it/#org" } } },
-      { "@type": "ListItem", "position": 2, "item": { "@type": "CreativeWork", "name": "Perla", "description": "Mini bag color cacao con manico rigido e tre perle cucite a mano.", "image": "https://ellebi.it/assets/img/borsa-02.jpg", "creator": { "@id": "https://ellebi.it/#org" } } },
-      { "@type": "ListItem", "position": 3, "item": { "@type": "CreativeWork", "name": "Sera", "description": "Pouch in filato cioccolato con filo lurex, per le occasioni serali.", "image": "https://ellebi.it/assets/img/borsa-03.jpg", "creator": { "@id": "https://ellebi.it/#org" } } },
-      { "@type": "ListItem", "position": 4, "item": { "@type": "CreativeWork", "name": "Cacao", "description": "Pouch capiente in filato cioccolato opaco, lavorata a mano.", "image": "https://ellebi.it/assets/img/borsa-04.jpg", "creator": { "@id": "https://ellebi.it/#org" } } }
-    ] }
-  ]
-});
+/* =========================================================================
+   EmmeLù — home
+   Tutti i contenuti ripetuti (linee, pilastri, pezzi, domande) vivono in un
+   solo array: il markup visibile e il JSON-LD leggono la stessa fonte, così
+   non possono divergere (requisito dei rich result di Google per la FAQ).
+   ========================================================================= */
+const IG = "https://www.instagram.com/emmeluofficial/";
+const EMAIL = "ellebi.style@gmail.com";
 
-const extraPreload = `
-<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-w800.webp 800w, /assets/img/hero-w1200.webp 1200w, /assets/img/hero.webp 1920w" imagesizes="100vw" fetchpriority="high" media="(min-width: 48em)">
-<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-mobile-w480.webp 480w, /assets/img/hero-mobile-w800.webp 800w, /assets/img/hero-mobile.webp 1000w" imagesizes="100vw" fetchpriority="high" media="(max-width: 47.99em)">`;
+// Le 9 linee: sezione tipografica, nessuna immagine (esistono foto solo delle borse).
+const linee = [
+  { nome: "Borse", desc: "Eleganza e funzionalità in ogni dettaglio.", aria: "Ordina la linea Borse su Instagram" },
+  { nome: "Piccola Pelletteria", desc: "Piccoli dettagli, grande personalità.", aria: "Ordina la linea Piccola Pelletteria su Instagram" },
+  { nome: "Abbigliamento", desc: "Capi versatili e senza tempo.", aria: "Ordina la linea Abbigliamento su Instagram" },
+  { nome: "Accessori", desc: "Completa il tuo stile con unicità.", aria: "Ordina la linea Accessori su Instagram" },
+  { nome: "Gioielli", desc: "Luce ai tuoi momenti più speciali.", aria: "Ordina la linea Gioielli su Instagram" },
+  { nome: "Lingerie", desc: "Femminilità a contatto con la pelle.", aria: "Ordina la linea Lingerie su Instagram" },
+  { nome: "Beachwear", desc: "Stile che ti accompagna ovunque.", aria: "Ordina la linea Beachwear su Instagram" },
+  { nome: "Linea Home", desc: "La bellezza di sentirsi a casa.", aria: "Ordina la Linea Home su Instagram" },
+  { nome: "Linea Baby", desc: "Dolcezza per i suoi primi momenti.", aria: "Ordina la Linea Baby su Instagram" },
+];
 
-// Dati delle 4 borse: pilota sia il markup sia il JSON-LD sopra, in un solo posto.
+// I 5 pilastri: griglia responsive (3+2 da computer, 1 colonna sul telefono).
+const pilastri = [
+  { nome: "Cucito a mano", sub: "cura", testo: "Ogni capo è realizzato a mano con cura e precisione." },
+  { nome: "100% Italiano", sub: "origine", testo: "Creato, cucito e confezionato in Italia." },
+  { nome: "Materiali premium", sub: "qualità", testo: "Solo materiali di altissima qualità, selezionati con attenzione." },
+  { nome: "Personalizzazione", sub: "su misura", testo: "Ogni linea può essere personalizzata secondo i tuoi desideri." },
+  { nome: "Capsule & pezzi unici", sub: "unicità", testo: "Tutte le collezioni sono capsule limited edition. Alcuni pezzi, una volta consegnati, non saranno mai più replicati." },
+];
+
+// Dati delle 4 borse: pilotano sia il markup sia i Product del JSON-LD.
 const collezione = [
-  { base: "borsa-01", baseB: "borsa-01b", widths: [480, 800, 900], name: "Nuvola", meta: "Tortora · morbida fuori, ferma nella forma", alt: "Nuvola: pouch morbida in filato tortora con bordo intrecciato, tenuta in mano", caption: "Nuvola — tortora, morbida fuori e ferma nella forma" },
-  { base: "borsa-02", baseB: "borsa-02b", widths: [480, 800, 900], name: "Perla", meta: "Cacao · manico rigido, tre perle cucite a mano", alt: "Perla: mini bag color cacao con manico rigido e tre perle bianche cucite a mano", caption: "Perla — cacao, manico rigido e tre perle cucite a mano" },
-  { base: "borsa-03", baseB: "borsa-03b", widths: [480, 800, 900], name: "Sera", meta: "Cioccolato lurex · quella che si nota di sera", alt: "Sera: pouch in filato cioccolato attraversato da lurex dorato, appoggiata su un muretto", caption: "Sera — cioccolato lurex, quella che si nota di sera" },
-  { base: "borsa-04", baseB: "borsa-04b", widths: [480, 800, 900], name: "Cacao", meta: "Cioccolato opaco · la misura che ti porti ovunque", alt: "Cacao: pouch capiente in filato cioccolato opaco, tenuta in mano", caption: "Cacao — cioccolato opaco, la misura che ti porti ovunque" },
+  { base: "borsa-01", baseB: "borsa-01b", widths: [480, 800, 900], id: "borsa-nuvola", name: "Nuvola", meta: "Tortora · morbida fuori, ferma nella forma", colore: "Tortora", desc: "Pouch morbida in fettuccia di cotone tortora, cucita a mano: morbida fuori, ferma nella forma. Capsule limited edition.", alt: "Nuvola: pouch morbida in filato tortora con bordo intrecciato, tenuta in mano", caption: "Nuvola — tortora, morbida fuori e ferma nella forma" },
+  { base: "borsa-02", baseB: "borsa-02b", widths: [480, 800, 900], id: "borsa-perla", name: "Perla", meta: "Cacao · manico rigido, tre perle cucite a mano", colore: "Cacao", desc: "Mini bag color cacao con manico rigido e tre perle cucite a mano, in fettuccia di cotone. Capsule limited edition.", alt: "Perla: mini bag color cacao con manico rigido e tre perle bianche cucite a mano", caption: "Perla — cacao, manico rigido e tre perle cucite a mano" },
+  { base: "borsa-03", baseB: "borsa-03b", widths: [480, 800, 900], id: "borsa-sera", name: "Sera", meta: "Cioccolato lurex · quella che si nota di sera", colore: "Cioccolato", desc: "Pouch in fettuccia di cotone cioccolato attraversata da filo lurex dorato, pensata per le occasioni serali. Capsule limited edition.", alt: "Sera: pouch in filato cioccolato attraversato da lurex dorato, appoggiata su un muretto", caption: "Sera — cioccolato lurex, quella che si nota di sera" },
+  { base: "borsa-04", baseB: "borsa-04b", widths: [480, 800, 900], id: "borsa-cacao", name: "Cacao", meta: "Cioccolato opaco · la misura che ti porti ovunque", colore: "Cioccolato opaco", desc: "Pouch capiente in fettuccia di cotone cioccolato opaco, la misura da portare ovunque. Capsule limited edition.", alt: "Cacao: pouch capiente in filato cioccolato opaco, tenuta in mano", caption: "Cacao — cioccolato opaco, la misura che ti porti ovunque" },
 ];
 const cardSizes = "(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw";
 
@@ -44,18 +56,61 @@ const galleria = [
   { base: "gallery-06", caption: "Cacao — il fondo", label: "il fondo della borsa Cacao", alt: "Il fondo lavorato a mano della borsa Cacao" },
 ];
 const gallerySizes = "(min-width: 48em) 28vw, 40vw";
+
+// Domande: stesso testo, parola per parola, nel markup e nella FAQPage.
+const domande = [
+  { q: "Come si ordina un pezzo EmmeLù?", a: "Si ordina in direct su Instagram, @emmeluofficial. Mi scrivi il pezzo o la linea che ti interessa, ti dico se è disponibile, in quanto tempo arriva e quanto costa. Se preferisci l'e-mail, scrivi a ellebi.style@gmail.com. Non c'è un carrello: rispondo io, di persona." },
+  { q: "Cosa significa «capsule limited edition»?", a: "Che ogni collezione nasce in un numero chiuso di pezzi e non viene rimessa in produzione. Alcuni pezzi, una volta consegnati, non saranno mai più replicati: non esiste una seconda copia identica, nemmeno nello stesso colore." },
+  { q: "Posso personalizzare un capo?", a: "Sì, ogni linea può essere personalizzata: colore, misura, dettagli, iniziali. Se ne parla per messaggio prima di iniziare, così sai già cosa è realizzabile con i materiali disponibili e quanto tempo serve." },
+  { q: "Dove vengono realizzati i capi EmmeLù?", a: "In Italia, dal primo all'ultimo passaggio: creato, cucito e confezionato qui. I materiali sono selezionati uno a uno e sono di altissima qualità — è la parte che non si vede in foto ma che si sente addosso." },
+  { q: "Quali linee esistono?", a: "Nove: borse, piccola pelletteria, abbigliamento, accessori, gioielli, lingerie, beachwear, linea home e linea baby. Tutte cucite a mano e tutte personalizzabili." },
+  { q: "Come si cura un capo cucito a mano?", a: "Si pulisce a mano, con poca acqua tiepida e un panno morbido, trattando solo il punto da smacchiare. Niente lavatrice e niente asciugatrice. Le borse vanno tenute riempite quando riposano, così i lati non si afflosciano." },
+];
+
+const jsonld = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": "https://ellebi.it/#org", "name": "EMMELÙ", "alternateName": "EmmeLù", "url": "https://ellebi.it/", "logo": "https://ellebi.it/assets/img/logo-badge.svg", "image": "https://ellebi.it/assets/img/og-cover.jpg", "description": "Capsule limited edition cucite a mano in Italia: borse, abbigliamento, gioielli e accessori. Alcuni pezzi, una volta consegnati, non saranno mai più replicati.", "email": EMAIL, "areaServed": "IT", "founder": { "@type": "Person", "name": "Lucy Basilicata" }, "knowsAbout": linee.map((l) => l.nome), "sameAs": [IG], "slogan": "Stile • Armonia • Autenticità" },
+    { "@type": "WebSite", "@id": "https://ellebi.it/#site", "url": "https://ellebi.it/", "name": "EmmeLù", "inLanguage": "it-IT", "publisher": { "@id": "https://ellebi.it/#org" } },
+    { "@type": "WebPage", "@id": "https://ellebi.it/#page", "url": "https://ellebi.it/", "name": "EmmeLù — Unicità oggi, per sempre", "isPartOf": { "@id": "https://ellebi.it/#site" }, "about": { "@id": "https://ellebi.it/#org" }, "inLanguage": "it-IT", "primaryImageOfPage": "https://ellebi.it/assets/img/hero.jpg" },
+    { "@type": "ItemList", "@id": "https://ellebi.it/#pezzi", "name": "Pezzi disponibili EmmeLù", "itemListOrder": "https://schema.org/ItemListUnordered", "numberOfItems": collezione.length, "itemListElement": collezione.map((b, i) => ({ "@type": "ListItem", "position": i + 1, "item": { "@id": "https://ellebi.it/#" + b.id } })) },
+    ...collezione.map((b) => ({
+      "@type": "Product",
+      "@id": "https://ellebi.it/#" + b.id,
+      "name": b.name,
+      "description": b.desc,
+      "image": ["https://ellebi.it/assets/img/" + b.base + ".jpg"],
+      "color": b.colore,
+      "material": "Fettuccia di cotone",
+      "brand": { "@id": "https://ellebi.it/#org" },
+      "manufacturer": { "@id": "https://ellebi.it/#org" },
+      "category": "Borse e accessori > Pochette e mini bag",
+      "itemCondition": "https://schema.org/NewCondition",
+      "url": "https://ellebi.it/#pezzi",
+      "additionalProperty": [
+        { "@type": "PropertyValue", "name": "Lavorazione", "value": "Cucita a mano in Italia" },
+        { "@type": "PropertyValue", "name": "Disponibilità", "value": "Capsule limited edition — pezzo unico" }
+      ]
+    })),
+    { "@type": "FAQPage", "@id": "https://ellebi.it/#domande", "isPartOf": { "@id": "https://ellebi.it/#page" }, "inLanguage": "it-IT", "mainEntity": domande.map((d) => ({ "@type": "Question", "name": d.q, "acceptedAnswer": { "@type": "Answer", "text": d.a } })) }
+  ]
+});
+
+const extraPreload = `
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-w800.webp 800w, /assets/img/hero-w1200.webp 1200w, /assets/img/hero.webp 1920w" imagesizes="100vw" fetchpriority="high" media="(min-width: 48em)">
+<link rel="preload" as="image" type="image/webp" imagesrcset="/assets/img/hero-mobile-w480.webp 480w, /assets/img/hero-mobile-w800.webp 800w, /assets/img/hero-mobile.webp 1000w" imagesizes="100vw" fetchpriority="high" media="(max-width: 47.99em)">`;
 %><!DOCTYPE html>
 <html lang="it">
 <head>
 <%- include('./src/partials/head-meta.html', {
-  title: "ELLEBI — Borse fatte a mano | Ogni borsa esiste una volta sola",
-  description: "Borse all'uncinetto fatte a mano, un pezzo alla volta. Nessuna produzione in serie: quando una borsa finisce, finisce. Guarda i pezzi ancora disponibili.",
+  title: "EmmeLù — Capsule limited edition cucite a mano in Italia",
+  description: "Borse, abbigliamento, gioielli e accessori cuciti a mano in Italia. Capsule limited edition: alcuni pezzi, una volta consegnati, non saranno mai più replicati. Ordina su Instagram.",
   canonical: "/",
   ogType: "website",
-  ogTitle: "ELLEBI — Ogni borsa esiste una volta sola",
-  ogDescription: "Borse all'uncinetto fatte a mano, un nodo alla volta. Nessuna serie, nessuna copia.",
+  ogTitle: "EmmeLù — Unicità oggi, per sempre",
+  ogDescription: "Capsule limited edition cucite a mano in Italia. Nove linee, un solo pezzo per volta. Ordina su Instagram.",
   ogImageWidth: 1200, ogImageHeight: 630,
-  ogImageAlt: "Una borsa ELLEBI fatta a mano in filato tortora",
+  ogImageAlt: "Una borsa EmmeLù cucita a mano in filato tortora",
   extraPreload,
   jsonld,
 }) %>
@@ -67,7 +122,7 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
 <div class="preloader" role="status" aria-live="polite">
   <span class="visually-hidden">Caricamento in corso…</span>
   <svg class="preloader__mark" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-    <use href="#ellebi-mark"></use>
+    <use href="#emmelu-mark"></use>
   </svg>
   <span class="preloader__bar" aria-hidden="true"></span>
 </div>
@@ -112,20 +167,28 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
       <line class="menu__shape-el" stroke="currentColor" x1="104" y1="0" x2="400" y2="296" stroke-width="24"></line>
       <line class="menu__shape-el" stroke="currentColor" x1="204" y1="0" x2="400" y2="196" stroke-width="18"></line>
     </svg>
+    <svg class="menu__shape" data-shape="6" viewBox="0 0 400 400" fill="none">
+      <circle class="menu__shape-el" stroke="currentColor" fill="none" cx="200" cy="200" r="52" stroke-width="30"></circle>
+      <circle class="menu__shape-el" stroke="currentColor" fill="none" cx="200" cy="200" r="122" stroke-width="22"></circle>
+      <circle class="menu__shape-el" stroke="currentColor" fill="none" cx="200" cy="200" r="186" stroke-width="14"></circle>
+    </svg>
   </div>
   <nav aria-label="Navigazione del sito">
     <ul class="menu__list" role="list">
-      <li class="menu__item" data-shape="1"><a class="menu__link" href="#collezione">Collezione</a></li>
-      <li class="menu__item" data-shape="2"><a class="menu__link" href="#filosofia">Perché a mano</a></li>
-      <li class="menu__item" data-shape="3"><a class="menu__link" href="#lavorazione">Lavorazione</a></li>
-      <li class="menu__item" data-shape="4"><a class="menu__link" href="#dettagli">Dettagli</a></li>
-      <li class="menu__item" data-shape="5"><a class="menu__link" href="#contatti">Contatti</a></li>
+      <li class="menu__item" data-shape="1"><a class="menu__link" href="#collezioni">Collezioni</a></li>
+      <li class="menu__item" data-shape="2"><a class="menu__link" href="#pezzi">Pezzi</a></li>
+      <li class="menu__item" data-shape="3"><a class="menu__link" href="#filosofia">Filosofia</a></li>
+      <li class="menu__item" data-shape="4"><a class="menu__link" href="#lavorazione">Lavorazione</a></li>
+      <li class="menu__item" data-shape="6"><a class="menu__link" href="#dettagli">Dettagli</a></li>
+      <li class="menu__item" data-shape="5"><a class="menu__link" href="#domande">Domande</a></li>
     </ul>
   </nav>
   <div class="menu__foot">
-    <a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
-    <a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
+    <a class="btn btn--solid" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
+      Ordina su Instagram
+      <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+    </a>
+    <a class="link-line" href="mailto:<%= EMAIL %>"><%= EMAIL %></a>
   </div>
 </div>
 
@@ -140,22 +203,23 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
 
     <div class="hero__inner" data-hero-layer data-hero-shift="6.5">
       <div class="hero__content" data-hero-content>
-        <p class="hero__eyebrow">Fatte a mano, una alla volta</p>
-        <h1 class="hero__title" id="hero-title">Ogni borsa esiste una volta sola</h1>
-        <p class="hero__sub">Filato, mani, ore. Nessuna serie, nessuna copia: <em>quando un pezzo finisce, finisce.</em></p>
+        <p class="hero__eyebrow">Capsule limited edition · cucite a mano in Italia</p>
+        <h1 class="hero__title" id="hero-title">Unicità oggi,<br>per sempre</h1>
+        <p class="hero__sub">Borse, abbigliamento, gioielli, accessori. Cuciti a mano, uno per volta. <em>Alcuni pezzi non saranno mai più replicati.</em></p>
         <div class="hero__actions">
-          <a class="btn btn--solid" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">
-            Scrivimi su Instagram
+          <a class="btn btn--solid" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
+            Ordina su Instagram
             <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
           </a>
-          <a class="btn" href="#collezione">Guarda la collezione</a>
+          <a class="btn" href="#collezioni">Guarda le collezioni</a>
         </div>
+        <p class="hero__note">Si ordina in direct: ti dico cosa è disponibile e in quanto tempo arriva.</p>
       </div>
     </div>
 
     <div class="hero__fore" data-hero-layer data-hero-shift="2" aria-hidden="true"></div>
 
-    <a class="hero__scroll" href="#collezione" aria-label="Scorri alla collezione">
+    <a class="hero__scroll" href="#collezioni" aria-label="Scorri alle collezioni">
       <span>Scorri</span>
     </a>
   </section>
@@ -163,23 +227,58 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
   <div class="marquee" aria-hidden="true">
     <div class="marquee__track">
       <div class="marquee__group">
-        <span>Fatto a mano in Italia</span><span>Un pezzo alla volta</span><span>Nessuna produzione in serie</span><span>Stile</span><span>Armonia</span><span>Autenticità</span>
+        <span>Cucito a mano</span><span>100% italiano</span><span>Materiali premium</span><span>Personalizzabile</span><span>Capsule limited edition</span><span>Pezzi mai replicati</span>
       </div>
       <div class="marquee__group">
-        <span>Fatto a mano in Italia</span><span>Un pezzo alla volta</span><span>Nessuna produzione in serie</span><span>Stile</span><span>Armonia</span><span>Autenticità</span>
+        <span>Cucito a mano</span><span>100% italiano</span><span>Materiali premium</span><span>Personalizzabile</span><span>Capsule limited edition</span><span>Pezzi mai replicati</span>
       </div>
     </div>
   </div>
-  <p class="visually-hidden">Fatto a mano in Italia, un pezzo alla volta, senza produzione in serie. Stile, armonia, autenticità.</p>
+  <p class="visually-hidden">Cucito a mano, 100% italiano, materiali premium, personalizzabile. Capsule limited edition: pezzi mai replicati.</p>
 
-  <section class="section collection" id="collezione" aria-labelledby="collezione-title">
+  <section class="section lines" id="collezioni" aria-labelledby="collezioni-title">
+    <div class="wrap">
+      <div class="lines__head">
+        <div data-reveal>
+          <p class="eyebrow">Le nostre collezioni</p>
+          <h2 class="title" id="collezioni-title">Un universo di stile,<br>tutto da personalizzare</h2>
+        </div>
+        <p class="lead" data-reveal data-reveal-delay="120">Nove linee, una sola regola: ogni pezzo è cucito a mano e può essere personalizzato come lo vuoi tu. Dimmi cosa cerchi e te lo costruisco addosso.</p>
+      </div>
+
+      <ul class="lines__grid" role="list" data-stagger>
+        <% linee.forEach((l, i) => { %>
+        <li class="line" data-reveal>
+          <a class="line__link" href="<%= IG %>" target="_blank" rel="noopener noreferrer" aria-label="<%= l.aria %>">
+            <span class="line__num" aria-hidden="true"><%= String(i + 1).padStart(2, "0") %></span>
+            <span class="line__body">
+              <span class="line__name"><%= l.nome %></span>
+              <span class="line__text"><%= l.desc %></span>
+            </span>
+            <svg class="line__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+          </a>
+        </li>
+        <% }) %>
+      </ul>
+
+      <div class="collection__note" data-reveal>
+        <p>Non trovi la tua linea? Si parte sempre da un messaggio.</p>
+        <a class="btn btn--solid" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
+          Ordina su Instagram
+          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section collection" id="pezzi" aria-labelledby="pezzi-title">
     <div class="wrap">
       <div class="collection__head">
         <div data-reveal>
-          <p class="eyebrow">La collezione</p>
-          <h2 class="title" id="collezione-title">Quattro borse.<br>Zero copie.</h2>
+          <p class="eyebrow">Pezzi disponibili adesso</p>
+          <h2 class="title" id="pezzi-title">Quattro borse.<br>Zero copie.</h2>
         </div>
-        <p class="lead" data-reveal data-reveal-delay="120">Dietro non c'è un magazzino: c'è un tavolo, un uncinetto e il tempo che serve. Ogni pezzo nasce una volta e resta com'è.</p>
+        <p class="lead" data-reveal data-reveal-delay="120">Queste sono uscite dall'atelier e non sono ancora state replicate. Quando una trova casa, quel pezzo finisce lì.</p>
       </div>
 
       <div class="collection__grid" data-stagger>
@@ -195,56 +294,46 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
           </div>
           <h3 class="card__name"><%= b.name %></h3>
           <p class="card__meta"><%= b.meta %></p>
+          <a class="card__cta" href="<%= IG %>" target="_blank" rel="noopener noreferrer" aria-label="Ordina la borsa <%= b.name %> su Instagram">
+            Ordinala
+            <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+          </a>
         </article>
         <% }) %>
       </div>
 
       <div class="collection__note" data-reveal>
-        <p>Questo sito mostra, non vende. Per sapere quali pezzi sono ancora disponibili basta un messaggio.</p>
-        <a class="link-line" href="#contatti">Chiedimi cosa c'è adesso</a>
+        <p>Vuoi sapere quali sono ancora disponibili? Te lo dico in un messaggio.</p>
+        <a class="btn btn--solid" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
+          Ordina su Instagram
+          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </a>
       </div>
     </div>
   </section>
 
   <section class="section philosophy" id="filosofia" aria-labelledby="filosofia-title">
     <div class="wrap wrap--narrow">
-      <p class="eyebrow eyebrow--center" data-reveal>Perché fatte a mano</p>
-      <h2 class="philosophy__title" id="filosofia-title" data-split>Una macchina ne farebbe mille uguali. Io ne faccio una.</h2>
-      <p class="philosophy__text" data-reveal data-reveal-delay="200">Dal primo giro all'ultimo filo tirato dentro passano ore, tutte con le stesse due mani. È per questo che due ELLEBI non saranno mai identiche: cambia la tensione del punto, cambia il filato, e quello che ne esce resta tuo e basta.</p>
+      <p class="eyebrow eyebrow--center" data-reveal>Più di un brand</p>
+      <h2 class="philosophy__title" id="filosofia-title" data-split>Più di un brand, una storia italiana.</h2>
+      <p class="philosophy__text" data-reveal data-reveal-delay="200">EmmeLù è stile, passione e artigianalità. Dal primo taglio all'ultimo punto passano ore, tutte con le stesse due mani — creato, cucito e confezionato in Italia. È per questo che ogni capo racconta una storia. La tua.</p>
     </div>
   </section>
 
   <section class="section pillars" aria-labelledby="pilastri-title">
     <div class="wrap">
-      <h2 class="visually-hidden" id="pilastri-title">I tre valori di ELLEBI</h2>
-      <div class="diagram" data-diagram>
-        <svg class="diagram__lines" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <path d="M410 230 C 340 230, 300 150, 210 140"></path>
-          <path d="M590 230 C 660 230, 700 140, 790 130"></path>
-          <path d="M590 250 C 670 260, 700 330, 790 345"></path>
-        </svg>
-        <ul class="diagram__items diagram__items--left" role="list">
-          <li class="pillar" data-reveal="left">
-            <h3 class="pillar__name">Armonia <small>equilibrio</small></h3>
-            <p class="pillar__text">Colori caldi scelti per stare bene con quello che hai già nell'armadio, senza rubare la scena.</p>
-          </li>
-        </ul>
-        <div class="diagram__core" data-reveal="scale">
-          <svg viewBox="0 0 120 120" role="img" aria-label="Marchio ELLEBI" focusable="false">
-            <use href="#ellebi-mark"></use>
-          </svg>
-        </div>
-        <ul class="diagram__items diagram__items--right" role="list">
-          <li class="pillar" data-reveal="right">
-            <h3 class="pillar__name">Stile <small>forma</small></h3>
-            <p class="pillar__text">Forme essenziali che non scadono a fine stagione: le porti quest'anno e anche il prossimo.</p>
-          </li>
-          <li class="pillar" data-reveal="right" data-reveal-delay="140">
-            <h3 class="pillar__name">Autenticità <small>unicità</small></h3>
-            <p class="pillar__text">Nessun pezzo è uguale a un altro: la mano che lavora lascia sempre una firma diversa.</p>
-          </li>
-        </ul>
+      <h2 class="visually-hidden" id="pilastri-title">I cinque pilastri di EmmeLù</h2>
+      <div class="pillars__mark" data-reveal="scale" aria-hidden="true">
+        <svg viewBox="0 0 120 120" focusable="false"><use href="#emmelu-mark"></use></svg>
       </div>
+      <ul class="pillars__grid" role="list" data-stagger>
+        <% pilastri.forEach((p) => { %>
+        <li class="pillar" data-reveal>
+          <h3 class="pillar__name"><%= p.nome %> <small><%= p.sub %></small></h3>
+          <p class="pillar__text"><%= p.testo %></p>
+        </li>
+        <% }) %>
+      </ul>
       <div class="pillars__cta" data-reveal>
         <a class="btn" href="#lavorazione">
           Guarda come nasce
@@ -259,10 +348,11 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
       <%- include('./src/partials/picture.html', { base: "atelier", widths: [480, 800, 1200, 1920], realWidth: 1920, realHeight: 1080, alt: "Dettaglio della borsa Sera: filato cioccolato con lurex dorato, alla luce naturale", sizes: "100vw", loading: "lazy" }) %>
     </div>
     <div class="banner__inner">
-      <h2 class="banner__title" id="banner-title" data-reveal>Quando un pezzo finisce, finisce</h2>
-      <p class="banner__text" data-reveal data-reveal-delay="150">Non riordino, non replico, non produco in serie. Se una borsa è ancora lì, è perché nessuno se l'è portata via.</p>
+      <p class="banner__eyebrow" data-reveal>EmmeLù — 100% italiano · 100% autentico · 100% tu</p>
+      <h2 class="banner__title" id="banner-title" data-reveal data-reveal-delay="80">Quando un pezzo finisce, finisce</h2>
+      <p class="banner__text" data-reveal data-reveal-delay="150">Tutte le collezioni sono capsule limited edition. Alcuni pezzi, una volta consegnati, non saranno mai più replicati: se è ancora qui, è perché nessuno se l'è portato via.</p>
       <div class="banner__actions" data-reveal data-reveal-delay="240">
-        <a class="btn btn--light" href="#contatti">
+        <a class="btn btn--light" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
           Chiedi cosa è ancora disponibile
           <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
         </a>
@@ -276,7 +366,7 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
         <p class="steps__figure" aria-hidden="true" data-reveal>4</p>
         <div>
           <h2 class="steps__title" id="lavorazione-title" data-reveal data-reveal-delay="80">Passaggi, nessuna scorciatoia</h2>
-          <p class="steps__intro" data-reveal data-reveal-delay="160">Dal gomitolo alla borsa che tieni in mano. È qui che si decide se durerà una stagione o dieci anni.</p>
+          <p class="steps__intro" data-reveal data-reveal-delay="160">Dal filato al capo che tieni in mano. È qui che si decide se durerà una stagione o dieci anni.</p>
         </div>
       </div>
 
@@ -295,6 +385,13 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
         </li>
         <% }) %>
       </ol>
+
+      <div class="steps__cta" data-reveal>
+        <a class="btn btn--solid" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
+          Ordina su Instagram
+          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -305,7 +402,7 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
           <p class="eyebrow">Dettagli</p>
           <h2 class="title" id="dettagli-title">Guarda da vicino <em>il punto</em></h2>
         </div>
-        <a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer" data-reveal>Altri scatti su Instagram</a>
+        <a class="link-line" href="<%= IG %>" target="_blank" rel="noopener noreferrer" data-reveal>Altri scatti su Instagram</a>
       </div>
 
       <div class="gallery__grid" data-stagger>
@@ -318,18 +415,42 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
     </div>
   </section>
 
-  <section class="section contact" id="contatti" aria-labelledby="contatti-title">
+  <section class="section faq" id="domande" aria-labelledby="domande-title">
     <div class="wrap wrap--narrow">
-      <p class="eyebrow eyebrow--center" data-reveal>Dove trovarle</p>
-      <h2 class="contact__title" id="contatti-title" data-reveal data-reveal-delay="80">Se te ne innamori,<br>fammelo sapere</h2>
-      <p class="contact__text" data-reveal data-reveal-delay="140">Qui non c'è un carrello: ci sono i miei messaggi aperti. Scrivimi su Instagram o via email per sapere quali pezzi sono ancora disponibili, e per tutto il resto — colori, misure, tempi di lavorazione. Rispondo io, non un assistente automatico.</p>
-      <div class="contact__actions" data-reveal data-reveal-delay="200">
-        <a class="btn btn--solid" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">
-          Scrivimi su Instagram
+      <div data-reveal>
+        <p class="eyebrow">Domande</p>
+        <h2 class="title" id="domande-title">Quello che mi <em>chiedete più spesso</em></h2>
+      </div>
+
+      <div class="faq__list">
+        <% domande.forEach((d) => { %>
+        <details class="faq__item" data-reveal>
+          <summary class="faq__q"><%= d.q %></summary>
+          <div class="faq__a"><p><%= d.a %></p></div>
+        </details>
+        <% }) %>
+      </div>
+
+      <div class="faq__cta" data-reveal>
+        <a class="btn btn--solid" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
+          Ordina su Instagram
           <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
         </a>
-        <a class="btn" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Scrivimi su Instagram</a>
-        <a class="btn" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact" id="contatti" aria-labelledby="contatti-title">
+    <div class="wrap wrap--narrow">
+      <p class="eyebrow eyebrow--center" data-reveal>Come si ordina</p>
+      <h2 class="contact__title" id="contatti-title" data-reveal data-reveal-delay="80">Un messaggio,<br>e il pezzo è tuo</h2>
+      <p class="contact__text" data-reveal data-reveal-delay="140">Qui non c'è un carrello: c'è il mio direct aperto. Scrivimi su Instagram il pezzo o la linea che ti interessa — ti dico cosa è disponibile, i tempi e come personalizzarlo. Rispondo io, non un assistente automatico.</p>
+      <div class="contact__actions" data-reveal data-reveal-delay="200">
+        <a class="btn btn--solid" href="<%= IG %>" target="_blank" rel="noopener noreferrer">
+          Ordina su Instagram
+          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </a>
+        <a class="btn" href="mailto:<%= EMAIL %>"><%= EMAIL %></a>
       </div>
       <p class="contact__note" data-reveal data-reveal-delay="260">Nessun modulo, nessun dato raccolto da questo sito.</p>
     </div>

@@ -1,0 +1,104 @@
+// 25. Collezioni (le nove linee)
+/* Griglia tipografica: di queste linee non esistono ancora fotografie, e una
+   griglia di segnaposto costerebbe banda senza dire nulla. Ogni voce è già un
+   link d'ordine, così chi sa cosa cerca arriva in direct dalla linea che gli
+   interessa senza scorrere fino in fondo alla pagina.
+   L'altezza dipende solo dal testo: nessuna risorsa da attendere, zero CLS. */
+.lines { background: var(--c-paper); }
+
+.lines__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+.lines__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 0;
+  list-style: none;
+  /* Le voci si separano con i bordi delle celle, non con margini: così le
+     righe restano allineate qualunque sia il numero di colonne che la
+     griglia decide di formare. */
+  border-top: 1px solid var(--c-line-soft);
+}
+
+.line {
+  border-bottom: 1px solid var(--c-line-soft);
+  /* Isola il ricalcolo dell'evidenziazione al passaggio del mouse: il
+     browser non deve ricontrollare le altre otto voci. */
+  contain: layout style;
+}
+
+.line__link {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  height: 100%;
+  padding: clamp(1.1rem, 2.4vw, 1.6rem) clamp(0.75rem, 2vw, 1.25rem);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--dur-2) var(--ease);
+}
+
+.line__num {
+  flex: none;
+  font-family: var(--f-serif);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  color: var(--c-terracotta-ink);
+}
+
+.line__body {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.line__name {
+  display: block;
+  font-size: var(--fs-h3);
+  font-weight: 300;
+  line-height: 1.15;
+}
+
+.line__text {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+.line__icon {
+  flex: none;
+  align-self: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--c-terracotta-ink);
+  opacity: 0;
+  /* Parte 8 px più a sinistra e scivola al suo posto: solo transform e
+     opacity, quindi l'animazione resta sul compositore e non ridisegna
+     né rimisura nulla. */
+  transform: translateX(-8px);
+  transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+
+.line__link:hover,
+.line__link:focus-visible { background-color: var(--c-paper-2); }
+
+.line__link:hover .line__icon,
+.line__link:focus-visible .line__icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Senza dispositivo di puntamento la freccia non comparirebbe mai: sul
+   telefono resta visibile in permanenza, è l'unico segnale che la voce
+   porta da qualche parte. */
+@media (hover: none) {
+  .line__icon { opacity: 1; transform: none; }
+}

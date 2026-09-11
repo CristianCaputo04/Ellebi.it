@@ -1,5 +1,5 @@
 /* =========================================================================
-   ELLEBI — interazioni del sito
+   EMMELÙ — interazioni del sito
    Vanilla JS, nessuna dipendenza esterna, nessun tracciamento di default.
    Ogni modulo è difensivo: se un elemento non esiste, il modulo esce.
    ========================================================================= */
@@ -58,23 +58,6 @@
   function memoriaCancella(chiave) {
     try { window.localStorage.removeItem(chiave); } catch (e) { /* si prosegue senza */ }
   }
-
-  /* ------------------------------------------------------------ preloader */
-  (function preloader() {
-    var node = $(".preloader");
-    if (!node) { return; }
-    var salvagente = null;
-    function hide() {
-      document.body.classList.add("is-loaded");
-      if (salvagente !== null) { window.clearTimeout(salvagente); salvagente = null; }
-    }
-    if (document.readyState === "complete") { hide(); }
-    else {
-      window.addEventListener("load", hide, { once: true });
-      // rete lenta o risorsa bloccata: il sito resta comunque utilizzabile
-      salvagente = window.setTimeout(hide, 3500);
-    }
-  })();
 
   /* ---------------------------------------------------------- anno footer */
   $$("[data-year]").forEach(function (el) {
@@ -282,7 +265,6 @@
   (function reveal() {
     var items = $$("[data-reveal]");
     var splits = $$("[data-split]");
-    var diagrams = $$("[data-diagram]");
 
     // ritardo progressivo per i gruppi con [data-stagger]
     $$("[data-stagger]").forEach(function (group) {
@@ -316,16 +298,7 @@
       el.appendChild(frag);
     });
 
-    // linee del diagramma: lunghezza reale del tracciato per l'effetto "disegno"
-    diagrams.forEach(function (d) {
-      $$(".diagram__lines path", d).forEach(function (path) {
-        if (typeof path.getTotalLength !== "function") { return; }
-        var len = Math.ceil(path.getTotalLength());
-        path.style.setProperty("--len", String(len));
-      });
-    });
-
-    var all = items.concat(splits).concat(diagrams);
+    var all = items.concat(splits);
     if (!all.length) { return; }
 
     if (!supportsIO || prefersReduced()) {
@@ -545,7 +518,7 @@
     // iubenda_cs.js (asincrono) sia pronto: evita un lampo del banner a
     // chi ha già scelto in una visita precedente. La fonte di verità del
     // consenso resta comunque iubenda, non questa chiave.
-    var seenKey = "ellebi_cookie_seen";
+    var seenKey = "emmelu_cookie_seen";
 
     function hideBanner() {
       banner.classList.remove("is-visible");

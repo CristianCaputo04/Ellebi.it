@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
-"""Genera il logo ELLEBI in SVG e le icone PNG dell'app.
+"""Genera il logo in SVG e le icone PNG dell'app.
+
+ATTENZIONE — QUESTO SCRIPT È FERMO AL MARCHIO VECCHIO.
+Disegna ancora il monogramma "LB" e la scritta "ELLEBI": il rebrand in EmmeLù
+ha riguardato nome, testi e link, mentre i file grafici del logo restano da
+sostituire con quelli che fornirà la titolare. Finché non arrivano, eseguire
+questo script **riporterebbe indietro** favicon.svg, logo-ellebi.svg,
+logo-badge.svg e le icone PNG. Quando il nuovo logo è disponibile: o si
+sovrascrivono direttamente quei file, oppure si aggiornano qui il monogramma
+e la scritta (righe con "LB" e "ELLEBI") e si rilancia.
+
+Il marchio-ciliegie non è interessato: resta valido anche in EmmeLù, ed è
+quello disegnato inline nelle pagine come <symbol id="emmelu-mark">.
 
 Le lettere non sono testo ma contorni veri, estratti dai font già ospitati
 sul sito: il file resta identico ovunque, anche dove i font non si caricano

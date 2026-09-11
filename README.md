@@ -1,9 +1,26 @@
-# ELLEBI — sito vetrina delle borse fatte a mano
+# EMMELÙ — sito di vendita delle capsule cucite a mano
 
-Landing page statica che mostra le borse artigianali ELLEBI. **Non è un negozio**:
-niente carrello, niente prezzi, niente moduli d'ordine. Le chiamate all'azione
-portano ai contatti diretti — Instagram e e-mail — dove si chiede quali pezzi
-sono ancora disponibili.
+Landing page statica di **EmmeLù**: capsule limited edition cucite a mano in
+Italia, su nove linee (borse, piccola pelletteria, abbigliamento, accessori,
+gioielli, lingerie, beachwear, linea home, linea baby).
+
+**Non c'è un carrello, ma la pagina è costruita per vendere**: niente prezzi e
+nessun modulo d'ordine, e ogni chiamata all'azione porta a ordinare in direct
+su Instagram [@emmeluofficial](https://www.instagram.com/emmeluofficial/).
+L'e-mail resta come canale secondario.
+
+> **Il dominio resta `ellebi.it`.** Il rebrand ha toccato nome, copy e link
+> social; indirizzo del sito, canonical, sitemap e casella di posta sono
+> rimasti quelli di prima. Se in futuro si registra un dominio EmmeLù, vanno
+> cambiati insieme: meta canonical e hreflang di ogni pagina, `sitemap.xml`,
+> `robots.txt`, `.well-known/security.txt`, i dati strutturati della home e
+> il campo `name` in `wrangler.toml`.
+>
+> **Il logo è ancora quello vecchio.** `favicon.svg`, `logo-ellebi.svg`,
+> `logo-badge.svg`, `icon-*.png`, `apple-touch-icon.png` e `og-cover.jpg`
+> contengono ancora il monogramma LB: vanno sostituiti quando arriva il file
+> del nuovo logo. Il marchio-ciliegie inline nelle pagine (`#emmelu-mark`) è
+> invece già valido, perché le ciliegie restano anche nel logo EmmeLù.
 
 Nessun framework, nessuna dipendenza da installare: HTML, CSS e JavaScript scritti
 a mano. Si pubblica su Cloudflare Workers a ogni commit.
@@ -49,7 +66,21 @@ servizio, cronologia Git — resta privato.
 
 ---
 
-## 2. Le quattro borse
+## 2. Le nove linee e i quattro pezzi
+
+Il sito ha **due sezioni distinte**, che non vanno confuse:
+
+- **`#collezioni`** elenca le **nove linee** del marchio. È una griglia
+  tipografica, senza fotografie: di queste linee non esistono ancora scatti, e
+  una griglia di segnaposto costerebbe banda senza dire nulla. Ogni voce è già
+  un link d'ordine verso Instagram. I testi stanno in `public/index.html` nella
+  sezione `.lines__grid` e, in forma di dati strutturati, nell'`ItemList`
+  `#collezioni` del blocco `application/ld+json`: **se cambi un nome o una
+  descrizione, cambiali in tutti e due i punti** e poi ricalcola l'hash CSP.
+- **`#pezzi`** mostra le **quattro borse fotografate**, quelle realmente
+  disponibili. È la sezione che prima si chiamava `#collezione`.
+
+### Le quattro borse
 
 I nomi sono usati nel sito, nei testi alternativi e nei dati strutturati.
 
@@ -61,9 +92,9 @@ I nomi sono usati nel sito, nei testi alternativi e nei dati strutturati.
 | **Cacao** | Pouch capiente in cioccolato opaco | `borsa-04.jpg` |
 
 Per rinominare una borsa vanno aggiornati tre punti in `public/index.html`: la scheda
-nella sezione “Collezione” (nome, testo `alt`, didascalia della lightbox), i testi
-alternativi nelle altre sezioni e il blocco `application/ld+json` nell'`<head>`
-(poi ricalcolare l'hash, vedi punto 4).
+nella sezione “Pezzi” (nome, testo `alt`, didascalia della lightbox, `aria-label`
+del link “Ordinala”), i testi alternativi nelle altre sezioni e il blocco
+`application/ld+json` nell'`<head>` (poi ricalcolare l'hash, vedi punto 4).
 
 ---
 
@@ -78,13 +109,13 @@ posizione GPS — sono stati rimossi in fase di esportazione.
 |---|---|---|---|
 | `hero.jpg` | schermata iniziale (desktop e tablet) | 1920 × 1280 | Nuvola |
 | `hero-mobile.jpg` | schermata iniziale sotto i 768 px | 1000 × 1400 | Nuvola |
-| `borsa-01…04.jpg` | schede della collezione | 900 × 1200 | una per borsa |
+| `borsa-01…04.jpg` | schede della sezione “Pezzi” | 900 × 1200 | una per borsa |
 | `borsa-01b…04b.jpg` | seconda foto al passaggio del mouse | 900 × 1200 | dettaglio della stessa borsa |
 | `atelier.jpg` | fascia a tutta larghezza | 1920 × 1080 | Sera |
 | `step-01…04.jpg` | i quattro passaggi | 1200 × 900 | dettagli delle quattro borse |
 | `gallery-01…06.jpg` | sezione “Dettagli” | 800 × 800 | ritagli ravvicinati |
-| `og-cover.jpg` | anteprima quando il link viene condiviso | 1200 × 630 | Nuvola + scritta |
-| `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | icona su telefono | quadrate | logo |
+| `og-cover.jpg` | anteprima quando il link viene condiviso | 1200 × 630 | Nuvola + scritta (**da rifare col nuovo logo**) |
+| `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` | icona su telefono | quadrate | logo (**da rifare col nuovo logo**) |
 
 **Per aggiungere o cambiare una borsa**: sovrascrivi il file mantenendo lo stesso
 nome e le stesse proporzioni (altrimenti l'immagine viene ritagliata al centro),
@@ -99,7 +130,7 @@ Già inseriti nel sito:
 
 | Dato | Valore |
 |---|---|
-| Titolare del trattamento | ELLEBI — Lucy Basilicata |
+| Titolare del trattamento | EMMELÙ — Lucy Basilicata |
 | E-mail pubblica | `ellebi.style@gmail.com` |
 
 L'**indirizzo postale non è pubblicato**. Il GDPR (art. 13) chiede identità e
@@ -110,8 +141,9 @@ una sede o una partita IVA, conviene indicarla per esteso in `public/privacy.htm
 Resta da aggiornare solo se il dominio finale cambiasse: `https://ellebi.it/`
 compare nei meta tag, in `sitemap.xml`, in `robots.txt` e nei dati strutturati.
 
-Profilo collegato (già corretto nel sito): Instagram `@ellebi.it`. Il profilo
-Vinted non è più collegato da nessuna pagina né dalla scorciatoia `/vinted`.
+Profilo collegato (già corretto nel sito): Instagram `@emmeluofficial`, raggiungibile
+anche dalle scorciatoie `/ig` e `/instagram`. Il profilo Vinted non è più
+collegato da nessuna pagina.
 
 Se modifichi il blocco `application/ld+json` in `public/index.html` — o
 qualunque altro `<script>` scritto dentro la pagina — esegui poi:
@@ -284,7 +316,7 @@ Il banner applica queste regole:
 
 - **niente prima del consenso**: nessuno strumento facoltativo viene caricato finché non decidi;
 - **rifiutare costa quanto accettare**: “Accetta tutto” e “Rifiuta tutto” hanno lo stesso peso visivo, più la scelta voce per voce;
-- **prova del consenso**: scelta, data, versione e scadenza restano nel tuo browser (`ellebi-consent-v2`) e non vengono mai inviate a nessun server;
+- **prova del consenso**: la registra iubenda (Cookie Solution). Il sito conserva a parte, nel browser, solo un segnalibro `emmelu_cookie_seen` che serve a non rimostrare il banner a chi ha già scelto — la stessa chiave va scritta uguale in `public/assets/js/main.js` e nel frammento `_iub.csConfiguration` in testa a **ogni** pagina, altrimenti il banner ricompare a ogni visita;
 - **scadenza a 6 mesi**: dopo, la scelta viene richiesta di nuovo (niente consensi eterni e niente banner a ogni visita);
 - **segnali del browser**: se arriva un segnale di rifiuto *Global Privacy Control* o *Do Not Track*, vale come rifiuto — il banner non chiede nulla e non si carica niente;
 - **revoca sempre disponibile**: pulsante “Preferenze cookie” in fondo a ogni pagina, con il riepilogo della scelta attiva in cima alla cookie policy.
@@ -317,7 +349,24 @@ senza errori.
 self-hosted in woff2 con `preload`, foto con dimensioni dichiarate (niente salti di
 layout) e caricamento differito, ritaglio verticale dedicato al telefono, animazioni
 su `transform`/`opacity` sincronizzate con `requestAnimationFrame`, cache lunga per
-font e immagini, HTML sempre riconvalidato.
+font e immagini, HTML sempre riconvalidato. Misurato con Chromium headless su
+390 px, 834 px e 1440 px: **CLS 0** e nessuna barra di scorrimento orizzontale su
+nessuna delle tre.
+
+Col rebrand sono state tolte tre cose che costavano senza rendere:
+
+- **Il preloader.** Copriva la pagina fino all'evento `load`, cioè finché non era
+  scaricata anche l'ultima immagine: ritardava di proposito il momento in cui il
+  sito diventava visibile. Rimosso da HTML, CSS e JavaScript.
+- **Le linee del diagramma dei pilastri.** Erano un SVG tarato su tre valori (ora
+  sono cinque) e costavano una `getTotalLength()` per tracciato al primo ingresso
+  in vista. Sostituite da una griglia che si adatta da sola al numero di voci.
+- **L'anello rotante del marchio.** Una rotazione perpetua su un bordo tratteggiato
+  tiene sveglio il compositore anche fuori dalla vista. Ora è fermo.
+
+I `preconnect` verso iubenda sono stati spostati **prima** dei loro `<script>`:
+il browser apre la connessione TLS mentre sta ancora leggendo la testa del
+documento, invece di aspettare di incontrare il tag.
 
 **Compatibilità** — layout fluido verificato su telefono (390 px), tablet (834 px)
 e desktop (1440 px), menu a tutta pagina sotto i 992 px, gesti di scorrimento nella

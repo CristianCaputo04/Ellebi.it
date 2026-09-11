@@ -1,6 +1,7 @@
-# ELLEBI — scaffold Vite
+# EMMELÙ — scaffold Vite
 
-Nuova architettura di build per **ellebi.it**, pensata per affiancare il sito
+Nuova architettura di build per **EmmeLù** (dominio `ellebi.it`, invariato),
+pensata per affiancare il sito
 statico esistente in `../public` senza sostituirlo: finché questo scaffold
 non è completo (tutte le pagine migrate e verificate), il sito in produzione
 resta quello in `../public`, invariato.
@@ -131,8 +132,9 @@ gli unici due pesi usati sopra la piega. Cormorant Garamond e i pesi
 ## 4. SCSS
 
 `src/styles/main.scss` importa, con `@use … as *`, un partial per ciascuna
-delle 23 sezioni originali di `style.css` (`src/styles/partials/_NN-nome.scss`,
-numerati nell'ordine in cui compaiono nel sito). Il primo import è
+delle sezioni del sito (`src/styles/partials/_NN-nome.scss`, numerati
+nell'ordine in cui compaiono nel markup; `_25` e `_26` sono le due sezioni
+aggiunte dopo — collezioni e domande). Il primo import è
 `_03-design-tokens.scss`: definisce le custom property CSS (`--c-espresso`,
 `--fs-h1`, `--sp-4`, …) usate da tutti gli altri. Sono rimaste custom
 property CSS, non variabili SCSS: servono a runtime (es. per il tema o per
@@ -141,11 +143,48 @@ non permettono.
 
 Per estendere lo stile di una sezione, apri direttamente il suo partial
 (es. `_11-collezione.scss` per la griglia delle borse); per aggiungerne una
-nuova, crea `_NN-nome.scss` e aggiungi la riga `@use` corrispondente in
-`main.scss`, nella posizione giusta rispetto all'ordine delle sezioni nel
-markup.
+nuova, crea `_NN-nome.scss` con il primo numero libero e aggiungi la riga
+`@use` corrispondente in `main.scss`, nella posizione giusta rispetto
+all'ordine delle sezioni nel markup — il numero nel nome è solo un
+identificativo stabile, l'ordine reale è quello di `main.scss`. È il caso di
+`_25-collezioni.scss` e `_26-domande.scss`, che in `main.scss` stanno
+rispettivamente prima di `11-collezione` e prima di `17-contatti`.
 
-## 5. Sicurezza (`public/_headers`, `public/_redirects`)
+## 5. Struttura della home
+
+Le sezioni di `index.html`, nell'ordine in cui compaiono (gli `id` sono quelli
+usati da header, menu, piè di pagina e JSON-LD: se ne cambi uno, cambiali
+tutti):
+
+| # | Sezione | `id` | Note |
+|---|---|---|---|
+| 1 | Hero | — | unica immagine con `fetchpriority="high"` e senza `loading="lazy"` |
+| 2 | Marquee | — | decorativo, `aria-hidden`; il testo equivalente è in un paragrafo nascosto |
+| 3 | Collezioni | `#collezioni` | le 9 linee, **griglia tipografica senza immagini**: di queste linee non esistono fotografie, ogni voce è già un link d'ordine su Instagram |
+| 4 | Pezzi disponibili | `#pezzi` | ex `#collezione`: le 4 borse fotografate, con lightbox |
+| 5 | Filosofia | `#filosofia` | titolo rivelato parola per parola (`data-split`) |
+| 6 | Pilastri | — | **5 voci** in griglia `auto-fit` (3+2 da computer, 1 colonna sul telefono) |
+| 7 | Banner | — | immagine a tutta larghezza con parallasse |
+| 8 | Lavorazione | `#lavorazione` | i 4 passaggi |
+| 9 | Dettagli | `#dettagli` | galleria + lightbox |
+| 10 | Domande | `#domande` | 6 FAQ in `<details>`: si aprono senza JavaScript |
+| 11 | Contatti | `#contatti` | CTA finale |
+
+Due cose da sapere prima di modificare `index.html`:
+
+- **Una sola fonte per i contenuti ripetuti.** Linee, pilastri, borse, passaggi,
+  galleria e domande sono array JavaScript in cima al file: il markup e il
+  blocco JSON-LD leggono gli stessi dati. Il testo delle risposte della FAQ
+  **deve** coincidere parola per parola con quello del blocco `FAQPage`,
+  altrimenti Google scarta il rich result — tenendo un array solo, non può
+  divergere.
+- **I pilastri non sono più un diagramma.** La versione precedente disegnava le
+  linee di collegamento in SVG (`.diagram__lines`) e ne misurava la lunghezza
+  con `getTotalLength()`: una composizione tarata su tre voci e una lettura di
+  layout in più. Con cinque voci è una semplice griglia, senza SVG da tenere
+  allineato al testo.
+
+## 6. Sicurezza (`public/_headers`, `public/_redirects`)
 
 `public/_headers` applica, su tutte le pagine:
 
@@ -186,7 +225,7 @@ varianti di scrittura delle pagine legali, e include un esempio commentato
 di fallback SPA (`/app/* /app/index.html 200`) da attivare solo se in futuro
 una sezione del sito diventasse un'app lato client.
 
-## 6. Deploy su Cloudflare Pages
+## 7. Deploy su Cloudflare Pages
 
 - **Comando di build**: `npm run build`
 - **Directory di output**: `dist`

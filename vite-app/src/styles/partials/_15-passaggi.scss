@@ -140,3 +140,9 @@
   background: var(--c-espresso);
   color: var(--c-blush-soft);
 }
+
+.steps__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--sp-6);
+}

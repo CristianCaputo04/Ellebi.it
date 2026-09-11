@@ -1,5 +1,5 @@
 /* =========================================================================
-   ELLEBI — interazioni del sito
+   EMMELÙ — interazioni del sito
    Vanilla JS, nessuna dipendenza esterna, nessun tracciamento di default.
    Ogni modulo è difensivo: se un elemento non esiste, il modulo esce.
    ========================================================================= */
@@ -35,11 +35,16 @@
   (function preloader() {
     var node = $(".preloader");
     if (!node) { return; }
-    function hide() { document.body.classList.add("is-loaded"); }
-    if (document.readyState === "complete") { hide(); }
-    else { window.addEventListener("load", hide, { once: true }); }
-    // rete lenta o risorsa bloccata: il sito resta comunque utilizzabile
-    window.setTimeout(hide, 3500);
+    // Il velo si dissolve appena la pagina è stata dipinta una volta: non
+    // aspetta il carico delle immagini (evento "load"), che arriverebbe
+    // secondi dopo e terrebbe nascosto un contenuto già pronto. Due
+    // requestAnimationFrame: il primo è prima della pittura, il secondo
+    // subito dopo.
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        document.body.classList.add("is-loaded");
+      });
+    });
   })();
 
   /* ---------------------------------------------------------- anno footer */
@@ -165,7 +170,6 @@
   (function reveal() {
     var items = $$("[data-reveal]");
     var splits = $$("[data-split]");
-    var diagrams = $$("[data-diagram]");
 
     // ritardo progressivo per i gruppi con [data-stagger]
     $$("[data-stagger]").forEach(function (group) {
@@ -199,16 +203,7 @@
       el.appendChild(frag);
     });
 
-    // linee del diagramma: lunghezza reale del tracciato per l'effetto "disegno"
-    diagrams.forEach(function (d) {
-      $$(".diagram__lines path", d).forEach(function (path) {
-        if (typeof path.getTotalLength !== "function") { return; }
-        var len = Math.ceil(path.getTotalLength());
-        path.style.setProperty("--len", String(len));
-      });
-    });
-
-    var all = items.concat(splits).concat(diagrams);
+    var all = items.concat(splits);
     if (!all.length) { return; }
 
     if (!supportsIO || prefersReduced()) {
@@ -247,7 +242,13 @@
     }
 
     var vh = window.innerHeight;
-    var onResize = function () { vh = window.innerHeight; };
+    var heroH = heroHost ? heroHost.offsetHeight : 0;
+    // Misurare qui, e non dentro il ciclo di scorrimento, evita di forzare un
+    // ricalcolo del layout a ogni fotogramma (lettura dopo scrittura).
+    var onResize = function () {
+      vh = window.innerHeight;
+      if (heroHost) { heroH = heroHost.offsetHeight; }
+    };
     window.addEventListener("resize", onResize, { passive: true });
 
     var onModo = function (e) { if (!e.matches) { azzeraPiani(); } };
@@ -271,7 +272,7 @@
       // profondità resta la stessa su ogni schermo.
       // Solo da computer: sul telefono l'effetto costa e rende poco.
       if (heroLayers.length && heroDesktop.matches) {
-        var hh = heroHost.offsetHeight || vh;
+        var hh = heroH || vh;
         var hp = Math.min(Math.max(y / hh, 0), 1);
         heroLayers.forEach(function (l) {
           var px = hp * l.shift * hh / 100;

@@ -45,6 +45,14 @@
   max-width: var(--maxw);
 }
 
+.banner__eyebrow {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(251, 247, 244, 0.88);
+}
+
 .banner__title {
   font-size: clamp(1.6rem, 0.9rem + 3.4vw, 3.6rem);
   font-weight: 300;

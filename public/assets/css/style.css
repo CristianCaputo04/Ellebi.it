@@ -1,13 +1,13 @@
 @charset "utf-8";
 /* =========================================================================
-   ELLEBI — Borse fatte a mano
+   EMMELÙ — Capsule limited edition cucite a mano in Italia
    Stile: minimal editoriale, palette del logo (blush + espresso)
    ========================================================================= */
 
 /* I font self-hosted sono in fonts.css, collegato prima di questo foglio
    nell'HTML: niente @import, così i due file si scaricano in parallelo. */
 
-/* ---------- 2. Reset ---------------------------------------------------- */
+/* ---------- 2. Reset */
 *,
 *::before,
 *::after { box-sizing: border-box; }
@@ -75,9 +75,9 @@ a { color: inherit; }
 :where(h1, h2, h3, h4) { text-wrap: balance; }
 :where(p, li) { text-wrap: pretty; }
 
-/* ---------- 3. Design tokens -------------------------------------------- */
+/* ---------- 3. Design tokens */
 :root {
-  /* Colori estratti dal logo ELLEBI */
+  /* Colori estratti dal logo EMMELÙ */
   --c-espresso: #3f2418;
   --c-espresso-2: #5c3d2e;
   --c-espresso-3: #8a6a58;
@@ -140,7 +140,7 @@ a { color: inherit; }
   :root { --header-h: 5.25rem; }
 }
 
-/* ---------- 4. Base ----------------------------------------------------- */
+/* ---------- 4. Base */
 body {
   background-color: var(--c-bg);
   color: var(--c-text);
@@ -204,7 +204,7 @@ body.is-locked {
   border: 0;
 }
 
-/* ---------- 5. Utility di layout ---------------------------------------- */
+/* ---------- 5. Utility di layout */
 .wrap {
   width: 100%;
   max-width: var(--maxw);
@@ -264,7 +264,7 @@ body.is-locked {
 
 .text-center { text-align: center; }
 
-/* ---------- 6. Bottoni e link ------------------------------------------- */
+/* ---------- 6. Bottoni e link */
 .btn {
   --btn-bg: transparent;
   --btn-fg: var(--c-espresso);
@@ -353,64 +353,75 @@ body.is-locked {
 .link-line:hover,
 .link-line:focus-visible { background-size: 100% 1px; }
 
-/* ---------- 7. Preloader ------------------------------------------------ */
-/* Mostrato solo con JavaScript attivo: senza JS non deve mai coprire il sito. */
-.preloader { display: none; }
-
-.js .preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: grid;
-  place-items: center;
-  background: var(--c-blush-soft);
-  transition: opacity 0.6s var(--ease), visibility 0s linear 0.6s;
-}
-
-.preloader__mark {
-  width: clamp(4.5rem, 12vw, 7rem);
-  color: var(--c-espresso);
-  animation: mark-pulse 1.8s var(--ease) infinite;
-}
-
-.preloader__bar {
-  position: absolute;
-  bottom: 18%;
-  left: 50%;
-  translate: -50% 0;
-  width: min(180px, 40vw);
-  height: 1px;
-  background: var(--c-line);
-  overflow: hidden;
-}
-
-.preloader__bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+/* CTA d'ordine nell'header: stesso bersaglio di tutte le altre — il direct
+   di Instagram — ma sempre visibile, senza dover scorrere fino in fondo.
+   Riusa la geometria di .btn in scala ridotta invece di ridichiararla. */
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.45rem 1.1rem;
+  border: 1px solid var(--c-espresso);
+  border-radius: 999px;
   background: var(--c-espresso);
-  transform-origin: left;
-  animation: bar-load 1.4s var(--ease-out-expo) infinite;
+  color: var(--c-paper);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
 }
 
-body.is-loaded .preloader {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+.header__cta:hover,
+.header__cta:focus-visible {
+  background: transparent;
+  color: var(--c-espresso);
 }
 
-@keyframes mark-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.55; transform: scale(0.96); }
+/* Ogni scheda ha il proprio link d'ordine: chi si è innamorato di un pezzo
+   preciso non deve cercare la CTA generica in fondo alla sezione. */
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+  padding-block: 0.3rem;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-terracotta-ink);
+  transition: color var(--dur-2) var(--ease);
 }
 
-@keyframes bar-load {
-  0% { transform: scaleX(0); }
-  60% { transform: scaleX(1); }
-  100% { transform: scaleX(1) translateX(100%); }
+.card__cta .btn__icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform var(--dur-2) var(--ease-out-expo);
 }
 
-/* ---------- 8. Header --------------------------------------------------- */
+.card__cta:hover,
+.card__cta:focus-visible { color: var(--c-espresso); }
+
+.card__cta:hover .btn__icon,
+.card__cta:focus-visible .btn__icon { transform: translateX(4px); }
+
+.steps__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--sp-6);
+}
+
+.banner__eyebrow {
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* ---------- 7. Header */
 .header {
   position: fixed;
   inset-inline: 0;
@@ -676,7 +687,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 
 @media (min-width: 76em) { .menu { display: none; } }
 
-/* ---------- 9. Hero ----------------------------------------------------- */
+/* ---------- 8. Hero */
 /* La foto è chiara e la borsa sta a destra: il testo vive sulla parete
    vuota a sinistra, in colore scuro. Nessun testo sovrapposto a un altro. */
 .hero {
@@ -820,7 +831,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
-/* ---------- 10. Marquee ------------------------------------------------- */
+/* ---------- 9. Marquee */
 .marquee {
   overflow: hidden;
   padding-block: var(--sp-3);
@@ -864,7 +875,113 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   to { transform: translate3d(-50%, 0, 0); }
 }
 
-/* ---------- 11. Collezione ---------------------------------------------- */
+/* ---------- 10. Collezioni (le nove linee) */
+/* Griglia tipografica: di queste linee non esistono ancora fotografie, e una
+   griglia di segnaposto costerebbe banda senza dire nulla. Ogni voce è già
+   un link d'ordine, così chi sa cosa cerca arriva in direct dalla linea che
+   gli interessa senza dover scorrere fino in fondo alla pagina. */
+.lines__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+.lines__grid {
+  display: grid;
+  /* 22rem è scelto perché da schermo largo produce tre colonne: nove linee
+     riempiono esattamente tre righe, senza l'ultima riga spaiata che si
+     otteneva con quattro colonne, e i nomi lunghi ("Piccola Pelletteria")
+     restano su una riga sola. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 0;
+  list-style: none;
+  /* Le voci si separano con i bordi delle celle, non con margini: così le
+     righe restano allineate qualunque sia il numero di colonne che la
+     griglia decide di formare. */
+  border-top: 1px solid var(--c-line-soft);
+}
+
+.line {
+  border-bottom: 1px solid var(--c-line-soft);
+  /* Isola il ricalcolo dell'evidenziazione al passaggio del mouse: il
+     browser non deve ricontrollare le altre otto voci. */
+  contain: layout style;
+}
+
+.line__link {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  padding: clamp(1.1rem, 2.4vw, 1.6rem) clamp(0.75rem, 2vw, 1.25rem);
+  text-decoration: none;
+  transition: background-color var(--dur-2) var(--ease);
+}
+
+.line__num {
+  flex: none;
+  font-family: var(--f-serif);
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  color: var(--c-terracotta-ink);
+}
+
+.line__body {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.line__name {
+  display: block;
+  font-size: var(--fs-h3);
+  font-weight: 300;
+  line-height: 1.15;
+}
+
+.line__text {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+.line__icon {
+  flex: none;
+  align-self: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--c-terracotta-ink);
+  opacity: 0;
+  /* Parte 8 px più a sinistra e scivola al suo posto: solo transform e
+     opacity, quindi l'animazione resta sul compositore e non ridisegna
+     né rimisura nulla. */
+  transform: translateX(-8px);
+  transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+
+.line__link:hover,
+.line__link:focus-visible {
+  background-color: var(--c-paper-2);
+}
+
+.line__link:hover .line__icon,
+.line__link:focus-visible .line__icon {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Senza dispositivo di puntamento la freccia non comparirebbe mai: sul
+   telefono resta visibile in permanenza, è l'unico segnale che la voce
+   porta da qualche parte. */
+@media (hover: none) {
+  .line__icon { opacity: 1; transform: none; }
+}
+
+/* ---------- 11. Pezzi disponibili (schede delle borse) */
 .collection__head {
   display: flex;
   flex-wrap: wrap;
@@ -1040,7 +1157,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   color: var(--c-muted);
 }
 
-/* ---------- 12. Filosofia (titolo rivelato parola per parola) ----------- */
+/* ---------- 12. Filosofia (titolo rivelato parola per parola) */
 .philosophy {
   text-align: center;
   background: linear-gradient(to bottom, var(--c-paper) 0%, var(--c-blush-soft) 100%);
@@ -1079,60 +1196,58 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   font-size: var(--fs-lead);
 }
 
-/* ---------- 13. Pilastri (diagramma circolare) -------------------------- */
+/* ---------- 13. Pilastri (griglia dei cinque valori) */
+/* Prima era un "diagramma": marchio al centro, una voce a sinistra e due a
+   destra, collegate da tre curve disegnate in SVG. Con cinque valori quella
+   composizione non regge — le curve andrebbero ridisegnate a ogni cambio di
+   testo — e le linee costavano una lettura di getTotalLength() per tracciato
+   al primo ingresso in vista. Ora è una griglia: si adatta da sola al numero
+   di voci, non misura niente e non ha SVG da tenere allineato. */
 .pillars {
   background: var(--c-blush-soft);
   padding-block-end: var(--sp-7);
 }
 
-.diagram {
+.pillars__mark {
   position: relative;
-  display: grid;
-  gap: var(--sp-4);
-  margin-top: var(--sp-5);
-}
-
-.diagram__core {
-  position: relative;
-  justify-self: center;
   display: grid;
   place-items: center;
-  width: clamp(11rem, 34vw, 17rem);
+  width: clamp(7rem, 18vw, 10.5rem);
   aspect-ratio: 1;
+  margin: var(--sp-4) auto var(--sp-5);
   border-radius: 50%;
   background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.92), rgba(246, 221, 208, 0.55) 62%, rgba(246, 221, 208, 0.15) 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 24px 60px -30px rgba(63, 36, 24, 0.55);
-  animation: float 9s var(--ease) infinite;
 }
 
-.diagram__core::before {
+.pillars__mark svg {
+  width: 54%;
+  height: auto;
+  color: var(--c-espresso);
+}
+
+/* L'anello era tratteggiato e ruotava all'infinito. Una rotazione perpetua
+   tiene sveglio il compositore finché l'elemento esiste, anche fuori dalla
+   vista, e su un tratteggio costringe a ridisegnare il bordo a ogni giro:
+   costo continuo per un dettaglio che nessuno guarda. Resta fermo. */
+.pillars__mark::before {
   content: "";
   position: absolute;
   inset: -6%;
   border-radius: 50%;
   border: 1px dashed rgba(63, 36, 24, 0.22);
-  animation: spin 46s linear infinite;
 }
 
-.diagram__core svg,
-.diagram__core img {
-  width: 58%;
-  height: auto;
-  color: var(--c-espresso);
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.diagram__items {
+/* auto-fit + minmax: tre colonne da schermo largo (3 + 2 sulla seconda riga),
+   due da tablet, una sul telefono. Nessun media query da tenere allineato al
+   numero di voci: se domani i valori diventano sei, la griglia si adatta. */
+.pillars__grid {
   display: grid;
-  gap: var(--sp-3);
+  /* 21rem dà tre colonne da schermo largo (3 + 2) e due da tablet: con
+     quattro colonne l'ultima voce restava sola su una riga tutta sua, e i
+     nomi lunghi ("Personalizzazione") andavano a capo. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: clamp(1.75rem, 3.5vw, 3rem) clamp(1.5rem, 3vw, 3rem);
   list-style: none;
 }
 
@@ -1148,6 +1263,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 .pillar__name {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   gap: 0.6rem;
   font-size: var(--fs-h3);
   font-weight: 300;
@@ -1174,55 +1290,10 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 .pillars__cta {
   display: flex;
   justify-content: center;
-  margin-top: var(--sp-5);
+  margin-top: var(--sp-6);
 }
 
-@media (min-width: 60em) {
-  .diagram {
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: clamp(2rem, 5vw, 5rem);
-    min-height: 30rem;
-  }
-  .diagram__core { grid-column: 2; grid-row: 1; }
-  .diagram__items { gap: var(--sp-5); }
-  .diagram__items--left { grid-column: 1; grid-row: 1; text-align: right; }
-  .diagram__items--right { grid-column: 3; grid-row: 1; }
-  .diagram__items--left .pillar {
-    padding-left: 0;
-    padding-right: var(--sp-3);
-    border-left: 0;
-    border-right: 1px solid var(--c-line);
-  }
-  .diagram__items--left .pillar__name { justify-content: flex-end; }
-  .diagram__items--left .pillar__text { margin-left: auto; }
-  /* linee di collegamento disegnate in SVG */
-  .diagram__lines {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: visible;
-  }
-  .diagram__lines path {
-    fill: none;
-    stroke: rgba(63, 36, 24, 0.3);
-    stroke-width: 1;
-    stroke-dasharray: var(--len, 600);
-    stroke-dashoffset: var(--len, 600);
-    transition: stroke-dashoffset 1.4s var(--ease-out-expo);
-  }
-  .diagram.is-inview .diagram__lines path { stroke-dashoffset: 0; }
-  .diagram__lines path:nth-child(2) { transition-delay: 0.15s; }
-  .diagram__lines path:nth-child(3) { transition-delay: 0.3s; }
-}
-
-@media (max-width: 59.99em) {
-  .diagram__lines { display: none; }
-}
-
-/* ---------- 14. Banner immagine a tutta larghezza ----------------------- */
+/* ---------- 14. Banner immagine a tutta larghezza */
 .banner {
   position: relative;
   display: grid;
@@ -1292,7 +1363,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   margin-top: var(--sp-4);
 }
 
-/* ---------- 15. Passaggi ------------------------------------------------ */
+/* ---------- 15. Passaggi */
 .steps { background: var(--c-paper); }
 
 .steps__head {
@@ -1435,7 +1506,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   color: var(--c-blush-soft);
 }
 
-/* ---------- 16. Galleria ------------------------------------------------ */
+/* ---------- 16. Galleria */
 .gallery { background: var(--c-blush-soft); }
 
 .gallery__head {
@@ -1489,7 +1560,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 .gallery__item:hover::after,
 .gallery__item:focus-visible::after { background: rgba(35, 19, 12, 0.16); }
 
-/* ---------- Domande frequenti ------------------------------------------- */
+/* ---------- 17. Domande frequenti */
 /* Le risposte stanno in <details>: si aprono senza JavaScript e restano nel
    documento anche da chiuse, quindi i motori di ricerca le leggono comunque. */
 .faq__list {
@@ -1537,7 +1608,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 
 .faq__a p { color: var(--c-muted); }
 
-/* ---------- 17. Contatti ------------------------------------------------ */
+/* ---------- 18. Contatti */
 .contact {
   background: var(--c-paper);
   text-align: center;
@@ -1573,7 +1644,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   color: var(--c-muted);
 }
 
-/* ---------- 18. Footer -------------------------------------------------- */
+/* ---------- 19. Footer */
 .footer {
   position: relative;
   background: var(--c-espresso);
@@ -1691,7 +1762,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 
 .to-top svg { width: 1rem; height: 1rem; }
 
-/* ---------- 19. Lightbox ------------------------------------------------ */
+/* ---------- 20. Lightbox */
 .lightbox {
   position: fixed;
   inset: 0;
@@ -1791,7 +1862,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
 .lightbox__nav--prev { left: clamp(0.5rem, 2vw, 1.5rem); }
 .lightbox__nav--next { right: clamp(0.5rem, 2vw, 1.5rem); }
 
-/* ---------- 20. Preferenze cookie (banner gestito da iubenda) ----------- */
+/* ---------- 21. Preferenze cookie (banner gestito da iubenda) */
 /* Il banner e le sue opzioni sono renderizzati dalla Cookie Solution di
    iubenda (vedi <head>): qui resta solo lo stile del link "Preferenze
    cookie" nel footer, l'unico elemento del banner rimasto nostro. */
@@ -1806,7 +1877,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   cursor: pointer;
 }
 
-/* ---------- 21. Pagine legali ------------------------------------------- */
+/* ---------- 22. Pagine legali */
 .legal {
   padding-top: calc(var(--header-h) + var(--sp-6));
   padding-bottom: var(--sp-7);
@@ -1904,7 +1975,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   color: var(--c-terracotta-ink);
 }
 
-/* ---------- 22. Animazioni di ingresso (scroll reveal) ------------------ */
+/* ---------- 23. Animazioni di ingresso (scroll reveal) */
 /* Senza JavaScript il contenuto resta visibile: nulla viene mai nascosto. */
 [data-reveal] {
   transition: opacity 0.9s var(--ease), transform 0.9s var(--ease-out-expo);
@@ -1926,8 +1997,7 @@ html:not(.js) .hero__inner { padding-top: var(--sp-5); }
   transform: none;
 }
 
-/* ---------- 23. Preferenze utente --------------------------------------- */
-/* ---------- 20. Hero a piani e menu cinetico ---------------------------- */
+/* ---------- 24. Hero a piani e menu cinetico */
 /* Adattamento in JavaScript nativo di due effetti pensati per GSAP + Lenis.
    Stessa meccanica, nessuna libreria: il peso della pagina non cambia e la
    Content-Security-Policy resta chiusa agli script esterni. */
@@ -2171,7 +2241,7 @@ li > .link-line,
 
 .menu__foot { transition-delay: 0.6s; }
 
-/* ========== 21. Banner Cookie gestito da iubenda ========== */
+/* ---------- 25. Banner Cookie gestito da iubenda */
 /* Il banner nativo di iubenda resta attivo (autoblocking, registrazione del
    consenso, conformità) ma la sua interfaccia visiva viene sostituita da
    quella qui sotto: i pulsanti restano nascosti anche via csConfiguration
@@ -2350,8 +2420,6 @@ li > .link-line,
   /* le forme d'ambiente non compaiono affatto */
   .menu__shapes { display: none !important; }
 
-  .diagram__lines path { stroke-dashoffset: 0 !important; }
-
   .cookie-banner {
     animation: none !important;
   }
@@ -2367,7 +2435,7 @@ li > .link-line,
 }
 
 @media print {
-  .header, .menu, .to-top, .cookie-banner, .cookie, .preloader, .lightbox, .hero__scroll, .marquee { display: none !important; }
+  .header, .menu, .to-top, .cookie-banner, .cookie, .lightbox, .hero__scroll, .marquee { display: none !important; }
   body { background: #fff; color: #000; }
   .section { padding-block: 1.5rem; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; }

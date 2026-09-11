@@ -1,6 +1,6 @@
 @charset "utf-8";
 // =========================================================================
-// ELLEBI — Borse fatte a mano
+// EMMELÙ — Capsule limited edition cucite a mano in Italia
 // Stile: minimal editoriale, palette del logo (blush + espresso)
 //
 // Architettura: un partial SCSS per sezione (7-1 pattern semplificato).
@@ -26,12 +26,14 @@
 @use "partials/09-hero" as *;
 @use "partials/24-hero-a-piani-e-menu-cinetico" as *;
 @use "partials/10-marquee" as *;
+@use "partials/25-collezioni" as *;
 @use "partials/11-collezione" as *;
 @use "partials/12-filosofia" as *;
 @use "partials/13-pilastri" as *;
 @use "partials/14-banner-immagine-a-tutta-larghezza" as *;
 @use "partials/15-passaggi" as *;
 @use "partials/16-galleria" as *;
+@use "partials/26-domande" as *;
 @use "partials/17-contatti" as *;
 @use "partials/18-footer" as *;
 

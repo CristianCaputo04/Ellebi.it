@@ -1,4 +1,9 @@
-# Configurazione Cloudflare Workers — sito vetrina ELLEBI.
+# Configurazione Cloudflare Workers — sito EMMELÙ.
+#
+# Il nome del Worker ("ellebi-it") e il dominio restano quelli di prima: il
+# rebrand ha cambiato marchio e testi, non l'indirizzo del sito. Rinominare
+# il Worker creerebbe un'applicazione nuova e staccherebbe i domini già
+# collegati, quindi non va fatto insieme al rebrand.
 #
 # Il sito non ha codice lato server: Cloudflare pubblica direttamente i file
 # della cartella "public" (funzione Workers Static Assets). Tutto ciò che sta

@@ -1,4 +1,4 @@
-// 11. Collezione
+// 11. Pezzi disponibili (griglia delle borse, sezione #pezzi)
 .collection__head {
   display: flex;
   flex-wrap: wrap;
@@ -104,6 +104,30 @@
   font-style: italic;
   letter-spacing: 0.02em;
 }
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+  align-self: flex-start;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-terracotta-ink);
+  border-bottom: 1px solid currentcolor;
+  transition: color var(--dur-2) var(--ease);
+}
+
+.card__cta svg { width: 1rem; height: 1rem; transition: transform var(--dur-2) var(--ease-out-expo); }
+
+.card__cta:hover,
+.card__cta:focus-visible { color: var(--c-espresso); }
+
+.card__cta:hover svg,
+.card__cta:focus-visible svg { transform: translateX(4px); }
 
 .collection__note {
   margin-top: var(--sp-5);

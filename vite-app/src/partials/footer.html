@@ -1,30 +1,35 @@
 <%
 const isHome = typeof variant === "undefined" || variant === "home";
+const IG = "https://www.instagram.com/emmeluofficial/";
+const EMAIL = "ellebi.style@gmail.com";
 %>
 <footer class="footer" id="footer">
   <% if (isHome) { %>
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__col" data-reveal>
-        <h2>ELLEBI</h2>
-        <p class="footer__text">Borse fatte a mano, un nodo alla volta. Nessuna serie, nessuna copia.</p>
+        <h2>EMMELÙ</h2>
+        <p class="footer__text">Capsule limited edition cucite a mano in Italia. Stile, armonia, autenticità.</p>
       </div>
 
       <div class="footer__col" data-reveal data-reveal-delay="80">
         <h3>Naviga</h3>
         <ul class="footer__list" role="list">
-          <li><a class="link-line" href="#collezione">Collezione</a></li>
-          <li><a class="link-line" href="#filosofia">Perché a mano</a></li>
+          <li><a class="link-line" href="#collezioni">Collezioni</a></li>
+          <li><a class="link-line" href="#pezzi">Pezzi</a></li>
+          <li><a class="link-line" href="#filosofia">Filosofia</a></li>
           <li><a class="link-line" href="#lavorazione">Lavorazione</a></li>
           <li><a class="link-line" href="#dettagli">Dettagli</a></li>
+          <li><a class="link-line" href="#domande">Domande</a></li>
+          <li><a class="link-line" href="#contatti">Ordina</a></li>
         </ul>
       </div>
 
       <div class="footer__col" data-reveal data-reveal-delay="160">
         <h3>Trovami</h3>
         <ul class="footer__list" role="list">
-          <li><a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-          <li><a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a></li>
+          <li><a class="link-line" href="<%= IG %>" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a class="link-line" href="mailto:<%= EMAIL %>"><%= EMAIL %></a></li>
         </ul>
       </div>
 
@@ -40,11 +45,11 @@ const isHome = typeof variant === "undefined" || variant === "home";
     </div>
   </div>
 
-  <p class="footer__wordmark" aria-hidden="true">Ellebi</p>
+  <p class="footer__wordmark" aria-hidden="true">EmmeLù</p>
 
   <div class="wrap">
     <div class="footer__bottom">
-      <p>© <span data-year>2026</span> ELLEBI — Borse fatte a mano</p>
+      <p>© <span data-year>2026</span> EMMELÙ — Capsule limited edition</p>
       <ul class="footer__legal" role="list">
         <li><a class="link-line" href="/privacy">Privacy</a></li>
         <li><a class="link-line" href="/cookie">Cookie</a></li>
@@ -55,7 +60,7 @@ const isHome = typeof variant === "undefined" || variant === "home";
   <% } else { %>
   <div class="wrap">
     <div class="footer__bottom">
-      <p>© <span data-year>2026</span> ELLEBI — Borse fatte a mano</p>
+      <p>© <span data-year>2026</span> EMMELÙ — Capsule limited edition</p>
       <ul class="footer__legal" role="list">
         <li><a class="link-line" href="/">Home</a></li>
         <li><a class="link-line" href="/cookie">Cookie</a></li>

@@ -61,6 +61,8 @@
     gap: clamp(1rem, 2.2vw, 2.4rem);
   }
   .header__nav--end { justify-content: flex-end; }
+  /* sei voci di sezione: passo più stretto, così restano su una riga */
+  .header__nav--sections { gap: clamp(0.7rem, 1.5vw, 1.6rem); }
 }
 
 .header__link {
@@ -74,6 +76,26 @@
 }
 
 .header__link:hover { opacity: 1; }
+
+/* CTA dell'header: stessa scala tipografica dei link, ma con la cornice del
+   bottone, così si distingue senza rompere l'allineamento della barra. */
+.header__cta {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+
+.header__cta:hover,
+.header__cta:focus-visible {
+  background: var(--c-espresso);
+  color: var(--c-blush-soft);
+}
 
 .header__brand {
   grid-column: 2;
