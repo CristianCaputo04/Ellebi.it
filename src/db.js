@@ -13,12 +13,21 @@ import { adesso } from "./util.js";
 
 /** Le categorie attive, nell'ordine scelto dalla titolare. */
 export async function categorieAttive(db) {
+  /* Si porta dietro quanti prodotti attivi contiene ciascuna categoria.
+     Serve a non offrire filtri che non filtrano niente: le linee dichiarate
+     sono nove, i pezzi a catalogo stanno per ora in una sola, e stampare
+     otto scorciatoie verso pagine vuote fa sembrare rotto un negozio che
+     funziona. Chi decide se nasconderle e' il chiamante — qui si contano e
+     basta. */
   const { results } = await db
     .prepare(
-      `SELECT id, slug, nome, descrizione, posizione
-         FROM categorie
-        WHERE attiva = 1
-        ORDER BY posizione, nome`
+      `SELECT c.id, c.slug, c.nome, c.descrizione, c.posizione,
+              COUNT(p.id) AS quanti_prodotti
+         FROM categorie c
+         LEFT JOIN prodotti p ON p.categoria_id = c.id AND p.stato = 'attivo'
+        WHERE c.attiva = 1
+        GROUP BY c.id
+        ORDER BY c.posizione, c.nome`
     )
     .all();
   return results || [];

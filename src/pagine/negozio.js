@@ -162,13 +162,37 @@ function ricerca(termine, categoriaAttiva, ordine) {
 }
 
 function filtri(categorie, categoriaAttiva) {
-  const voci = [{ slug: "", nome: "Tutte le linee" }].concat(
-    (Array.isArray(categorie) ? categorie : []).map(function (c) {
-      return { slug: String(c.slug || ""), nome: String(c.nome || "") };
-    })
-  );
+  const tutte = (Array.isArray(categorie) ? categorie : []).map(function (c) {
+    return {
+      slug: String(c.slug || ""),
+      nome: String(c.nome || ""),
+      // Le query vecchie non contano i prodotti: in quel caso la categoria si
+      // mostra, invece di sparire perche' un dato non e' arrivato.
+      quanti: c.quanti_prodotti === undefined ? null : Number(c.quanti_prodotti) || 0,
+    };
+  });
 
-  const elementi = voci.filter(function (v) { return v.slug === "" || v.slug; }).map(function (v) {
+  /* Una linea senza pezzi non diventa un filtro. Le linee dichiarate sono
+     nove e i pezzi stanno per ora in una sola: otto scorciatoie verso pagine
+     vuote fanno sembrare rotto un negozio che funziona, e chi ci clicca
+     pensa che il sito abbia perso il catalogo.
+
+     Unica eccezione: la linea che si sta guardando resta sempre in elenco,
+     anche se si e' appena svuotata. Toglierla farebbe sparire il filtro
+     attivo mentre ci sei dentro, e non si capirebbe piu' dove si e'. */
+  const visibili = tutte.filter(function (v) {
+    if (!v.slug) { return false; }
+    if (v.slug === (categoriaAttiva || "")) { return true; }
+    return v.quanti === null || v.quanti > 0;
+  });
+
+  /* Con una sola linea a catalogo il filtro non filtra: ci sarebbero due
+     pulsanti che mostrano sempre le stesse cose. Meglio nessuna barra. */
+  if (visibili.length < 2) { return ""; }
+
+  const voci = [{ slug: "", nome: "Tutte le linee", quanti: null }].concat(visibili);
+
+  const elementi = voci.map(function (v) {
     const attiva = (categoriaAttiva || "") === v.slug;
     const href = v.slug ? `/negozio?categoria=${encodeURIComponent(v.slug)}` : "/negozio";
     return `<li><a class="negozio__filtro${attiva ? " is-attivo" : ""}" href="${esc(href)}"${attiva ? ' aria-current="page"' : ""}>${esc(v.nome)}</a></li>`;
