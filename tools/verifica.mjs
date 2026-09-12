@@ -184,6 +184,34 @@ verifica(
   "modulo e rotta si aspettano valori di conferma diversi: il rimborso verrebbe sempre rifiutato"
 );
 
+/* ---- 9. ogni script in linea delle pagine generate porta il nonce
+
+   Le pagine generate non passano da public/_headers: la loro CSP autorizza
+   per nonce, non per hash. Uno <script> in linea senza ${nonce} viene
+   bloccato dal browser — e non se ne accorge nessuno provando con curl, che
+   le intestazioni le riceve ma non esegue niente. E' successo con il
+   frammento di configurazione di iubenda, cioe' con il consenso cookie. */
+
+/* Si tolgono prima i commenti — quelli di JavaScript e quelli HTML dentro le
+   stringhe template. Senza, questo controllo cadrebbe nella trappola che
+   serve a evitare: sia questo file sia layout.js CITANO il tag <script> in
+   prosa, e un cercatore ingenuo conterebbe quelle citazioni come marcatura.
+   E' esattamente l'errore che aveva tools/aggiorna-csp-hash.py. */
+const layoutSrc = readFileSync(join(RADICE, "src/pagine/layout.js"), "utf8")
+  .replace(/\/\*[\s\S]*?\*\//g, "")
+  .replace(/<!--[\s\S]*?-->/g, "")
+  .replace(/^[ \t]*\/\/.*$/gm, "");
+
+let senzaNonce = [];
+for (const m of layoutSrc.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>/g)) {
+  if (!m[1].includes("${nonce}")) senzaNonce.push(m[0]);
+}
+verifica(
+  "ogni script in linea delle pagine generate porta il nonce",
+  senzaNonce.length === 0,
+  `in src/pagine/layout.js ci sono script in linea senza \${nonce}, che la CSP bloccherebbe: ${senzaNonce.join(" ")}`
+);
+
 /* ------------------------------------------------------------ risultati */
 
 console.log(`${ok.length} controlli superati.`);

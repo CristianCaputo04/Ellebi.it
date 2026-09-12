@@ -6,12 +6,21 @@
    il menu e il piè di pagina: se una pagina generata diverge dalla home per
    un dettaglio di marcatura, la divergenza va corretta qui e non copiata.
 
-   La testa riproduce quella di public/index.html *byte per byte* nei due
-   frammenti di script in linea (configurazione iubenda e la riga che segna
-   la pagina come "js"). Non è pigrizia: la CSP del sito autorizza gli script
-   in linea per hash SHA-256, calcolati da tools/aggiorna-csp-hash.py sui file
-   statici. Riscrivere quei frammenti anche solo con uno spazio diverso
-   produrrebbe un hash diverso e il browser li bloccherebbe.
+   La testa riproduce quella di public/index.html nei due frammenti di script
+   in linea: la configurazione di iubenda e la riga che segna la pagina come
+   "js".
+
+   ATTENZIONE a come sono autorizzati, perché qui prima c'era scritto il
+   contrario ed è costato il consenso cookie su tutte le pagine generate.
+   Le pagine STATICHE passano da public/_headers, che autorizza per hash
+   SHA-256 (li calcola tools/aggiorna-csp-hash.py). Le pagine GENERATE non
+   passano da quel file: la loro CSP la costruisce intestazioniSicurezza() in
+   src/index.js, e autorizza per NONCE. Gli hash dei file statici non
+   c'entrano nulla con questa testa.
+
+   Conseguenza pratica: ogni <script> in linea qui dentro deve portare
+   ${nonce}, altrimenti il browser lo blocca — in silenzio per chi prova con
+   curl, che le intestazioni le riceve ma non esegue niente.
    ========================================================================= */
 
 import { esc } from "../util.js";
@@ -465,7 +474,7 @@ export function paginaCompleta(opzioni) {
 <!-- Cookie Solution iubenda: deve restare il primo script del documento,
      così l'autoblocking impedisce a qualunque altro script di partire
      prima che la persona scelga (https://www.iubenda.com/it/help/1205). -->
-<script type="text/javascript">
+<script type="text/javascript"${nonce}>
 var _iub = _iub || [];
 _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","consentOnScroll":false,"floatingPreferencesButtonDisplay":"bottom-left","banner":{"acceptButtonDisplay":false,"rejectButtonDisplay":false,"customizeButtonDisplay":false,"closeButtonDisplay":false},"callback":{"onPreferenceExpressed":function(){var b=document.getElementById("cookie-banner");if(b){b.classList.remove("is-visible");}try{localStorage.setItem("emmelu_cookie_seen","1");}catch(e){}}}};
 </script>
@@ -505,7 +514,7 @@ ${canonical ? `<meta property="og:url" content="${esc(canonical)}">` : ""}
 <link rel="preload" href="/assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/fonts.css">
 ${fogli}
-<script>document.documentElement.classList.add("js")</script>
+<script${nonce}>document.documentElement.classList.add("js")</script>
 ${serializzaJsonLd(o.jsonLd, nonce)}
 </head>
 

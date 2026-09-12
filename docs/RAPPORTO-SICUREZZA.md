@@ -13,9 +13,10 @@ trovato, cosa è stato corretto e cosa resta scoperto.
 
 ## 1. In breve
 
-Sono stati trovati e corretti **nove difetti**, tre dei quali gravi: un
+Sono stati trovati e corretti **dieci difetti**, quattro dei quali gravi: un
 incasso PayPal non ancora avvenuto contato come riuscito, il consenso cookie
-bloccato dalla propria CSP su tutto il sito, e il modulo dei rimborsi
+bloccato dalla propria CSP — sia sulle pagine statiche sia su quelle
+generate, per due cause tecniche diverse — e il modulo dei rimborsi
 inutilizzabile. Nessuno era sfruttabile da un visitatore qualsiasi per
 ottenere merce gratis o leggere i dati di un altro cliente: le difese
 principali — prezzo calcolato dal server, verifica dell'importo PayPal,
@@ -32,6 +33,7 @@ token sull'ordine, CSRF sul pannello — reggevano già.
 | 7 | Le nuove pagine non avevano l'hash CSP del proprio JSON-LD | Bassa | Corretto |
 | 8 | Lo script di configurazione del consenso cookie era bloccato dalla CSP su **tutte** le pagine | **Alta** | Corretto |
 | 9 | Il modulo dei rimborsi non poteva funzionare: nessun rimborso sarebbe partito | **Alta** | Corretto |
+| 10 | Gli script in linea delle pagine generate erano senza nonce, quindi bloccati | **Alta** | Corretto |
 
 ---
 
@@ -207,6 +209,34 @@ i nomi dei campi del modulo con quelli che la rotta legge, e verificano che i
 motivi abbiano una sola definizione. Rimettendo il nome sbagliato, la verifica
 fallisce — provato.
 
+### 2.10 Script in linea senza nonce sulle pagine generate — **alta**
+
+`src/pagine/layout.js`.
+
+Stessa conseguenza del §2.8 ma causa opposta, e trovata nello stesso modo:
+aprendo `/ordine` in un browser.
+
+Le pagine statiche autorizzano gli script in linea **per hash**; quelle
+generate dal Worker non passano da `public/_headers` e autorizzano **per
+nonce**. I due frammenti in linea di `layout.js` — la configurazione di
+iubenda e la riga che segna la pagina come «js» — non portavano l'attributo
+`nonce`, quindi erano bloccati su **ogni** pagina generata: catalogo, scheda
+prodotto, carrello, checkout, stato dell'ordine.
+
+L'errore era scritto nero su bianco in cima al file, che dichiarava di
+riprodurre la testa della home «byte per byte» perché gli hash calcolati sui
+file statici la coprissero. Non la coprono: la CSP di quelle pagine gli hash
+non li contiene affatto.
+
+**Correzione.** I due frammenti portano `${nonce}`. Il commento in cima al
+file dice ora quale meccanismo vale per quale tipo di pagina.
+
+**Prevenzione.** Un controllo in `tools/verifica.mjs` rifiuta qualunque
+`<script>` in linea senza `${nonce}` in `layout.js`. Il controllo toglie
+prima i commenti: sia quel file sia la verifica stessa **citano** il tag in
+prosa, ed è proprio confondere una citazione con la marcatura che aveva
+causato il §2.8.
+
 ---
 
 ## 3. Cosa è stato verificato e ha retto
@@ -254,6 +284,10 @@ comprato qui. La risposta di errore non contiene nome, token né stato.
 
 **Limiti di frequenza.** Con la finestra pulita: cinque ricerche d'ordine
 passano, la sesta riceve 429.
+
+**Console del browser.** Tutte le pagine, statiche e generate, aperte con
+Chromium a 390 px e a 1440 px: zero violazioni CSP, zero scorrimento
+orizzontale, CLS pari a 0.
 
 ---
 
