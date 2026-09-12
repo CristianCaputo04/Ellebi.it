@@ -183,9 +183,27 @@ function valutaCattura(dati, ordine) {
   const catture = unita && unita.payments && Array.isArray(unita.payments.captures)
     ? unita.payments.captures
     : [];
-  const cattura = catture.find((c) => c.status === "COMPLETED") || catture[0];
+  // Solo una cattura COMPLETED conta. Il ripiego su `catture[0]` che c'era
+  // prima sembrava prudente e non lo era: lo stato dell'ORDINE PayPal può
+  // essere COMPLETED mentre la cattura sotto è PENDING — succede davvero con
+  // gli eCheck, dove il denaro arriva giorni dopo e può non arrivare affatto.
+  // Quel ripiego marcava come pagato un ordine non incassato, e il pezzo
+  // sarebbe partito.
+  const cattura = catture.find((c) => c.status === "COMPLETED");
 
   if (!cattura) {
+    const inSospeso = catture.find((c) => c.status === "PENDING");
+    if (inSospeso) {
+      registra("avviso", "PayPal: incasso ancora in sospeso", {
+        numero: ordine.numero,
+        motivo: String((inSospeso.status_details && inSospeso.status_details.reason) || ""),
+      });
+      return {
+        ok: false,
+        codice: "incasso_in_sospeso",
+        messaggio: "Il pagamento risulta ancora in corso di accredito. Appena arriva ti avviso: non serve rifarlo.",
+      };
+    }
     return { ok: false, codice: "cattura_assente", messaggio: "PayPal non riporta alcun incasso." };
   }
 

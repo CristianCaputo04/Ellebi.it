@@ -17,16 +17,61 @@ import hashlib
 import os
 import re
 import sys
+from html.parser import HTMLParser
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUB = os.path.join(BASE, "public")
 HEADERS = os.path.join(PUB, "_headers")
 
-# Qualsiasi <script> privo di attributo src: copre sia i blocchi JSON-LD sia
-# il frammento inline di configurazione di iubenda (_iub.csConfiguration).
-# Gli script con src (main.js, head.js, gli script esterni di iubenda) sono
-# già coperti da 'self' o dal dominio esplicito e non hanno bisogno di hash.
-RX_LD = re.compile(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', re.S)
+
+class RaccoglitoreScript(HTMLParser):
+    """Estrae il contenuto di ogni <script> privo di attributo src.
+
+    Qui prima c'era un'espressione regolare, e sbagliava in un modo che non
+    si vedeva: nel <head> di ogni pagina c'è un commento che CITA il tag
+    («...quando incontra il tag <script>.»). L'espressione regolare non
+    distingue un commento dal documento, quindi partiva da quella citazione e
+    catturava tutto fino al primo </script> vero — inghiottendo i preconnect
+    e il frammento di configurazione di iubenda. Risultato: veniva pubblicato
+    l'hash di quel blocco inventato, e la configurazione di iubenda —
+    l'unica cosa che accende il banner del consenso — restava bloccata dalla
+    CSP su ogni pagina del sito.
+
+    Un analizzatore vero i commenti li riconosce, e non può ricascarci.
+    """
+
+    def __init__(self):
+        # convert_charrefs=False: il contenuto deve arrivare byte per byte
+        # come sta nel file, o l'hash non corrisponde a quello che il
+        # browser calcola.
+        super().__init__(convert_charrefs=False)
+        self.dentro = False
+        self.pezzi = []
+        self.blocchi = []
+
+    def handle_starttag(self, tag, attributi):
+        if tag == "script":
+            # Gli script con src (main.js, quelli esterni di iubenda) sono già
+            # coperti da 'self' o dal dominio esplicito: niente hash.
+            self.dentro = not any(nome == "src" for nome, _ in attributi)
+            self.pezzi = []
+
+    def handle_data(self, dati):
+        if self.dentro:
+            self.pezzi.append(dati)
+
+    def handle_entityref(self, nome):
+        if self.dentro:
+            self.pezzi.append("&%s;" % nome)
+
+    def handle_charref(self, nome):
+        if self.dentro:
+            self.pezzi.append("&#%s;" % nome)
+
+    def handle_endtag(self, tag):
+        if tag == "script" and self.dentro:
+            self.blocchi.append("".join(self.pezzi))
+            self.dentro = False
 
 
 def hash_di(contenuto):
@@ -37,8 +82,9 @@ def hash_di(contenuto):
 def raccogli():
     trovati = []
     for pagina in sorted(glob.glob(os.path.join(PUB, "*.html"))):
-        testo = open(pagina, encoding="utf-8").read()
-        for blocco in RX_LD.findall(testo):
+        lettore = RaccoglitoreScript()
+        lettore.feed(open(pagina, encoding="utf-8").read())
+        for blocco in lettore.blocchi:
             h = hash_di(blocco)
             if h not in trovati:
                 trovati.append(h)

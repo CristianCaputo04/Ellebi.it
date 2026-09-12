@@ -51,6 +51,8 @@ export function paginaAccesso(ctx, { errore = null, csrf = "" } = {}) {
     corpo,
     ctx,
     vocaleAttiva: null,
-    csrf: gettone,
+    // Il token GREZZO: paginaAdmin lo fa passare da esc() per conto suo, e
+    // dargli quello gia' sfuggito lo sfuggirebbe due volte.
+    csrf: csrf || (ctx && ctx.csrf) || "",
   });
 }

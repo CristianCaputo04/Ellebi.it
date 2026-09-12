@@ -20,12 +20,13 @@ import { leggiConfig, riempiSegnaposto } from "./config.js";
 import {
   rispostaJson, rispostaErrore, rispostaHtml, rispostaRedirect,
   leggiCookie, scriviCookie, esc, tokenCasuale, hashConSale, ipChiamante,
-  registra, testoPulito, slugValido, PROVINCE, adesso,
+  registra, testoPulito, slugValido, PROVINCE, adesso, confrontoCostante,
 } from "./util.js";
 import {
   categorieAttive, prodottiInVetrina, prodottoPerSlug, variantiPerSku,
   tariffeAttive, ordinePerNumero, ordinePerPaypal, elencoOrdini, conteggiOrdini,
   prodottiConVarianti, consumaLimite, pulisciDatiScaduti,
+  cercaProdotti, ritrovaOrdine,
 } from "./db.js";
 import { calcolaOrdine } from "./prezzi.js";
 import {
@@ -38,12 +39,14 @@ import {
 import { invia, modelloConferma, modelloAggiornamento, modelloAvvisoTitolare } from "./email.js";
 import { accedi, sessione, csrfValido, esci, esportaCsv } from "./admin.js";
 import { anonimizzaOrdine, anonimizzaOrdiniOltreTermine } from "./gdpr.js";
+import { statoRimborsi, eseguiRimborso, importoInCentesimi } from "./rimborsi.js";
 
 import { paginaNegozio } from "./pagine/negozio.js";
 import { paginaProdotto } from "./pagine/prodotto.js";
 import { paginaCarrello } from "./pagine/carrello.js";
 import { paginaCheckout } from "./pagine/checkout.js";
 import { paginaOrdine } from "./pagine/ordine.js";
+import { paginaRitrova } from "./pagine/ritrova.js";
 
 import { paginaAccesso } from "./admin-pagine/accesso.js";
 import { paginaOrdini } from "./admin-pagine/ordini.js";
@@ -100,6 +103,12 @@ function intestazioniSicurezza({ nonce, paypal = false, noindex = false }) {
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Cross-Origin-Opener-Policy": "same-origin",
+    // Le tre che seguono erano in public/_headers ma non qui: le pagine
+    // statiche viaggiavano piu' protette di carrello, checkout e pannello,
+    // che sono esattamente quelle con dentro i soldi e i dati personali.
+    "Cross-Origin-Resource-Policy": "same-origin",
+    "X-Permitted-Cross-Domain-Policies": "none",
+    "X-DNS-Prefetch-Control": "off",
     "Permissions-Policy":
       "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), " +
       "geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(self), usb=()",
@@ -107,6 +116,52 @@ function intestazioniSicurezza({ nonce, paypal = false, noindex = false }) {
 
   if (noindex) intestazioni["X-Robots-Tag"] = "noindex, nofollow";
   return intestazioni;
+}
+
+/**
+ * Difende le rotte che scrivono da richieste partite da altri siti.
+ *
+ * Il `Content-Type: application/json` da solo NON basta, ed è l'errore più
+ * comune: un modulo HTML con `enctype="text/plain"` può comporre un corpo che
+ * è JSON valido e inviarlo da un altro dominio senza che il browser chieda il
+ * permesso al nostro server. Con quella sola difesa, una pagina ostile aperta
+ * da un visitatore potrebbe fargli creare ordini in contrassegno a sua insaputa
+ * — e intanto svuotare il magazzino dei pezzi unici.
+ *
+ * Si controllano due cose, e ne basta una a salvarci:
+ *   · `Sec-Fetch-Site`, che i browser aggiornati mettono da soli e che il
+ *     JavaScript di pagina non può falsificare;
+ *   · `Origin`, che deve coincidere con il nostro.
+ *
+ * Una richiesta senza nessuna delle due non viene da un browser (curl, uno
+ * script, un webhook): per le rotte d'ordine la si rifiuta, perché il negozio
+ * è fatto per essere usato da persone con un browser.
+ */
+function provenienzaLecita(richiesta, url) {
+  const sito = richiesta.headers.get("Sec-Fetch-Site");
+  if (sito) return sito === "same-origin" || sito === "same-site" || sito === "none";
+
+  const origine = richiesta.headers.get("Origin");
+  if (origine) {
+    try {
+      return new URL(origine).host === url.host;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
+/**
+ * Rifiuta i corpi assurdamente grandi prima di leggerli.
+ *
+ * Un ordine legittimo pesa meno di due kilobyte. Leggere in memoria un corpo
+ * da dieci megabyte per poi scoprire che è spazzatura costa tempo di CPU su
+ * ogni richiesta, ed è il modo più economico di infastidire un Worker.
+ */
+function corpoTroppoGrande(richiesta, massimoByte = 16 * 1024) {
+  const dichiarato = Number(richiesta.headers.get("Content-Length"));
+  return Number.isFinite(dichiarato) && dichiarato > massimoByte;
 }
 
 /* -------------------------------------------------------------- carrello */
@@ -166,6 +221,19 @@ async function apiPreventivo(db, richiesta, config) {
   let corpo = null;
   try { corpo = await richiesta.json(); } catch { corpo = null; }
   if (!corpo) return rispostaErrore("corpo_non_valido", "Richiesta non leggibile.", 400);
+
+  /* È la sola rotta che chiunque può chiamare e che fa lavorare il database:
+     ogni chiamata legge le varianti degli SKU inviati più le tariffe. Il tetto
+     è largo apposta — il browser la richiama a ogni modifica del carrello, e
+     una sessione d'acquisto normale ne fa qualche decina — ma esiste, perché
+     senza non c'è niente che impedisca di tenerla occupata all'infinito. */
+  const ipHashPreventivo = await hashConSale(ipChiamante(richiesta), config.hashSale);
+  const limitePreventivo = await consumaLimite(db, {
+    chiave: "preventivo", ipHash: ipHashPreventivo, massimo: 150, minutiFinestra: 10,
+  });
+  if (!limitePreventivo.consentito) {
+    return rispostaErrore("troppe_richieste", "Troppe richieste ravvicinate. Riprova fra poco.", 429);
+  }
 
   const righe = normalizzaRighe(corpo.righe);
   if (righe.length === 0) {
@@ -261,7 +329,7 @@ async function apiPaypalCrea(db, env, richiesta, config) {
   const dati = await ordinePerNumero(db, numero);
   // Il token è ciò che lega la richiesta all'ordine: senza, chiunque
   // conoscesse un numero d'ordine potrebbe avviarne il pagamento.
-  if (!dati || dati.ordine.token !== token) {
+  if (!dati || !confrontoCostante(dati.ordine.token, token)) {
     return rispostaErrore("ordine_inesistente", "Ordine non trovato.", 404);
   }
   if (dati.ordine.stato !== "in_attesa_pagamento") {
@@ -290,7 +358,7 @@ async function apiPaypalCattura(db, env, richiesta, config) {
   }
 
   const dati = await ordinePerNumero(db, numero);
-  if (!dati || dati.ordine.token !== token) {
+  if (!dati || !confrontoCostante(dati.ordine.token, token)) {
     return rispostaErrore("ordine_inesistente", "Ordine non trovato.", 404);
   }
 
@@ -388,13 +456,29 @@ async function apiPaypalWebhook(db, env, richiesta, config) {
 async function paginaCatalogo(db, ctx) {
   const slug = ctx.url.searchParams.get("categoria");
   const categoriaSlug = slug && slugValido(slug) ? slug : null;
+  // Il termine di ricerca arriva da una persona: si ripulisce e si tronca
+  // prima di toccare il database. La query lo lega come parametro, quindi
+  // non puo' cambiare la struttura della ricerca, ma un testo lunghissimo
+  // costerebbe comunque una scansione inutile.
+  const termine = testoPulito(ctx.url.searchParams.get("q"), 60);
+  const ordine = testoPulito(ctx.url.searchParams.get("ordine"), 30);
+
   const [categorie, prodotti] = await Promise.all([
     categorieAttive(db),
-    prodottiInVetrina(db, { categoriaSlug }),
+    cercaProdotti(db, { termine, categoriaSlug, ordine }),
   ]);
   // `paginaNegozio` si aspetta lo slug, non l'oggetto categoria: è lei a
   // ritrovarselo nell'elenco che le passiamo.
-  return paginaNegozio(ctx, { categorie, prodotti, categoriaAttiva: categoriaSlug || "" });
+  return paginaNegozio(ctx, {
+    categorie, prodotti,
+    categoriaAttiva: categoriaSlug || "",
+    termine,
+    // Si rimanda alla pagina l'ordinamento DAVVERO applicato, non quello
+    // chiesto: se qualcuno inventa un valore, cercaProdotti() ripiega su
+    // "recenti" e il menu deve mostrare quello, non una scelta mai avvenuta.
+    ordine: ["recenti", "nome", "prezzo_crescente", "prezzo_decrescente", "disponibili"].includes(ordine)
+      ? ordine : "recenti",
+  });
 }
 
 async function paginaSchedaProdotto(db, ctx, slug) {
@@ -527,6 +611,53 @@ async function gestisciAdmin(db, env, richiesta, url, config, nonce) {
         return rispostaRedirect(`/admin/ordine/${encodeURIComponent(numero)}`, 303, intestazioni);
       }
 
+      if (azione === "/rimborso") {
+        // La conferma esplicita e' nel modulo, non solo nel JavaScript: un
+        // rimborso non si annulla, e questa casella e' l'ultima cosa che
+        // resta quando lo script non gira.
+        if (modulo.get("conferma") !== "si") {
+          return rispostaErrore("conferma_mancante", "Serve la conferma esplicita.", 400);
+        }
+
+        const dati = await ordinePerNumero(db, numero);
+        if (!dati) return rispostaErrore("inesistente", "Ordine non trovato.", 404);
+
+        const situazione = await statoRimborsi(db, dati.ordine, config);
+        // Rimborso intero = tutto quello che resta da restituire, calcolato
+        // dal server. Se lo calcolasse il modulo, un residuo cambiato nel
+        // frattempo farebbe uscire piu' denaro del dovuto.
+        const importo = testoPulito(modulo.get("tipo"), 20) === "parziale"
+          ? importoInCentesimi(modulo.get("importo_euro"))
+          : situazione.rimborsabile_cent;
+
+        if (importo === null) {
+          return rispostaErrore("importo_non_valido", "L'importo non e' valido. Usa per esempio 45,50.", 400);
+        }
+
+        const esito = await eseguiRimborso(db, env, config, {
+          numero,
+          importoCent: importo,
+          motivo: testoPulito(modulo.get("motivo"), 30),
+          nota: testoPulito(modulo.get("nota"), 300),
+        });
+
+        if (esito.ok) {
+          const aggiornato = await ordinePerNumero(db, numero);
+          if (aggiornato) {
+            const messaggio = modelloAggiornamento({
+              ordine: aggiornato.ordine,
+              config,
+              nota: esito.integrale
+                ? "Il rimborso e' stato inviato. Il tempo di riaccredito dipende dalla tua banca."
+                : "E' stato inviato un rimborso parziale. Il tempo di riaccredito dipende dalla tua banca.",
+            });
+            await invia(env, config, { a: aggiornato.ordine.email, ...messaggio });
+          }
+          return rispostaRedirect(`/admin/ordine/${encodeURIComponent(numero)}`, 303, intestazioni);
+        }
+        return rispostaErrore(esito.codice, esito.messaggio, 400);
+      }
+
       if (azione === "/anonimizza") {
         // La casella di conferma è nel modulo e non solo nel JavaScript: è
         // l'unica protezione che resta se la pagina viene inviata senza.
@@ -541,6 +672,10 @@ async function gestisciAdmin(db, env, richiesta, url, config, nonce) {
 
     const dati = await ordinePerNumero(db, numero);
     if (!dati) return rispostaHtml("Ordine non trovato", { stato: 404, intestazioni });
+    // La stessa funzione che decide cosa la pagina puo' offrire decide anche
+    // cosa la rotta di scrittura accetta: separarle significherebbe mostrare
+    // un pulsante che il server rifiuta, o peggio il contrario.
+    const rimborso = await statoRimborsi(db, dati.ordine, config);
     return rispostaHtml(
       paginaOrdineAdmin(ctxAdmin, {
         ordine: dati.ordine,
@@ -548,6 +683,7 @@ async function gestisciAdmin(db, env, richiesta, url, config, nonce) {
         eventi: dati.eventi,
         csrf: sess.csrf,
         transizioniPossibili: TRANSIZIONI[dati.ordine.stato] || [],
+        rimborso,
       }),
       { intestazioni }
     );
@@ -602,6 +738,19 @@ export default {
       /* --- API --- */
       if (percorso.startsWith("/api/")) {
         if (!db) return rispostaErrore("database_assente", "Servizio non disponibile.", 503);
+
+        if (richiesta.method === "POST") {
+          if (corpoTroppoGrande(richiesta)) {
+            return rispostaErrore("corpo_troppo_grande", "Richiesta troppo grande.", 413);
+          }
+          // Il webhook PayPal arriva da un server, non da un browser: è l'unica
+          // rotta che non può avere una provenienza "same-origin", e infatti si
+          // difende in modo proprio, verificando la firma crittografica.
+          if (percorso !== "/api/paypal/webhook" && !provenienzaLecita(richiesta, url)) {
+            registra("avviso", "richiesta d'ordine da provenienza non lecita", { percorso });
+            return rispostaErrore("provenienza_non_lecita", "Richiesta non valida.", 403);
+          }
+        }
 
         if (percorso === "/api/catalogo" && richiesta.method === "GET") {
           return apiCatalogo(db, url);
@@ -682,6 +831,74 @@ export default {
         );
       }
 
+      /* Ritrova un ordine: la via di servizio per chi ha perso l'e-mail e con
+         essa il token. Il modulo sta in GET, la ricerca in POST — non per
+         gusto, ma perche' con la GET numero ed e-mail finirebbero nella
+         cronologia del browser e nei registri di ogni intermediario. */
+      if (percorso === "/ordine" || percorso === "/ordine/") {
+        if (!db) return rispostaErrore("database_assente", "Servizio non disponibile.", 503);
+
+        if (richiesta.method !== "POST") {
+          return rispostaHtml(paginaRitrova(contesto, {}), {
+            intestazioni: intestazioniSicurezza({ nonce, noindex: true }),
+          });
+        }
+
+        if (corpoTroppoGrande(richiesta, 8 * 1024)) {
+          return rispostaErrore("corpo_troppo_grande", "Richiesta troppo grande.", 413);
+        }
+        if (!provenienzaLecita(richiesta, url)) {
+          registra("avviso", "ricerca ordine da provenienza non lecita", { percorso });
+          return rispostaErrore("provenienza_non_lecita", "Richiesta non valida.", 403);
+        }
+
+        const modulo = await richiesta.formData();
+        // I numeri d'ordine sono maiuscoli in tabella, ma nessuno li digita
+        // cosi': si normalizza qui, altrimenti "el-2026-0123" non trova nulla
+        // e chi lo scrive in minuscolo crede di avere il numero sbagliato.
+        const numeroChiesto = testoPulito(modulo.get("numero"), 30).toUpperCase();
+        const emailChiesta = testoPulito(modulo.get("email"), 180);
+
+        /* Senza limite questa rotta diventa il modo piu' comodo per provare
+           indirizzi e-mail in blocco: si tiene stretta, cinque tentativi ogni
+           dieci minuti, perche' chi cerca il proprio ordine ne fa uno o due. */
+        const ipHashRitrova = await hashConSale(ipChiamante(richiesta), config.hashSale);
+        const limiteRitrova = await consumaLimite(db, {
+          chiave: "ritrova-ordine", ipHash: ipHashRitrova, massimo: 5, minutiFinestra: 10,
+        });
+        if (!limiteRitrova.consentito) {
+          return rispostaHtml(
+            paginaRitrova(contesto, {
+              numero: numeroChiesto,
+              errore: "Troppi tentativi ravvicinati. Riprova fra qualche minuto.",
+            }),
+            { stato: 429, intestazioni: intestazioniSicurezza({ nonce, noindex: true }) }
+          );
+        }
+
+        const gettoneTrovato = numeroChiesto && emailChiesta
+          ? await ritrovaOrdine(db, { numero: numeroChiesto, email: emailChiesta })
+          : null;
+
+        if (!gettoneTrovato) {
+          // Un solo messaggio per tutti i casi: ordine inesistente, e-mail
+          // diversa, ordine anonimizzato. Distinguerli direbbe a chiunque se
+          // un certo indirizzo ha comprato qui.
+          return rispostaHtml(
+            paginaRitrova(contesto, {
+              numero: numeroChiesto,
+              errore: "Non trovo nessun ordine con questo numero e questa e-mail. Controlla che siano quelli dell'ordine, poi riprova.",
+            }),
+            { stato: 404, intestazioni: intestazioniSicurezza({ nonce, noindex: true }) }
+          );
+        }
+
+        return rispostaRedirect(
+          `/ordine/${encodeURIComponent(numeroChiesto)}?token=${encodeURIComponent(gettoneTrovato)}`,
+          303
+        );
+      }
+
       const statoOrdine = percorso.match(/^\/ordine\/([A-Za-z0-9-]{1,30})$/);
       if (statoOrdine && db) {
         const token = url.searchParams.get("token") || "";
@@ -690,7 +907,7 @@ export default {
         // d'ordine indovinato mostrerebbe nome, indirizzo e telefono di un
         // altro cliente. Il messaggio non distingue "ordine inesistente" da
         // "token sbagliato", per non confermare che quel numero esiste.
-        if (!dati || !token || dati.ordine.token !== token) {
+        if (!dati || !token || !confrontoCostante(dati.ordine.token, token)) {
           return rispostaHtml(
             paginaOrdine(contesto, { ordine: null, righe: [], eventi: [] }),
             { stato: 404, intestazioni: intestazioniSicurezza({ nonce, noindex: true }) }
@@ -705,6 +922,19 @@ export default {
       /* --- pannello --- */
       if (percorso.startsWith("/admin")) {
         if (!db) return rispostaErrore("database_assente", "Servizio non disponibile.", 503);
+        // Il pannello ha già il token anti-CSRF su ogni modulo e il cookie in
+        // SameSite=Strict. Questo è il terzo strato: costa un confronto di
+        // stringhe e chiude anche il caso di un browser che non mandi il
+        // cookie ma mandi la richiesta.
+        if (richiesta.method === "POST") {
+          if (corpoTroppoGrande(richiesta, 64 * 1024)) {
+            return rispostaErrore("corpo_troppo_grande", "Richiesta troppo grande.", 413);
+          }
+          if (!provenienzaLecita(richiesta, url)) {
+            registra("avviso", "scrittura sul pannello da provenienza non lecita", { percorso });
+            return rispostaErrore("provenienza_non_lecita", "Richiesta non valida.", 403);
+          }
+        }
         return gestisciAdmin(db, env, richiesta, url, config, nonce);
       }
 

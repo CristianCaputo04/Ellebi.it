@@ -1,0 +1,19 @@
+{
+  "name": "emmelu",
+  "private": true,
+  "type": "module",
+  "description": "Negozio EmmeLù su Cloudflare Workers. Nessuna dipendenza a runtime: questo file esiste per due motivi, non per installare pacchetti.",
+  "//": [
+    "1. \"type\": \"module\" fa sì che `node --check` analizzi i file di src/ come",
+    "   moduli ES, che è quello che sono. Senza, Node li legge come script",
+    "   classici e NON segnala errori di sintassi propri dei moduli: un",
+    "   `export const x = ;` passava il controllo indisturbato.",
+    "2. `npm run verifica` raccoglie in un comando solo i controlli che girano",
+    "   anche in CI prima di ogni pubblicazione."
+  ],
+  "scripts": {
+    "verifica": "node tools/verifica.mjs && python3 tools/aggiorna-versioni.py --check && python3 tools/aggiorna-sitemap.py --check",
+    "sviluppo": "wrangler dev --local --env sviluppo",
+    "migra:locale": "wrangler d1 execute emmelu --local --env sviluppo --file=migrazioni/0001-schema.sql && wrangler d1 execute emmelu --local --env sviluppo --file=migrazioni/0002-dati-iniziali.sql"
+  }
+}

@@ -22,6 +22,14 @@ jobs:
         with:
           node-version: "22"
 
+      # Sta prima di tutto il resto perché è il controllo più economico e
+      # quello che intercetta gli errori peggiori: un file JavaScript che non
+      # compila, una chiave segreta finita in wrangler.toml, una rotta
+      # generata che manca da run_worker_first. Pubblicare uno di questi
+      # significa accorgersene dal sito in produzione.
+      - name: Verifica la coerenza del progetto
+        run: node tools/verifica.mjs
+
       - name: Controlla le marche di versione di CSS e JS
         run: python3 tools/aggiorna-versioni.py --check
 

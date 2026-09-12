@@ -45,7 +45,9 @@ export function paginaMagazzino(ctx, { prodotti = [], csrf = "", salvato = false
       corpo: conferma + `<p class="vuoto">Non c'è ancora nessun prodotto a catalogo.</p>`,
       ctx,
       vocaleAttiva: "magazzino",
-      csrf: gettone,
+      // Il token GREZZO: paginaAdmin lo fa passare da esc() per conto suo, e
+      // dargli quello gia' sfuggito lo sfuggirebbe due volte.
+      csrf: csrf || "",
     });
   }
 
@@ -67,7 +69,9 @@ export function paginaMagazzino(ctx, { prodotti = [], csrf = "", salvato = false
     corpo,
     ctx,
     vocaleAttiva: "magazzino",
-    csrf: gettone,
+    // Il token GREZZO: paginaAdmin lo fa passare da esc() per conto suo, e
+    // dargli quello gia' sfuggito lo sfuggirebbe due volte.
+    csrf: csrf || "",
   });
 }
 

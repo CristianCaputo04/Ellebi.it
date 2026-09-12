@@ -162,6 +162,97 @@ export async function variantiPerSku(db, sku) {
   return new Map((results || []).map((v) => [v.sku, v]));
 }
 
+/**
+ * Cerca fra i prodotti in vetrina e ordina il risultato.
+ *
+ * La ricerca è deliberatamente semplice — `LIKE` su nome, sottotitolo,
+ * materiale e colore — e non usa l'indice full-text di SQLite. Con un
+ * catalogo di poche decine di pezzi la differenza di velocità è nulla, e FTS5
+ * richiederebbe una tabella da tenere sincronizzata a ogni modifica: una
+ * fonte di bug per un guadagno che qui non esiste. Si passerà a FTS5 quando
+ * il catalogo supererà il migliaio di righe, non prima.
+ *
+ * Il termine di ricerca viene messo fra due `%` come PARAMETRO, non
+ * concatenato: un `%` o un `_` scritti dal visitatore restano caratteri di
+ * ricerca e non possono cambiare la struttura della query.
+ */
+export async function cercaProdotti(db, { termine = "", categoriaSlug = null, ordine = "recenti" } = {}) {
+  const testo = String(termine || "").trim().slice(0, 60);
+
+  // L'ordinamento arriva dalla query string: si sceglie da un elenco chiuso e
+  // si scarta tutto il resto. Interpolare un ORDER BY che arriva dall'esterno
+  // e' una delle poche iniezioni che sopravvivono alle query parametriche,
+  // perche' un nome di colonna non puo' essere un parametro.
+  const ordinamenti = {
+    recenti: "p.creato_il DESC, p.nome",
+    nome: "p.nome",
+    prezzo_crescente: "prezzo_cent ASC, p.nome",
+    prezzo_decrescente: "prezzo_cent DESC, p.nome",
+    disponibili: "disponibile DESC, p.nome",
+  };
+  const ordinaPer = ordinamenti[ordine] || ordinamenti.recenti;
+
+  const condizioni = ["p.stato = 'attivo'", "c.attiva = 1"];
+  const parametri = [];
+  if (categoriaSlug) {
+    parametri.push(categoriaSlug);
+    condizioni.push(`c.slug = ?${parametri.length}`);
+  }
+  if (testo) {
+    parametri.push(`%${testo}%`);
+    const i = parametri.length;
+    condizioni.push(
+      `(p.nome LIKE ?${i} OR p.sottotitolo LIKE ?${i} OR p.materiale LIKE ?${i} OR p.colore LIKE ?${i} OR c.nome LIKE ?${i})`
+    );
+  }
+
+  const query = `
+    SELECT p.id, p.slug, p.nome, p.sottotitolo, p.materiale, p.colore,
+           p.personalizzabile, p.pezzo_unico, p.creato_il,
+           c.slug AS categoria_slug, c.nome AS categoria_nome,
+           MIN(v.prezzo_cent) AS prezzo_cent,
+           COALESCE(SUM(v.giacenza), 0) AS giacenza_totale,
+           CASE WHEN COALESCE(SUM(v.giacenza), 0) > 0 THEN 1 ELSE 0 END AS disponibile
+      FROM prodotti p
+      JOIN categorie c ON c.id = p.categoria_id
+      LEFT JOIN varianti v ON v.prodotto_id = p.id
+     WHERE ${condizioni.join(" AND ")}
+     GROUP BY p.id
+     ORDER BY ${ordinaPer}
+     LIMIT 200`;
+
+  const preparata = parametri.length ? db.prepare(query).bind(...parametri) : db.prepare(query);
+  const { results } = await preparata.all();
+  const prodotti = results || [];
+  if (prodotti.length === 0) return [];
+
+  const immagini = await immaginiDi(db, prodotti.map((p) => p.id));
+  return prodotti.map((p) => ({
+    ...p,
+    disponibile: p.giacenza_totale > 0,
+    immagini: immagini.get(p.id) || [],
+  }));
+}
+
+/**
+ * Ritrova un ordine dal numero e dall'indirizzo e-mail.
+ *
+ * Serve a chi ha perso l'e-mail di conferma e quindi il token. Le due
+ * informazioni insieme sono un segreto sufficiente — il numero da solo si
+ * indovina, l'e-mail da sola non basta — ma la rotta che usa questa funzione
+ * DEVE essere limitata in frequenza, altrimenti diventa un modo per provare
+ * indirizzi e-mail in blocco.
+ *
+ * Restituisce solo il token: la pagina di stato fara' il resto.
+ */
+export async function ritrovaOrdine(db, { numero, email }) {
+  const riga = await db
+    .prepare(`SELECT token FROM ordini WHERE numero = ?1 AND email = ?2 AND anonimizzato_il IS NULL`)
+    .bind(String(numero || "").trim().toUpperCase(), String(email || "").trim().toLowerCase())
+    .first();
+  return riga ? riga.token : null;
+}
+
 /* ----------------------------------------------------------- spedizioni */
 
 export async function tariffeAttive(db) {

@@ -64,6 +64,30 @@ export async function accedi(db, env, config, richiesta, password) {
     return { ok: false, messaggio: "Accesso non riuscito." };
   }
 
+  /* Il limite per IP protegge la password, non la macchina: chi cambia
+     indirizzo a ogni tentativo lo aggira, e ogni tentativo costa 210.000
+     iterazioni di PBKDF2 di CPU. Non e' un modo per entrare, e' un modo per
+     esaurire il budget del Worker con qualche riga di script.
+
+     Il tetto complessivo e' volutamente alto. Un tetto stretto proteggerebbe
+     meglio la CPU ma consegnerebbe a chiunque il potere di chiudere fuori la
+     titolare dal suo pannello: fra le due, sopportare un po' di CPU sprecata
+     e' il male minore. A 120 tentativi ogni quarto d'ora l'abuso resta
+     limitato e l'accesso legittimo — cinque tentativi scarsi — non rischia
+     mai di incrociarlo. */
+  const limiteGlobale = await consumaLimite(db, {
+    chiave: "accesso-admin-globale",
+    ipHash: "tutti",
+    massimo: 120,
+    minutiFinestra: 15,
+  });
+  if (!limiteGlobale.consentito) {
+    registra("avviso", "accesso admin: limite complessivo superato", {
+      tentativi: limiteGlobale.conteggio,
+    });
+    return { ok: false, messaggio: "Accesso non riuscito." };
+  }
+
   if (!(await passwordCorretta(env, password))) {
     registra("avviso", "accesso admin: password errata");
     return { ok: false, messaggio: "Accesso non riuscito." };

@@ -132,13 +132,17 @@ def aggiorna_wrangler():
 
     cambiato = False
     for chiave, valore in atteso.items():
+        # re.M + ^: la stessa chiave compare due volte, in [vars] e in
+        # [env.sviluppo.vars]. Vanno allineate entrambe, altrimenti la prova
+        # in locale non rispecchia quello che vedra' un cliente.
         rx = re.compile(r'^(' + chiave + r' = ")([0-9a-f]*)(")', re.M)
-        trovato = rx.search(testo)
-        if not trovato:
+        occorrenze = rx.findall(testo)
+        if not occorrenze:
             sys.exit("Manca %s in wrangler.toml" % chiave)
-        if trovato.group(2) != valore:
+        if any(o[1] != valore for o in occorrenze):
             cambiato = True
-            print("%-14s %s: %s -> %s" % ("wrangler.toml", chiave, trovato.group(2) or "(vuoto)", valore))
+            print("%-14s %s: %s -> %s" % ("wrangler.toml", chiave,
+                  ", ".join(o[1] or "(vuoto)" for o in occorrenze), valore))
             if not CHECK:
                 testo = rx.sub(lambda m: m.group(1) + valore + m.group(3), testo)
 

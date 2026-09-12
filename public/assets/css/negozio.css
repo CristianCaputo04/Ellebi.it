@@ -65,6 +65,68 @@
   font-size: var(--fs-small);
 }
 
+/* ---------- ricerca
+
+   È un <form method="get"> vero: senza JavaScript funziona, il risultato ha
+   un indirizzo proprio e si può mandare a qualcuno. Le regole qui sotto non
+   fanno altro che renderlo leggibile.
+
+   Su schermo stretto i campi si impilano e il pulsante prende tutta la
+   larghezza: è il bersaglio da premere col pollice, e una riga di tre
+   elementi a 390 px li rende tutti troppo piccoli. */
+
+.negozio__ricerca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: var(--sp-4) 0 0;
+}
+
+/* Il campo di testo si allunga, il menu dell'ordinamento resta della sua
+   misura: allargare un <select> non aggiunge nessuna informazione. */
+.negozio__ricerca-campo { flex: 0 0 auto; }
+.negozio__ricerca-campo:first-of-type { flex: 1 1 16rem; min-width: 0; }
+
+.negozio__ricerca-input {
+  width: 100%;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  background: var(--c-paper);
+  color: inherit;
+  font: inherit;
+  /* Non var(--fs-small): vale 0.9rem al massimo, e iOS ingrandisce la pagina
+     ogni volta che si tocca un campo sotto i 16 px. Il minimo di 1rem tiene
+     la pagina ferma; sopra i 33rem, dove non ci sono tastiere che facciano
+     zoomare, si torna alla misura del resto dell'interfaccia. */
+  font-size: max(1rem, var(--fs-small));
+  line-height: 1.4;
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.negozio__ricerca-input:hover { border-color: var(--c-espresso); }
+.negozio__ricerca-input:focus-visible { border-color: var(--c-espresso); outline-offset: 2px; }
+
+/* La crocetta nativa di type="search" su WebKit sta dentro il bordo tondo e
+   ne esce di qualche pixel: si toglie e si lascia il link «Azzera», che è
+   visibile anche sugli altri browser. */
+.negozio__ricerca-input::-webkit-search-cancel-button { display: none; }
+
+.negozio__ricerca-invia { flex: 0 0 auto; }
+.negozio__ricerca-azzera { flex: 0 0 auto; font-size: var(--fs-micro); }
+
+@media (min-width: 33.01rem) {
+  .negozio__ricerca-input { font-size: var(--fs-small); }
+}
+
+@media (max-width: 33rem) {
+  .negozio__ricerca-campo,
+  .negozio__ricerca-campo:first-of-type { flex: 1 1 100%; }
+  .negozio__ricerca-invia { flex: 1 1 100%; }
+  .negozio__ricerca-azzera { margin: 0 auto; }
+}
+
 .negozio__filtri { margin: var(--sp-4) 0 var(--sp-5); }
 
 .negozio__filtri-lista {
@@ -96,6 +158,10 @@
 /* Il filtro attivo non si distingue solo per colore: cambia anche il peso del
    bordo e il contrasto, così resta riconoscibile in stampa e per chi non
    percepisce quella differenza cromatica. */
+/* Il markup in src/pagine/negozio.js usa "is-attivo": la regola porta
+   entrambi i nomi perche' una classe non applicata non si vede, e un filtro
+   attivo indistinguibile dagli altri fa perdere l'orientamento. */
+.negozio__filtro.is-attivo,
 .negozio__filtro--attivo {
   background: var(--c-espresso);
   border-color: var(--c-espresso);
@@ -250,6 +316,39 @@
 .campo--quantita .campo__controllo { max-width: 7rem; }
 
 .campo__aiuto { margin-top: 0.3rem; font-size: var(--fs-micro); color: var(--c-muted); }
+
+/* ---------- ritrova il tuo ordine
+
+   Modulo corto in colonna stretta: due campi e un pulsante. Non c'è niente
+   da affiancare, e una riga larga su un campo di sei caratteri fa solo
+   sembrare che manchi qualcosa. */
+
+.ritrova__modulo { margin-top: var(--sp-4); max-width: 24rem; }
+.ritrova__modulo .azioni { margin-top: var(--sp-4); }
+.ritrova__modulo .btn { width: 100%; }
+
+/* L'errore è la sola cosa che questa pagina dice dopo un tentativo: sta
+   sopra il modulo, dove l'occhio torna, e non solo in rosso — ha anche un
+   bordo e role="alert", perché il colore da solo non lo annuncia a chi usa
+   un lettore di schermo o non lo distingue. */
+.ritrova__errore {
+  margin-top: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 2px solid var(--c-terracotta);
+  background: var(--c-blush-soft);
+  font-size: var(--fs-small);
+}
+
+.ritrova__aiuto {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+.ritrova__aiuto code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95em;
+}
 
 .avviso {
   margin-top: var(--sp-2);
@@ -646,6 +745,7 @@
 
 @media print {
   .header__carrello,
+  .negozio__ricerca,
   .negozio__filtri,
   .carrello__quantita,
   .carrello__togli,

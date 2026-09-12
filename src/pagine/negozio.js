@@ -68,6 +68,56 @@ function scheda(prodotto, config) {
         </article>`;
 }
 
+/* Ordinamenti offerti. Le chiavi coincidono con quelle accettate da
+   cercaProdotti() in src/db.js: se divergono, il menu propone un ordine che
+   il server ignora in silenzio, che e' il modo peggiore di sbagliare. */
+const ORDINAMENTI = [
+  ["recenti", "Novita'"],
+  ["nome", "Nome"],
+  ["prezzo_crescente", "Prezzo crescente"],
+  ["prezzo_decrescente", "Prezzo decrescente"],
+  ["disponibili", "Prima i disponibili"],
+];
+
+/**
+ * Ricerca e ordinamento.
+ *
+ * E' un <form method="get"> vero: funziona senza JavaScript, il risultato ha
+ * un indirizzo proprio che si puo' salvare o condividere, e il tasto indietro
+ * del browser fa quello che ci si aspetta. Un filtro che vive solo nel
+ * JavaScript perde tutte e tre le cose.
+ */
+function ricerca(termine, categoriaAttiva, ordine) {
+  const opzioni = ORDINAMENTI.map(function (o) {
+    const scelto = o[0] === ordine ? " selected" : "";
+    return `<option value="${esc(o[0])}"${scelto}>${esc(o[1])}</option>`;
+  }).join("");
+
+  /* La categoria viaggia in un campo nascosto: cercando dentro una linea si
+     resta in quella linea, invece di essere rispediti su tutto il catalogo. */
+  const categoriaNascosta = categoriaAttiva
+    ? `<input type="hidden" name="categoria" value="${esc(categoriaAttiva)}">`
+    : "";
+
+  return `<form class="negozio__ricerca" method="get" action="/negozio" role="search">
+      ${categoriaNascosta}
+      <div class="negozio__ricerca-campo">
+        <label class="visually-hidden" for="ricerca-termine">Cerca fra i pezzi</label>
+        <input class="negozio__ricerca-input" id="ricerca-termine" type="search" name="q"
+               value="${esc(termine)}" maxlength="60" autocomplete="off"
+               placeholder="Cerca: borsa, tortora, lurex...">
+      </div>
+      <div class="negozio__ricerca-campo">
+        <label class="visually-hidden" for="ricerca-ordine">Ordina per</label>
+        <select class="negozio__ricerca-input" id="ricerca-ordine" name="ordine">
+          ${opzioni}
+        </select>
+      </div>
+      <button class="btn negozio__ricerca-invia" type="submit">Cerca</button>
+      ${termine ? `<a class="link-line negozio__ricerca-azzera" href="${esc(categoriaAttiva ? `/negozio?categoria=${encodeURIComponent(categoriaAttiva)}` : "/negozio")}">Azzera</a>` : ""}
+    </form>`;
+}
+
 function filtri(categorie, categoriaAttiva) {
   const voci = [{ slug: "", nome: "Tutte le linee" }].concat(
     (Array.isArray(categorie) ? categorie : []).map(function (c) {
@@ -137,6 +187,8 @@ export function paginaNegozio(ctx, dati) {
   const categorie = Array.isArray(d.categorie) ? d.categorie : [];
   const prodotti = Array.isArray(d.prodotti) ? d.prodotti : [];
   const categoriaAttiva = d.categoriaAttiva ? String(d.categoriaAttiva) : "";
+  const termine = d.termine ? String(d.termine) : "";
+  const ordine = d.ordine ? String(d.ordine) : "recenti";
   const sito = String(config.sito || "https://ellebi.it").replace(/\/$/, "");
 
   const categoria = categorie.find(function (x) { return String(x.slug) === categoriaAttiva; }) || null;
@@ -155,6 +207,8 @@ export function paginaNegozio(ctx, dati) {
     ? `<div class="collection__grid negozio__griglia" data-stagger>
         ${prodotti.map(function (p) { return scheda(p, config); }).join("\n        ")}
       </div>`
+    : termine
+    ? `<p class="negozio__vuoto">Nessun pezzo corrisponde a <strong>${esc(termine)}</strong>. <a class="link-line" href="/negozio">Guarda tutto il catalogo</a>, oppure scrivimi su <a class="link-line" href="${esc(config.instagram || "https://www.instagram.com/emmeluofficial/")}" target="_blank" rel="noopener noreferrer">Instagram</a>: molti pezzi nascono su richiesta.</p>`
     : `<p class="negozio__vuoto">In questa linea non c'è ancora nulla di disponibile. <a class="link-line" href="/negozio">Guarda tutte le linee</a> oppure scrivimi su <a class="link-line" href="${esc(config.instagram || "https://www.instagram.com/emmeluofficial/")}" target="_blank" rel="noopener noreferrer">Instagram</a>: alcuni pezzi nascono su richiesta.</p>`;
 
   const corpo = `<main id="main">
@@ -167,6 +221,8 @@ export function paginaNegozio(ctx, dati) {
       </div>
 
       ${avvisoVetrina}
+
+      ${ricerca(termine, categoriaAttiva, ordine)}
 
       ${filtri(categorie, categoriaAttiva)}
 
@@ -185,7 +241,9 @@ export function paginaNegozio(ctx, dati) {
     titolo: titolo,
     descrizione: descrizione,
     canonical: categoria ? `${sito}/negozio?categoria=${encodeURIComponent(categoriaAttiva)}` : `${sito}/negozio`,
-    noindex: false,
+    // Una ricerca produce contenuto duplicato rispetto al catalogo: si lascia
+    // indicizzabile solo la vetrina, con o senza linea scelta.
+    noindex: termine !== "" || ordine !== "recenti",
     corpo: corpo,
     cssExtra: [],
     jsExtra: [],

@@ -559,6 +559,101 @@ code { font-family: var(--f-mono); font-size: 0.9em; }
   .esportazione__modulo .azioni { margin-top: 0; }
 }
 
+/* ---------- rimborso
+
+   Il rimborso è l'unica azione che manda indietro del denaro e non si annulla.
+   Si distingue dal resto senza dipendere dal colore: bordo spesso a sinistra,
+   titolo con un segno testuale, e il pulsante finale con il bordo doppio e la
+   parola «rimborso» scritta per esteso. Chi non vede il rosso vede comunque
+   che questo blocco non è come gli altri. */
+
+.scheda--denaro {
+  border: 1px solid var(--c-linea-forte);
+  border-left: 6px solid var(--c-attenzione);
+}
+.scheda--denaro .scheda__titolo::before {
+  content: "€ ";
+  font-weight: 700;
+  color: var(--c-attenzione);
+}
+
+.scheda__sottotitolo {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: var(--sp-1);
+}
+
+.totali--rimborso { margin-bottom: var(--sp-3); }
+
+/* Un gruppo di campi che è davvero un gruppo: il <fieldset> non è decorazione,
+   tiene insieme le due scelte e resta comprensibile anche letto da uno
+   screen reader, che annuncia la <legend> prima di ogni voce. */
+.riquadro {
+  border: 1px solid var(--c-linea);
+  border-radius: var(--raggio);
+  padding: var(--sp-2);
+  margin-bottom: var(--sp-3);
+  min-width: 0;
+}
+.riquadro__titolo {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--c-muto);
+  padding: 0 0.4rem;
+}
+
+/* Bersaglio pieno da 44 px: su un telefono il pallino del radio è minuscolo,
+   ma la riga intera con la sua etichetta è cliccabile. */
+.campo--scelta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-height: var(--tocco);
+  margin-bottom: 0;
+}
+.campo--scelta input {
+  width: 1.4rem;
+  height: 1.4rem;
+  accent-color: var(--c-attenzione);
+  flex: none;
+}
+.campo--scelta label { min-height: var(--tocco); display: flex; align-items: center; }
+
+.rimborso__perche { margin-top: var(--sp-2); }
+
+.rimborso__personalizzati ul,
+.rimborso__elenco-pers { margin: var(--sp-1) 0 0 1.2rem; list-style: disc; }
+.rimborso__elenco-pers li { overflow-wrap: anywhere; }
+
+.rimborso__regole {
+  margin-top: var(--sp-3);
+  border-top: 1px solid var(--c-linea);
+  padding-top: var(--sp-2);
+  color: var(--c-muto);
+  font-size: 0.95rem;
+}
+.rimborso__regole-titolo {
+  font-weight: 700;
+  color: var(--c-testo);
+  margin-bottom: var(--sp-1);
+}
+.rimborso__regole ul { margin-left: 1.2rem; list-style: disc; }
+.rimborso__regole li { margin-bottom: 0.35rem; }
+
+.rimborso__storico { margin-top: var(--sp-3); }
+
+/* Il bordo doppio dice «attenzione» anche in bianco e nero, dove il fondo
+   rosso del pulsante pericoloso diventa un grigio qualunque. */
+.bottone--irreversibile {
+  border-style: double;
+  border-width: 4px;
+  width: 100%;
+}
+
+@media (min-width: 40em) {
+  .bottone--irreversibile { width: auto; }
+}
+
 /* ---------- movimento */
 
 @media (prefers-reduced-motion: reduce) {
@@ -574,7 +669,8 @@ code { font-family: var(--f-mono); font-size: 0.9em; }
 
 @media print {
   .barra, .filtri, .impaginazione, .azioni, .esportazione,
-  .scheda--pericolo, .salta { display: none !important; }
+  .scheda--pericolo, .salta,
+  .rimborso__modulo, .rimborso__regole { display: none !important; }
   body { background: #fff; color: #000; }
   .scheda { border: 1px solid #000; break-inside: avoid; }
 }

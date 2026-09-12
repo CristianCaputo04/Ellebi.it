@@ -272,7 +272,10 @@ function datiFiscali(config) {
 
   if (!righe) { return ""; }
 
-  return `<div class="footer__col" data-reveal data-reveal-delay="240">
+  // 320 e non 240: la colonna "Serve aiuto" si e' inserita prima di
+  // "Trovami", che ha preso il 240. Due colonne con lo stesso ritardo
+  // comparirebbero insieme, rompendo la cascata da sinistra a destra.
+  return `<div class="footer__col" data-reveal data-reveal-delay="320">
         <h3>Dati fiscali</h3>
         <ul class="footer__list footer__fiscali" role="list">
           ${righe}
@@ -305,6 +308,19 @@ function piePagina(ctx) {
       </div>
 
       <div class="footer__col" data-reveal data-reveal-delay="160">
+        <h3>Serve aiuto</h3>
+        <ul class="footer__list" role="list">
+          <li><a class="link-line" href="/ordine">Ritrova il tuo ordine</a></li>
+          <li><a class="link-line" href="/spedizioni">Spedizioni e tempi</a></li>
+          <li><a class="link-line" href="/pagamenti">Come si paga</a></li>
+          <li><a class="link-line" href="/resi">Resi e recesso</a></li>
+          <li><a class="link-line" href="/cura">Come si cura</a></li>
+          <li><a class="link-line" href="/assistenza">Assistenza</a></li>
+          <li><a class="link-line" href="/chi-siamo">Chi c'è dietro</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col" data-reveal data-reveal-delay="240">
         <h3>Trovami</h3>
         <ul class="footer__list" role="list">
           <li><a class="link-line" href="${esc(instagram)}" target="_blank" rel="noopener noreferrer">Instagram</a></li>
@@ -327,6 +343,7 @@ function piePagina(ctx) {
         <li><a class="link-line" href="/termini">Termini e condizioni</a></li>
         <li><a class="link-line" href="/vendita">Condizioni di vendita</a></li>
         <li><a class="link-line" href="/resi">Resi e recesso</a></li>
+        <li><a class="link-line" href="/ordine">Ritrova il tuo ordine</a></li>
         <li><a class="link-line" href="/accessibilita">Accessibilità</a></li>
         <li><button class="cookie-prefs iubenda-cs-preferences-link" type="button">Preferenze cookie</button></li>
       </ul>

@@ -12,6 +12,7 @@
 
 import { esc, euro, dataOra } from "../util.js";
 import { paginaAdmin, marcaStato, ETICHETTE_STATO } from "./layout.js";
+import { sezioneRimborsoHtml } from "./rimborso.js";
 
 const METODI = { paypal: "PayPal", contrassegno: "Contrassegno" };
 
@@ -30,6 +31,9 @@ const ORIGINI = {
  * @param {Array}  opzioni.eventi in ordine cronologico crescente
  * @param {string} opzioni.csrf
  * @param {Array<string>} opzioni.transizioniPossibili stati leciti da qui
+ * @param {object|null} opzioni.rimborso stato del rimborso calcolato dal
+ *        backend: `{ possibile, motivo_non_possibile, gia_rimborsato_cent,
+ *        rimborsabile_cent, storico }`. Se manca, la sezione non compare.
  *
  * Garantisce: ogni testo scritto dal cliente (nome, note, personalizzazione)
  * passa da esc(); il menu del cambio stato contiene SOLO le transizioni
@@ -38,7 +42,7 @@ const ORIGINI = {
  * Non garantisce: che le transizioni ricevute siano davvero lecite — quella
  * verifica resta al backend, l'interfaccia si limita a non proporne altre.
  */
-export function paginaOrdineAdmin(ctx, { ordine = {}, righe = [], eventi = [], csrf = "", transizioniPossibili = [] } = {}) {
+export function paginaOrdineAdmin(ctx, { ordine = {}, righe = [], eventi = [], csrf = "", transizioniPossibili = [], rimborso = null } = {}) {
   const gettone = esc(csrf || "");
   const numero = esc(ordine.numero || "—");
   const anonimizzato = Boolean(ordine.anonimizzato_il);
@@ -52,6 +56,10 @@ export function paginaOrdineAdmin(ctx, { ordine = {}, righe = [], eventi = [], c
     pagamentoHtml(ordine) +
     azioniStatoHtml(ordine, transizioniPossibili, gettone) +
     tracciaturaHtml(ordine, gettone) +
+    // I soldi stanno dopo la spedizione e prima dei dati personali: sono due
+    // azioni irreversibili diverse e non devono trovarsi vicine, per non
+    // cancellare un cliente credendo di rimborsarlo.
+    sezioneRimborsoHtml({ ordine, righe, rimborso, gettone }) +
     eventiHtml(eventi) +
     (anonimizzato ? "" : anonimizzazioneHtml(ordine, gettone));
 
@@ -60,7 +68,12 @@ export function paginaOrdineAdmin(ctx, { ordine = {}, righe = [], eventi = [], c
     corpo: `<p class="torna"><a href="/admin/ordini">← Tutti gli ordini</a></p>` + corpo,
     ctx,
     vocaleAttiva: "ordini",
-    csrf: gettone,
+    // Il token GREZZO, non `gettone`: paginaAdmin lo passa da esc() per conto
+    // suo, e passargli quello gia' sfuggito lo sfuggirebbe due volte. Oggi non
+    // si vede — tokenCasuale produce solo caratteri innocui — ma il giorno in
+    // cui l'alfabeto del token cambiasse, il modulo "Esci" spedirebbe un
+    // valore diverso da quello in sessione e nessuno capirebbe perche'.
+    csrf: csrf || "",
   });
 }
 
