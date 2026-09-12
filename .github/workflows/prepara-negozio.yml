@@ -1,0 +1,124 @@
+name: Prepara il negozio (database e dominio)
+
+# Si esegue a mano, non a ogni push.
+#
+# Serve a fare le operazioni che richiedono le credenziali Cloudflare e che
+# quindi non si possono fare da una macchina di sviluppo senza accesso:
+# creare il database D1, applicare le migrazioni e dire se il dominio
+# ellebi.it è in questo account Cloudflare.
+#
+# Non pubblica niente e non tocca il sito: legge, crea il database se manca,
+# e stampa quello che serve per collegarlo in wrangler.toml.
+#
+# Nessun segreto viene stampato. L'identificativo del database NON è un
+# segreto: finisce in wrangler.toml, che sta nel repository.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  prepara:
+    name: Crea il database e controlla il dominio
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scarica il repository
+        uses: actions/checkout@v4
+
+      - name: Prepara Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Il token potrebbe essere limitato ai soli Worker. In quel caso questo
+      # passaggio fallisce e lo dice, invece di lasciare credere che il
+      # database sia stato creato.
+      - name: Elenca i database esistenti
+        id: elenco
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set +e
+          npx --yes wrangler@4 d1 list --json > elenco.json 2> errore.txt
+          esito=$?
+          if [ $esito -ne 0 ]; then
+            echo "PERMESSI INSUFFICIENTI o errore nell'elenco dei database."
+            echo "Il token in CLOUDFLARE_API_TOKEN deve avere il permesso D1:Edit."
+            sed -e 's/[A-Za-z0-9_-]\{30,\}/[OMESSO]/g' errore.txt
+            exit 1
+          fi
+          cat elenco.json
+
+      - name: Crea il database se non esiste
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -e
+          gia=$(node -e "
+            const l = require('./elenco.json');
+            const t = (Array.isArray(l) ? l : []).find(d => d.name === 'emmelu');
+            process.stdout.write(t ? t.uuid : '');
+          ")
+          if [ -n "$gia" ]; then
+            echo "Il database emmelu esiste gia'."
+          else
+            echo "Creo il database emmelu..."
+            npx --yes wrangler@4 d1 create emmelu || true
+          fi
+
+      - name: Applica le migrazioni
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -e
+          for f in migrazioni/0001-schema.sql migrazioni/0002-dati-iniziali.sql migrazioni/0003-rimborsi.sql; do
+            echo "--- $f ---"
+            # Le migrazioni sono scritte per poter essere riapplicate: se una
+            # tabella c'e' gia', l'errore non deve fermare le altre.
+            npx --yes wrangler@4 d1 execute emmelu --remote --file="$f" --yes || echo "(gia' applicata, proseguo)"
+          done
+
+      - name: IDENTIFICATIVO DA INCOLLARE IN wrangler.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -e
+          npx --yes wrangler@4 d1 list --json > finale.json
+          node -e "
+            const l = require('./finale.json');
+            const t = (Array.isArray(l) ? l : []).find(d => d.name === 'emmelu');
+            if (!t) { console.log('DATABASE NON TROVATO'); process.exit(1); }
+            console.log('database_id = \"' + t.uuid + '\"');
+          "
+
+      # Informativo: dice se il dominio è gestito da questo account, cioè se
+      # si può agganciare il Worker al dominio da qui. Se il token non ha il
+      # permesso sulle zone, lo dice e non fallisce: è un'informazione, non
+      # un requisito.
+      - name: Il dominio ellebi.it e' in questo account?
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          risposta=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/zones?name=ellebi.it")
+          echo "$risposta" | node -e "
+            let d=''; process.stdin.on('data',c=>d+=c).on('end',()=>{
+              let r; try { r = JSON.parse(d); } catch { console.log('risposta illeggibile'); return; }
+              if (!r.success) {
+                console.log('Il token non puo leggere le zone (serve Zone:Read). Non e un problema per il database.');
+                return;
+              }
+              if (!r.result || !r.result.length) {
+                console.log('ellebi.it NON risulta in questo account Cloudflare.');
+                console.log('Va aggiunto come sito su Cloudflare e i nameserver vanno cambiati dal registrar.');
+                return;
+              }
+              const z = r.result[0];
+              console.log('ellebi.it E in questo account. Stato della zona: ' + z.status);
+              console.log('Nameserver attesi: ' + (z.name_servers || []).join(', '));
+            });
+          "
