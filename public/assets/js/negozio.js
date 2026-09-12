@@ -1017,6 +1017,36 @@
     return { apri: apri, attivo: true };
   })();
 
+  /* ------------------------------- barra d'acquisto fissa su telefono */
+
+  /* Il pulsante della barra non aggiunge niente da solo: invia il modulo che
+     sta sopra. Cosi' variante, quantita' e personalizzazione sono sempre
+     quelle scelte davvero. Un secondo modulo con i propri campi si sarebbe
+     disallineato al primo cambio di variante, e avrebbe messo in carrello il
+     pezzo sbagliato senza che nessuno se ne accorgesse. */
+  (function barraAcquisto() {
+    var barra = $("[data-barra-acquisto]");
+    var modulo = $("[data-aggiungi-carrello]");
+    var bottone = barra ? $("[data-barra-aggiungi]", barra) : null;
+    if (!barra || !modulo || !bottone) { return; }
+
+    bottone.addEventListener("click", function () {
+      if (typeof modulo.requestSubmit === "function") { modulo.requestSubmit(); }
+      else { modulo.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true })); }
+    });
+
+    /* La barra compare solo quando il pulsante vero e' uscito dallo schermo:
+       tenerla sempre visibile coprirebbe il contenuto anche quando non
+       serve, e sovrapporrebbe due pulsanti identici a mezzo centimetro di
+       distanza. */
+    var vero = $(".prodotto__aggiungi", modulo);
+    if (!vero || !("IntersectionObserver" in window)) { return; }
+
+    new IntersectionObserver(function (voci) {
+      voci.forEach(function (v) { barra.hidden = v.isIntersecting; });
+    }, { rootMargin: "0px 0px -20% 0px" }).observe(vero);
+  })();
+
   /* -------------------------------------- aggiunta rapida dalla griglia */
 
   /* Un pezzo unico ha una variante sola: chiedere di aprire la scheda per

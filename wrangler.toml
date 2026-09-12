@@ -150,8 +150,8 @@ EMAIL_NOME_MITTENTE = "EmmeLu"
 VERSIONE_INFORMATIVA = "2026-09-12"
 HASH_SALE = "sale-solo-per-lo-sviluppo-locale"
 # Riallineate da tools/aggiorna-versioni.py insieme a quelle di [vars].
-VERSIONE_CSS = "48b0807ce1"
-VERSIONE_JS = "66f07e579e"
+VERSIONE_CSS = "36fba5c178"
+VERSIONE_JS = "dd2ec7c845"
 
 # ------------------------------------------------------- compiti periodici
 #
@@ -240,5 +240,5 @@ VERSIONE_INFORMATIVA = "2026-09-12"
 # main.js + negozio.js + admin.js. Servono perche' public/_headers dichiara
 # quei file "immutable" per un anno: senza una marca che cambia, una modifica
 # non arriverebbe mai a chi ha gia' visitato il sito.
-VERSIONE_CSS = "48b0807ce1"
-VERSIONE_JS = "66f07e579e"
+VERSIONE_CSS = "36fba5c178"
+VERSIONE_JS = "dd2ec7c845"

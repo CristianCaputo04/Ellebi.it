@@ -177,9 +177,87 @@ function moduloAcquisto(prodotto, stato, config) {
         <p class="prodotto__esito" data-esito role="status" aria-live="polite"></p>
       </form>
 
+      ${rassicurazioni(config)}
+
       <noscript>
         <p class="avviso">Il carrello ha bisogno di JavaScript. Se preferisci non attivarlo, scrivimi su <a class="link-line" href="${esc(instagram)}" target="_blank" rel="noopener noreferrer">Instagram</a> o a <a class="link-line" href="mailto:${esc(email)}">${esc(email)}</a>: ordiniamo insieme, di persona.</p>
       </noscript>`;
+}
+
+/**
+ * Le tre righe sotto il pulsante d'acquisto.
+ *
+ * Stanno esattamente li' perche' li' si decide: il dubbio su spedizione,
+ * reso e pagamento arriva con il dito gia' sul pulsante, e mandarlo a
+ * cercare la risposta in fondo alla pagina — o peggio in un'altra pagina —
+ * e' il momento in cui si perde l'acquisto.
+ *
+ * Ogni riga dice una cosa verificabile e rimanda al documento che la regge.
+ * Nessun bollino inventato, nessun «100% sicuro»: chi compra da un artigiano
+ * riconosce la differenza fra una garanzia e un adesivo.
+ */
+/**
+ * Barra d'acquisto fissa in fondo allo schermo, solo su telefono.
+ *
+ * Quasi tutto il traffico arriva da Instagram, quindi da telefono. Su uno
+ * schermo stretto la scheda e' lunga: prezzo e pulsante escono dalla vista
+ * dopo mezza schermata, e da li' in poi chi legge la descrizione non ha piu'
+ * niente da premere finche' non risale. Questa barra tiene il prezzo e
+ * l'azione sempre a portata di pollice.
+ *
+ * Non duplica il modulo: e' un pulsante che invia QUELLO, cosi' variante,
+ * quantita' e personalizzazione scelte sopra restano quelle. Due moduli
+ * separati si sarebbero disallineati al primo cambio di variante.
+ */
+function barraAcquistoMobile(prodotto, stato, prezzo, config) {
+  // Senza negozio attivo non c'e' niente da comprare; da esaurito il pulsante
+  // sarebbe una promessa che il server rifiuterebbe.
+  if (!config.negozioAttivo || stato.codice === "esaurito") { return ""; }
+
+  return `<div class="barra-acquisto" data-barra-acquisto hidden>
+  <div class="barra-acquisto__dati">
+    <p class="barra-acquisto__nome">${esc(String(prodotto.nome || "Pezzo"))}</p>
+    <p class="barra-acquisto__prezzo numerico">${esc(euro(prezzo))}</p>
+  </div>
+  <button class="btn btn--solid barra-acquisto__bottone" type="button" data-barra-aggiungi>
+    Aggiungi
+  </button>
+</div>`;
+}
+
+function rassicurazioni(config) {
+  const soglia = Number(config.sogliaSpedizioneGratisCent) || 0;
+
+  const voci = [
+    [
+      "Spedizione tracciata in Italia",
+      soglia > 0 ? `Gratuita sopra ${euro(soglia)}.` : "Corriere con codice di spedizione.",
+      "/spedizioni",
+    ],
+    [
+      "14 giorni per ripensarci",
+      "Sui pezzi non personalizzati. Garanzia di due anni su tutto.",
+      "/resi",
+    ],
+    [
+      "Paghi con PayPal o alla consegna",
+      "Con PayPal anche a carta, senza account. I dati della carta non passano da qui.",
+      "/pagamenti",
+    ],
+  ];
+
+  const righe = voci
+    .map(
+      ([titolo, testo, dove]) =>
+        `<li class="rassicura__voce">` +
+        `<a class="rassicura__link" href="${esc(dove)}">` +
+        `<span class="rassicura__titolo">${esc(titolo)}</span>` +
+        `<span class="rassicura__testo">${esc(testo)}</span>` +
+        `</a></li>`
+    )
+    .join("");
+
+  return `<ul class="rassicura" role="list">${righe}</ul>`;
 }
 
 function briciole(prodotto, categoria) {
@@ -343,7 +421,8 @@ export function paginaProdotto(ctx, dati) {
   </section>
 
   ${sezioneCorrelati}
-</main>`;
+</main>
+${barraAcquistoMobile(prodotto, stato, prezzo, config)}`;
 
   const descrizione = String(prodotto.descrizione || prodotto.sottotitolo || "")
     .slice(0, 300) || `${String(prodotto.nome || "")}: pezzo EmmeLù cucito a mano in Italia.`;

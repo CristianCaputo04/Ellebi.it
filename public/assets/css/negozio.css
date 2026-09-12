@@ -1011,3 +1011,91 @@
   .pannello { display: none !important; }
   .card__aggiungi { display: none !important; }
 }
+
+/* ---------- rassicurazioni sotto il pulsante d'acquisto
+
+   Tre righe, non tre bollini: chi compra da un artigiano riconosce la
+   differenza fra una garanzia e un adesivo. Ognuna porta al documento che
+   la regge, così la promessa è verificabile in un clic. */
+
+.rassicura {
+  margin: var(--sp-3) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--c-line-soft);
+}
+
+.rassicura__voce { border-bottom: 1px solid var(--c-line-soft); }
+
+.rassicura__link {
+  display: block;
+  padding: 0.7rem 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.rassicura__link:hover .rassicura__titolo,
+.rassicura__link:focus-visible .rassicura__titolo { text-decoration: underline; text-underline-offset: 0.2em; }
+
+.rassicura__titolo {
+  display: block;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rassicura__testo {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: var(--fs-small);
+  color: var(--c-muted);
+}
+
+/* ---------- barra d'acquisto fissa (solo telefono)
+
+   Quasi tutto il traffico arriva da Instagram, quindi da telefono, e su uno
+   schermo stretto prezzo e pulsante escono dalla vista dopo mezza schermata.
+   La barra li tiene a portata di pollice. Compare solo quando il pulsante
+   vero non si vede più: negozio.js la accende con un IntersectionObserver. */
+
+.barra-acquisto { display: none; }
+
+@media (max-width: 55.99em) {
+  .barra-acquisto {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    padding: 0.7rem var(--sp-3);
+    padding-bottom: calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    background: var(--c-paper);
+    border-top: 1px solid var(--c-line);
+    box-shadow: 0 -6px 24px rgba(35, 19, 12, 0.12);
+  }
+
+  .barra-acquisto[hidden] { display: none; }
+
+  .barra-acquisto__dati { min-width: 0; }
+  .barra-acquisto__nome {
+    margin: 0;
+    font-size: var(--fs-micro);
+    color: var(--c-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .barra-acquisto__prezzo { margin: 0; font-family: var(--f-serif); font-size: 1.1rem; }
+  .barra-acquisto__bottone { flex: 0 0 auto; }
+
+  /* Il pulsante "torna su" starebbe esattamente sopra la barra: si alza. */
+  .to-top { bottom: 5.2rem; }
+}
+
+@media print {
+  .barra-acquisto { display: none !important; }
+}
