@@ -1,0 +1,654 @@
+@charset "utf-8";
+/* =========================================================================
+   EMMELÙ — stile delle pagine generate dal Worker
+   (negozio, scheda prodotto, carrello, pagamento, stato dell'ordine)
+
+   Questo foglio si carica DOPO style.css e ne riusa i token: colori,
+   spaziature, dimensioni di testo, curve di transizione. Nessun token viene
+   ridefinito qui — se un colore serve e non c'è, va aggiunto a style.css,
+   non duplicato con un valore leggermente diverso.
+
+   Le classi già esistenti (.wrap, .section, .card, .btn, .eyebrow, .title,
+   .link-line) non vengono ritoccate: il negozio deve sembrare la stessa
+   mano che ha fatto la home, non un pezzo attaccato dopo.
+   ========================================================================= */
+
+/* ---------- 1. Indicatore del carrello nell'header ---------------------- */
+
+.header__carrello {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: var(--c-espresso);
+  text-decoration: none;
+  transition: background-color var(--dur-2) var(--ease);
+}
+
+.header__carrello:hover,
+.header__carrello:focus-visible { background-color: var(--c-paper-2); }
+
+.header__carrello-icona { width: 1.35rem; height: 1.35rem; }
+
+/* Il numero non deve far muovere nulla quando compare: è posizionato in
+   assoluto sopra l'icona, quindi passare da 0 a 1 articolo non sposta
+   l'header di un pixel. */
+.header__carrello-num {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.05rem;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--c-terracotta-ink);
+  color: var(--c-white);
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1.15rem;
+  text-align: center;
+}
+
+/* ---------- 2. Catalogo ------------------------------------------------- */
+
+.negozio__testa { margin-bottom: var(--sp-4); }
+
+.negozio__avviso,
+.carrello__avviso {
+  margin: var(--sp-3) 0;
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 2px solid var(--c-terracotta);
+  background: var(--c-blush-soft);
+  font-size: var(--fs-small);
+}
+
+.negozio__filtri { margin: var(--sp-4) 0 var(--sp-5); }
+
+.negozio__filtri-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+/* I filtri sono link veri: funzionano senza JavaScript, si possono aprire in
+   una scheda nuova e sono indicizzabili. */
+.negozio__filtro {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+
+.negozio__filtro:hover,
+.negozio__filtro:focus-visible { border-color: var(--c-espresso); }
+
+/* Il filtro attivo non si distingue solo per colore: cambia anche il peso del
+   bordo e il contrasto, così resta riconoscibile in stampa e per chi non
+   percepisce quella differenza cromatica. */
+.negozio__filtro--attivo {
+  background: var(--c-espresso);
+  border-color: var(--c-espresso);
+  color: var(--c-paper);
+}
+
+.negozio__scheda { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.negozio__nome {
+  font-size: var(--fs-h3);
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.negozio__nome a { text-decoration: none; }
+.negozio__nome a:hover,
+.negozio__nome a:focus-visible { text-decoration: underline; text-underline-offset: 0.2em; }
+
+.negozio__prezzo {
+  font-family: var(--f-serif);
+  font-size: 1.25rem;
+}
+
+/* Lo stato della disponibilità porta un segno testuale oltre al colore. */
+.negozio__stato,
+.prodotto__stato {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.negozio__stato--esaurito,
+.prodotto__stato--esaurito { color: var(--c-terracotta-ink); }
+
+.negozio__conteggio { justify-content: space-between; }
+
+.negozio__vuoto,
+.carrello__vuoto {
+  padding: var(--sp-5) 0;
+  text-align: center;
+  color: var(--c-muted);
+}
+
+.carrello__vuoto .btn { margin-top: var(--sp-3); }
+
+/* ---------- 3. Scheda prodotto ------------------------------------------ */
+
+.briciole { margin-bottom: var(--sp-3); font-size: var(--fs-micro); color: var(--c-muted); }
+
+.briciole__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+}
+
+.briciole__lista li + li::before { content: "›"; margin-right: 0.4rem; }
+
+.prodotto__griglia {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+@media (min-width: 56em) {
+  .prodotto__griglia { grid-template-columns: 1.1fr 1fr; align-items: start; }
+  /* La colonna delle informazioni resta visibile mentre si scorrono le foto:
+     il prezzo e il pulsante d'acquisto non devono uscire dallo schermo. */
+  .prodotto__info { position: sticky; top: calc(var(--header-h) + 1.5rem); }
+}
+
+.prodotto__figura {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--c-paper-2);
+}
+
+.prodotto__miniature {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  list-style: none;
+  padding: 0;
+  overflow-x: auto;
+}
+
+.prodotto__miniatura {
+  flex: 0 0 clamp(4rem, 18vw, 5.5rem);
+  border-radius: var(--radius-sm, 6px);
+  overflow: hidden;
+  background: var(--c-paper-2);
+}
+
+.prodotto__nome { font-size: var(--fs-h2); font-weight: 300; line-height: 1.05; }
+
+.prodotto__sottotitolo {
+  margin-top: 0.4rem;
+  color: var(--c-muted);
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: var(--fs-lead);
+}
+
+.prodotto__prezzo {
+  margin-top: var(--sp-2);
+  font-family: var(--f-serif);
+  font-size: clamp(1.8rem, 1.2rem + 2vw, 2.6rem);
+}
+
+.prodotto__iva { font-size: var(--fs-micro); color: var(--c-muted); }
+
+.prodotto__descrizione { margin-top: var(--sp-3); }
+
+.prodotto__dati {
+  margin-top: var(--sp-3);
+  display: grid;
+  gap: 0.4rem;
+  font-size: var(--fs-small);
+}
+
+.prodotto__dato { display: flex; gap: 0.6rem; }
+.prodotto__dato dt { color: var(--c-muted); min-width: 8rem; }
+
+/* ---------- 4. Campi dei moduli (scheda prodotto) ----------------------- */
+
+.campo { margin-top: var(--sp-3); }
+
+.campo__etichetta {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.campo__nota { text-transform: none; letter-spacing: 0; color: var(--c-muted); }
+
+.campo__controllo {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--c-white);
+  font-size: var(--fs-body);
+  font-family: inherit;
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.campo__controllo:focus-visible { border-color: var(--c-espresso); }
+
+.campo--quantita .campo__controllo { max-width: 7rem; }
+
+.campo__aiuto { margin-top: 0.3rem; font-size: var(--fs-micro); color: var(--c-muted); }
+
+.avviso {
+  margin-top: var(--sp-2);
+  padding: var(--sp-2);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--c-blush-soft);
+  font-size: var(--fs-small);
+}
+
+/* L'avvertenza sul recesso è un obbligo di legge, non una nota di stile:
+   deve essere impossibile non vederla prima di comprare un pezzo su misura. */
+.avviso--recesso { border-left: 3px solid var(--c-terracotta-ink); }
+
+.prodotto__aggiungi { width: 100%; margin-top: var(--sp-3); }
+
+.prodotto__esito { margin-top: var(--sp-2); font-size: var(--fs-small); min-height: 1.5em; }
+.prodotto__esito--errore { color: var(--c-terracotta-ink); }
+
+.prodotto__esaurito,
+.prodotto__vetrina {
+  margin-top: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.prodotto__vetrina-nota { margin-top: 0.5rem; font-size: var(--fs-small); color: var(--c-muted); }
+
+.prodotto__legale { margin-top: var(--sp-3); font-size: var(--fs-micro); color: var(--c-muted); }
+
+.prodotto__correlati { margin-top: var(--sp-6); }
+.prodotto__sottotitolo-sezione { font-size: var(--fs-h3); font-weight: 300; margin-bottom: var(--sp-3); }
+
+.card__cta { margin-top: 0.2rem; }
+
+/* ---------- 5. Carrello ------------------------------------------------- */
+
+.carrello__attesa { padding: var(--sp-4) 0; color: var(--c-muted); }
+
+.carrello__righe { list-style: none; padding: 0; margin: var(--sp-4) 0 0; }
+
+.carrello__riga {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  grid-template-areas:
+    "foto dati prezzo"
+    "foto quantita togli";
+  gap: 0.5rem 1rem;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--c-line-soft);
+  align-items: start;
+}
+
+.carrello__riga--problema { background: var(--c-blush-soft); }
+
+.carrello__foto { grid-area: foto; border-radius: var(--radius-sm, 6px); overflow: hidden; }
+.carrello__dati { grid-area: dati; min-width: 0; }
+.carrello__quantita { grid-area: quantita; display: flex; align-items: center; gap: 0.25rem; }
+.carrello__prezzo { grid-area: prezzo; font-family: var(--f-serif); font-size: 1.15rem; white-space: nowrap; }
+.carrello__togli { grid-area: togli; justify-self: end; font-size: var(--fs-micro); text-decoration: underline; color: var(--c-muted); }
+
+.carrello__nome { font-size: var(--fs-body); font-weight: 400; }
+.carrello__nome a { text-decoration: none; }
+
+.carrello__variante,
+.carrello__personalizzazione { font-size: var(--fs-small); color: var(--c-muted); }
+
+/* La personalizzazione la scrive il cliente e può essere lunga: va spezzata,
+   altrimenti una parola senza spazi allarga la riga e apre uno scorrimento
+   orizzontale su tutta la pagina. */
+.carrello__personalizzazione { overflow-wrap: anywhere; }
+
+.carrello__avvertenza,
+.ordine__riga-avvertenza { font-size: var(--fs-micro); color: var(--c-terracotta-ink); }
+
+.carrello__esaurito { font-size: var(--fs-small); color: var(--c-terracotta-ink); font-weight: 500; }
+
+/* Tocchi da 44 px: il minimo perché un dito li prenda al primo colpo. */
+.carrello__passo {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--c-line);
+  border-radius: 50%;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.carrello__campo {
+  width: 3.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm, 6px);
+  text-align: center;
+  font-size: var(--fs-body);
+}
+
+.carrello__riepilogo {
+  margin-top: var(--sp-4);
+  padding: var(--sp-4);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-paper-2);
+}
+
+.carrello__conti,
+.ordine__conti { margin: 0; }
+
+.carrello__conti > div,
+.ordine__conti > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: 0.35rem 0;
+}
+
+.carrello__conti dt,
+.carrello__conti dd,
+.ordine__conti dt,
+.ordine__conti dd { margin: 0; }
+
+.carrello__conti-totale,
+.ordine__conti-totale {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem !important;
+  border-top: 1px solid var(--c-espresso);
+  font-size: var(--fs-lead);
+}
+
+.carrello__iva,
+.ordine__iva { margin-top: 0.35rem; font-size: var(--fs-micro); color: var(--c-muted); }
+
+.carrello__soglia {
+  margin-top: var(--sp-2);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm, 6px);
+  background: var(--c-blush-soft);
+  font-size: var(--fs-small);
+}
+
+.carrello__vai { width: 100%; margin-top: var(--sp-3); }
+.carrello__nota { margin-top: 0.6rem; font-size: var(--fs-micro); color: var(--c-muted); text-align: center; }
+.carrello__continua { display: block; margin-top: var(--sp-2); text-align: center; }
+
+/* Un pulsante disattivato deve *sembrare* disattivato, altrimenti si clicca
+   e non succede niente — e l'utente pensa che il sito sia rotto. */
+.btn--spento {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ---------- 6. Pagamento ------------------------------------------------ */
+
+.checkout__colonne { display: grid; gap: clamp(1.5rem, 4vw, 3rem); margin-top: var(--sp-4); }
+
+@media (min-width: 60em) {
+  .checkout__colonne { grid-template-columns: 1.4fr 1fr; align-items: start; }
+  .checkout__riepilogo { position: sticky; top: calc(var(--header-h) + 1.5rem); }
+}
+
+.modulo__gruppo { border: 0; padding: 0; margin: 0 0 var(--sp-5); }
+
+.modulo__legenda {
+  padding: 0;
+  margin-bottom: var(--sp-2);
+  font-size: var(--fs-h3);
+  font-weight: 300;
+}
+
+.modulo__griglia {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: var(--sp-2) var(--sp-3);
+}
+
+.modulo__campo { display: flex; flex-direction: column; }
+.modulo__campo--corto { max-width: 12rem; }
+
+/* Un campo su due colonne su schermi larghi resta pieno sul telefono: la
+   griglia ci pensa da sola, qui si dichiara solo l'intento. */
+.modulo__campo--meta { grid-column: span 1; }
+
+.modulo__etichetta {
+  margin-bottom: 0.3rem;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.modulo__facoltativo { text-transform: none; letter-spacing: 0; color: var(--c-muted); }
+
+.modulo__input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--c-white);
+  font: inherit;
+  font-size: var(--fs-body);
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.modulo__input:focus-visible { border-color: var(--c-espresso); }
+
+/* Il campo sbagliato si riconosce dal bordo E dal messaggio sotto: il colore
+   da solo non basta a chi non lo distingue. */
+.modulo__input[aria-invalid="true"] { border-color: var(--c-terracotta-ink); border-width: 2px; }
+
+.modulo__aiuto { margin-bottom: 0.3rem; font-size: var(--fs-micro); color: var(--c-muted); }
+
+.modulo__errore {
+  margin-top: 0.3rem;
+  font-size: var(--fs-small);
+  color: var(--c-terracotta-ink);
+}
+
+.modulo__spunta { display: flex; gap: 0.7rem; align-items: start; font-size: var(--fs-small); }
+.modulo__spunta input { margin-top: 0.25rem; width: 1.15rem; height: 1.15rem; flex: none; }
+
+.pagamento {
+  display: flex;
+  gap: 0.8rem;
+  align-items: start;
+  padding: var(--sp-3);
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  transition: border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+
+.pagamento:hover { border-color: var(--c-espresso); }
+.pagamento:has(input:checked) { border-color: var(--c-espresso); background: var(--c-blush-soft); }
+.pagamento:has(input:focus-visible) { outline: 2px solid var(--c-focus); outline-offset: 2px; }
+
+.pagamento input { margin-top: 0.2rem; width: 1.15rem; height: 1.15rem; flex: none; }
+.pagamento__corpo { display: flex; flex-direction: column; gap: 0.2rem; }
+.pagamento__nome { font-size: var(--fs-body); }
+.pagamento__nota { font-size: var(--fs-small); color: var(--c-muted); }
+
+.pagamento--spento { opacity: 0.5; cursor: not-allowed; }
+
+.pagamento__blocco {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm, 6px);
+  background: var(--c-blush-soft);
+  font-size: var(--fs-small);
+}
+
+.checkout__recesso {
+  margin-top: var(--sp-3);
+  padding: var(--sp-2);
+  border-left: 3px solid var(--c-terracotta-ink);
+  background: var(--c-blush-soft);
+  font-size: var(--fs-small);
+}
+
+.checkout__riepilogo {
+  padding: var(--sp-4);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+  background: var(--c-paper-2);
+}
+
+.checkout__riepilogo-titolo { font-size: var(--fs-h3); font-weight: 300; margin-bottom: var(--sp-2); }
+
+.checkout__righe { list-style: none; padding: 0; margin: 0 0 var(--sp-3); font-size: var(--fs-small); }
+
+.checkout__righe li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+.checkout__righe small {
+  flex-basis: 100%;
+  color: var(--c-muted);
+  overflow-wrap: anywhere;
+}
+
+.checkout__conto { display: flex; justify-content: space-between; gap: var(--sp-2); padding: 0.3rem 0; }
+
+.checkout__conto--totale {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--c-espresso);
+  font-size: var(--fs-lead);
+}
+
+.checkout__iva { margin-top: 0.3rem; font-size: var(--fs-micro); color: var(--c-muted); }
+
+.checkout__errore {
+  margin: var(--sp-2) 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 3px solid var(--c-terracotta-ink);
+  background: var(--c-white);
+  font-size: var(--fs-small);
+  color: var(--c-terracotta-ink);
+}
+
+.checkout__invia { width: 100%; margin-top: var(--sp-2); }
+.checkout__sicurezza { margin-top: var(--sp-2); font-size: var(--fs-micro); color: var(--c-muted); }
+
+#paypal-bottoni { margin-top: var(--sp-2); }
+
+/* ---------- 7. Stato dell'ordine ---------------------------------------- */
+
+.ordine__messaggio {
+  margin: var(--sp-3) 0;
+  padding: var(--sp-3);
+  border-left: 3px solid var(--c-terracotta);
+  background: var(--c-blush-soft);
+}
+
+.ordine__passi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  list-style: none;
+  padding: 0;
+  margin: var(--sp-4) 0;
+}
+
+.ordine__passo { display: flex; align-items: center; gap: 0.5rem; color: var(--c-muted); }
+.ordine__passo--fatto { color: var(--c-espresso); }
+.ordine__passo[aria-current="step"] { font-weight: 500; }
+.ordine__passo-segno { font-size: 0.8rem; }
+.ordine__passo-nome { font-size: var(--fs-small); }
+
+.ordine__sottotitolo { margin-top: var(--sp-5); font-size: var(--fs-h3); font-weight: 300; }
+
+.ordine__righe { list-style: none; padding: 0; margin-top: var(--sp-2); }
+
+.ordine__riga {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.5rem var(--sp-2);
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--c-line-soft);
+  align-items: start;
+}
+
+.ordine__riga-nota { font-size: var(--fs-small); color: var(--c-muted); overflow-wrap: anywhere; }
+.ordine__riga-prezzo { font-family: var(--f-serif); white-space: nowrap; }
+.ordine__riga-quantita { color: var(--c-muted); }
+
+.ordine__conti { margin-top: var(--sp-3); }
+
+.ordine__indirizzo { font-style: normal; margin-top: var(--sp-2); line-height: 1.7; }
+.ordine__note { margin-top: var(--sp-2); font-size: var(--fs-small); color: var(--c-muted); }
+
+.ordine__tracciatura {
+  margin-top: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm, 6px);
+}
+
+.ordine__storia { margin-top: var(--sp-2); padding-left: 1.2rem; font-size: var(--fs-small); color: var(--c-muted); }
+.ordine__storia li { padding: 0.2rem 0; }
+
+.ordine__aiuto { margin-top: var(--sp-5); font-size: var(--fs-small); }
+
+/* ---------- 8. Dati fiscali nel piè di pagina --------------------------- */
+
+.footer__fiscali {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-micro);
+  color: var(--c-muted);
+  line-height: 1.7;
+}
+
+/* ---------- 9. Preferenze dell'utente ----------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .header__carrello,
+  .negozio__filtro,
+  .modulo__input,
+  .campo__controllo,
+  .pagamento { transition-duration: 0.001ms !important; }
+}
+
+@media (prefers-contrast: more) {
+  .modulo__input,
+  .campo__controllo,
+  .pagamento,
+  .negozio__filtro { border-width: 2px; }
+  .carrello__esaurito,
+  .modulo__errore { text-decoration: underline; }
+}
+
+@media print {
+  .header__carrello,
+  .negozio__filtri,
+  .carrello__quantita,
+  .carrello__togli,
+  .carrello__vai,
+  #paypal-bottoni { display: none !important; }
+}

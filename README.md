@@ -1,31 +1,80 @@
-# EMMELÙ — sito di vendita delle capsule cucite a mano
+# EMMELÙ — negozio delle capsule cucite a mano
 
-Landing page statica di **EmmeLù**: capsule limited edition cucite a mano in
-Italia, su nove linee (borse, piccola pelletteria, abbigliamento, accessori,
-gioielli, lingerie, beachwear, linea home, linea baby).
+E-commerce di **EmmeLù**: capsule limited edition cucite a mano in Italia, su
+nove linee (borse, piccola pelletteria, abbigliamento, accessori, gioielli,
+lingerie, beachwear, linea home, linea baby).
 
-**Non c'è un carrello, ma la pagina è costruita per vendere**: niente prezzi e
-nessun modulo d'ordine, e ogni chiamata all'azione porta a ordinare in direct
-su Instagram [@emmeluofficial](https://www.instagram.com/emmeluofficial/).
-L'e-mail resta come canale secondario.
-
-> **Il dominio resta `ellebi.it`.** Il rebrand ha toccato nome, copy e link
-> social; indirizzo del sito, canonical, sitemap e casella di posta sono
-> rimasti quelli di prima. Se in futuro si registra un dominio EmmeLù, vanno
-> cambiati insieme: meta canonical e hreflang di ogni pagina, `sitemap.xml`,
-> `robots.txt`, `.well-known/security.txt`, i dati strutturati della home e
-> il campo `name` in `wrangler.toml`.
+> ## ⚠️ IL NEGOZIO È SPENTO, ED È VOLUTO
 >
-> **Il logo è ancora quello vecchio.** `favicon.svg`, `logo-ellebi.svg`,
-> `logo-badge.svg`, `icon-*.png`, `apple-touch-icon.png` e `og-cover.jpg`
-> contengono ancora il monogramma LB: vanno sostituiti quando arriva il file
-> del nuovo logo. Il marchio-ciliegie inline nelle pagine (`#emmelu-mark`) è
-> invece già valido, perché le ciliegie restano anche nel logo EmmeLù.
+> `NEGOZIO_ATTIVO = "0"` in `wrangler.toml`. Catalogo e prezzi si vedono, ma
+> carrello e pagamento sono disattivati e chi vuole comprare viene mandato su
+> Instagram — esattamente come prima.
+>
+> **Il motivo non è tecnico: la partita IVA non è ancora aperta, e incassare
+> online senza è un illecito.** Il codice ha anche una protezione propria: se
+> qualcuno mettesse `"1"` per sbaglio, il negozio resterebbe chiuso finché
+> `RAGIONE_SOCIALE` e `PIVA` sono vuote, e lo scriverebbe nei log.
+>
+> Tutto quello che serve per accenderlo — burocrazia compresa, in ordine di
+> esecuzione — è in **[`docs/CHECKLIST-APERTURA-NEGOZIO.md`](docs/CHECKLIST-APERTURA-NEGOZIO.md)**.
 
-Nessun framework, nessuna dipendenza da installare: HTML, CSS e JavaScript scritti
-a mano. Si pubblica su Cloudflare Workers a ogni commit.
+## Com'è fatto
 
----
+Due metà che convivono nello stesso Worker:
+
+| | Chi lo serve | Perché |
+|---|---|---|
+| Home, pagine legali, 404, immagini, CSS, font | **File statici** in `public/` | Non dipendono dal database, escono dalla cache dei bordi, non costano un'invocazione |
+| `/negozio`, `/prodotto/…`, `/carrello`, `/checkout`, `/ordine/…`, `/admin`, `/api/…` | **Generati** da `src/index.js` leggendo D1 | Devono dire il vero su prezzo e disponibilità nel momento in cui qualcuno guarda |
+
+Pagamenti: **PayPal** e **contrassegno**. Niente Stripe. Spedizione **solo in
+Italia**, IVA 22% inclusa nei prezzi esposti.
+
+Nessuna dipendenza a runtime: JavaScript nativo, niente framework, niente
+librerie. L'unico script di terze parti è l'SDK di PayPal, e si carica
+**soltanto sulla pagina di pagamento**.
+
+## Documentazione
+
+| File | A cosa serve |
+|---|---|
+| [`docs/CHECKLIST-APERTURA-NEGOZIO.md`](docs/CHECKLIST-APERTURA-NEGOZIO.md) | **Parti da qui.** Tutto ciò che serve prima di accendere, scritto per chi non programma |
+| [`docs/CONTRATTO-TECNICO.md`](docs/CONTRATTO-TECNICO.md) | Come è fatto il negozio e perché. Da leggere prima di toccare il codice |
+| [`docs/REGISTRO-TRATTAMENTI.md`](docs/REGISTRO-TRATTAMENTI.md) | Registro dell'art. 30 GDPR, già compilato |
+| [`docs/PROCEDURA-DIRITTI-INTERESSATI.md`](docs/PROCEDURA-DIRITTI-INTERESSATI.md) | Cosa fare quando un cliente chiede i suoi dati o la cancellazione |
+| [`docs/PROCEDURA-VIOLAZIONI.md`](docs/PROCEDURA-VIOLAZIONI.md) | Data breach: le 72 ore, cosa notificare e a chi |
+| [`docs/CONSERVAZIONE-DATI.md`](docs/CONSERVAZIONE-DATI.md) | Per quanto si tiene ogni dato e quale riga di codice lo cancella |
+
+## Comandi
+
+```bash
+# Provare in locale (negozio acceso, dati finti)
+npx wrangler@4 d1 execute emmelu --local --file=migrazioni/0001-schema.sql
+npx wrangler@4 d1 execute emmelu --local --file=migrazioni/0002-dati-iniziali.sql
+npx wrangler@4 dev --local --var NEGOZIO_ATTIVO:1 --var RAGIONE_SOCIALE:"Prova" --var PIVA:"IT00000000000"
+
+# Password del pannello (mai in chiaro fra i segreti)
+node tools/genera-password-admin.mjs 'una-password-lunga'
+npx wrangler@4 secret put ADMIN_PASSWORD_HASH
+
+# Prima di ogni pubblicazione: la CI li esegue e blocca il deploy se falliscono
+python3 tools/aggiorna-versioni.py
+python3 tools/aggiorna-sitemap.py
+python3 tools/aggiorna-csp-hash.py
+```
+
+## Due cose da sapere, che non sono ovvie
+
+**`run_worker_first` in `wrangler.toml` non si tocca.** Il livello Static
+Assets di Cloudflare intercetta le richieste di *navigazione* prima dello
+script: senza quell'elenco, `/negozio` e `/checkout` rispondono 200 a `curl` e
+**404 a un browser vero**. Il negozio sarebbe irraggiungibile per i clienti e
+funzionante in ogni prova da riga di comando.
+
+**I prezzi in `migrazioni/0002-dati-iniziali.sql` sono stime inventate.** Vanno
+confermati uno per uno prima di aprire, insieme ai pesi dei pezzi imballati,
+che determinano la tariffa di spedizione.
+
 
 ## 1. Struttura del progetto
 

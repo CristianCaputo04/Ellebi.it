@@ -28,8 +28,16 @@ import sys
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUB = os.path.join(BASE, "public")
 
-# I file versionati e il modo in cui compaiono nelle pagine.
+# I file versionati e il modo in cui compaiono nelle pagine statiche.
 VERSIONATI = ["assets/css/style.css", "assets/js/main.js"]
+
+# I file usati SOLO dalle pagine generate dal Worker (negozio, carrello,
+# pagamento, pannello). Non compaiono in nessun file HTML statico: la loro
+# marca la costruisce src/pagine/layout.js leggendola dalla configurazione.
+# Senza questo blocco resterebbero in cache un anno anche dopo una modifica,
+# perche' public/_headers dichiara "immutable" tutto /assets/css e /assets/js.
+GENERATI_CSS = ["assets/css/style.css", "assets/css/negozio.css", "assets/css/admin.css"]
+GENERATI_JS = ["assets/js/main.js", "assets/js/negozio.js", "assets/js/admin.js"]
 
 CHECK = "--check" in sys.argv
 
@@ -65,8 +73,20 @@ def main():
         if nuovo != testo and not CHECK:
             open(pagina, "w", encoding="utf-8").write(nuovo)
 
+    # Le pagine generate dal Worker non hanno un ?v= scritto nell'HTML: la
+    # loro marca vive in wrangler.toml e va riallineata qui, altrimenti un
+    # negozio.css modificato resterebbe in cache un anno.
+    wrangler_cambiato = aggiorna_wrangler()
+
     if not da_sistemare:
-        print("Marche di versione già allineate (%s)." % ", ".join(sorted(attese.values())))
+        if not wrangler_cambiato:
+            print("Marche di versione già allineate (%s)." % ", ".join(sorted(attese.values())))
+            return
+        if CHECK:
+            print("\nwrangler.toml non allineato. Esegui:\n"
+                  "  python3 tools/aggiorna-versioni.py")
+            sys.exit(1)
+        print("\nwrangler.toml aggiornato.")
         return
 
     for riga in da_sistemare:
@@ -79,6 +99,52 @@ def main():
         )
         sys.exit(1)
     print("\n%d marca/e aggiornata/e." % len(da_sistemare))
+
+
+
+def marca_insieme(percorsi):
+    """Marca unica di un gruppo di file: cambia se cambia uno qualsiasi.
+
+    Serve per le pagine generate, dove un'unica variabile deve invalidare
+    tutti i fogli o tutti gli script insieme. Piu' grossolano di una marca per
+    file, ma qui l'alternativa sarebbe passare al layout sei variabili diverse
+    per risparmiare un download ogni tanto.
+    """
+    somma = hashlib.sha256()
+    for rel in percorsi:
+        pieno = os.path.join(PUB, rel)
+        if not os.path.exists(pieno):
+            sys.exit("Manca " + rel)
+        with open(pieno, "rb") as f:
+            somma.update(f.read())
+    return somma.hexdigest()[:10]
+
+
+def aggiorna_wrangler():
+    """Riallinea VERSIONE_CSS e VERSIONE_JS in wrangler.toml.
+
+    Restituisce True se qualcosa andava cambiato.
+    """
+    percorso = os.path.join(BASE, "wrangler.toml")
+    testo = open(percorso, encoding="utf-8").read()
+    atteso = {"VERSIONE_CSS": marca_insieme(GENERATI_CSS),
+              "VERSIONE_JS": marca_insieme(GENERATI_JS)}
+
+    cambiato = False
+    for chiave, valore in atteso.items():
+        rx = re.compile(r'^(' + chiave + r' = ")([0-9a-f]*)(")', re.M)
+        trovato = rx.search(testo)
+        if not trovato:
+            sys.exit("Manca %s in wrangler.toml" % chiave)
+        if trovato.group(2) != valore:
+            cambiato = True
+            print("%-14s %s: %s -> %s" % ("wrangler.toml", chiave, trovato.group(2) or "(vuoto)", valore))
+            if not CHECK:
+                testo = rx.sub(lambda m: m.group(1) + valore + m.group(3), testo)
+
+    if cambiato and not CHECK:
+        open(percorso, "w", encoding="utf-8").write(testo)
+    return cambiato
 
 
 if __name__ == "__main__":

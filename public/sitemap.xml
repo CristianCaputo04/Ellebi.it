@@ -4,7 +4,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ellebi.it/</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-09-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -35,7 +35,7 @@
   </url>
   <url>
     <loc>https://ellebi.it/accessibilita</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-09-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
@@ -46,7 +46,7 @@
   </url>
   <url>
     <loc>https://ellebi.it/cookie</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-09-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
@@ -57,7 +57,18 @@
   </url>
   <url>
     <loc>https://ellebi.it/privacy</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-09-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
+      <image:title>La lavorazione a mano EmmeLù</image:title>
+      <image:caption>Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ellebi.it/resi</loc>
+    <lastmod>2026-09-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
@@ -68,7 +79,18 @@
   </url>
   <url>
     <loc>https://ellebi.it/termini</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-09-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <image:image>
+      <image:loc>https://ellebi.it/assets/img/atelier.jpg</image:loc>
+      <image:title>La lavorazione a mano EmmeLù</image:title>
+      <image:caption>Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://ellebi.it/vendita</loc>
+    <lastmod>2026-09-12</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>

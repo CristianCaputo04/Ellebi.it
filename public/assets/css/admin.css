@@ -1,0 +1,580 @@
+@charset "utf-8";
+/* =========================================================================
+   EMMELÙ — Pannello di gestione
+   Foglio autonomo: non dipende da style.css e non ne condivide i font.
+   Il pannello non deve essere bello, deve essere leggibile in piedi, con una
+   mano sola, con la luce sbagliata. Da qui: contrasto alto, testo grande,
+   bersagli da 44 px, niente decorazione che costi un ridisegno.
+   ========================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  color-scheme: light dark;
+
+  /* I colori richiamano la palette del sito (espresso e blush) ma sono
+     ricalibrati per il contrasto: qui si legge, non si ammira. */
+  --c-fondo: #fbf7f4;
+  --c-superficie: #ffffff;
+  --c-superficie-2: #f4ece5;
+  --c-testo: #2a1710;
+  --c-muto: #5f4638;
+  --c-linea: #d9c8bc;
+  --c-linea-forte: #a98b78;
+  --c-primario: #3f2418;
+  --c-primario-testo: #ffffff;
+  --c-pericolo: #8c1f1f;
+  --c-pericolo-fondo: #fdf0ef;
+  --c-buono: #1f5a33;
+  --c-buono-fondo: #eef6f0;
+  --c-attenzione: #7a4c00;
+  --c-attenzione-fondo: #fdf4e3;
+  --c-fuoco: #8a4a2c;
+
+  --sp-1: 0.5rem;
+  --sp-2: 0.875rem;
+  --sp-3: 1.25rem;
+  --sp-4: 2rem;
+
+  --raggio: 6px;
+  --tocco: 2.75rem; /* 44 px */
+
+  --f: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --f-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-fondo: #17110d;
+    --c-superficie: #211913;
+    --c-superficie-2: #2c211a;
+    --c-testo: #f4ebe4;
+    --c-muto: #c3ab9b;
+    --c-linea: #453427;
+    --c-linea-forte: #7a6151;
+    --c-primario: #f0ddd0;
+    --c-primario-testo: #201409;
+    --c-pericolo: #ff9c93;
+    --c-pericolo-fondo: #3a1c19;
+    --c-buono: #93d9ac;
+    --c-buono-fondo: #17301f;
+    --c-attenzione: #efc077;
+    --c-attenzione-fondo: #362615;
+    --c-fuoco: #ffb489;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--c-fondo);
+  color: var(--c-testo);
+  font-family: var(--f);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2, h3, p, dl, dd, figure { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; }
+img { max-width: 100%; height: auto; }
+input, button, select, textarea { font: inherit; color: inherit; }
+code { font-family: var(--f-mono); font-size: 0.9em; }
+
+:focus-visible {
+  outline: 3px solid var(--c-fuoco);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.visuale-nascosta {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.salta {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 20;
+  background: var(--c-primario);
+  color: var(--c-primario-testo);
+  padding: var(--sp-2) var(--sp-3);
+}
+.salta:focus { left: var(--sp-2); top: var(--sp-2); }
+
+/* ---------- barra */
+
+.barra {
+  background: var(--c-superficie);
+  border-bottom: 2px solid var(--c-linea-forte);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.barra__dentro {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: var(--sp-1) var(--sp-2);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-1) var(--sp-2);
+}
+
+.barra__logo {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-right: auto;
+}
+.barra__logo a { text-decoration: none; }
+
+.barra__nav { display: flex; gap: var(--sp-1); flex-wrap: wrap; }
+
+.barra__voce,
+.barra__esci .bottone {
+  min-height: var(--tocco);
+  display: inline-flex;
+  align-items: center;
+}
+
+.barra__voce {
+  padding: 0 var(--sp-2);
+  border-radius: var(--raggio);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.barra__voce--attiva {
+  border-color: var(--c-linea-forte);
+  background: var(--c-superficie-2);
+  font-weight: 600;
+}
+.barra__esci { margin: 0; }
+
+/* ---------- impaginato */
+
+.contenuto {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding-block: var(--sp-3) var(--sp-4);
+  padding-inline: var(--sp-2);
+}
+
+.titolo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
+  overflow-wrap: anywhere;
+}
+
+.torna { margin-bottom: var(--sp-2); }
+
+.scheda {
+  background: var(--c-superficie);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--raggio);
+  padding: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.scheda__titolo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+}
+
+.scheda__spiega { color: var(--c-muto); margin-bottom: var(--sp-2); }
+
+.scheda--pericolo {
+  border: 2px solid var(--c-pericolo);
+  background: var(--c-pericolo-fondo);
+}
+.scheda--pericolo .scheda__titolo { color: var(--c-pericolo); }
+
+.vuoto { color: var(--c-muto); padding: var(--sp-2) 0; }
+.sbiadito { color: var(--c-muto); }
+.numerico { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- avvisi */
+
+.avviso {
+  border: 1px solid var(--c-linea-forte);
+  border-left-width: 6px;
+  border-radius: var(--raggio);
+  padding: var(--sp-2) var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+.avviso--vetrina { background: var(--c-attenzione-fondo); border-color: var(--c-attenzione); }
+.avviso--grave { background: var(--c-pericolo-fondo); border-color: var(--c-pericolo); }
+.avviso--buono { background: var(--c-buono-fondo); border-color: var(--c-buono); }
+
+/* ---------- moduli */
+
+.campo { margin-bottom: var(--sp-2); }
+
+.campo__etichetta {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--c-muto);
+  margin-bottom: 0.25rem;
+}
+
+.campo__valore {
+  width: 100%;
+  min-height: var(--tocco);
+  padding: 0.5rem var(--sp-2);
+  background: var(--c-fondo);
+  color: var(--c-testo);
+  border: 2px solid var(--c-linea-forte);
+  border-radius: var(--raggio);
+}
+.campo__valore--numero { max-width: 8rem; }
+
+.campo--casella {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-height: var(--tocco);
+}
+.campo--casella input {
+  width: 1.4rem;
+  height: 1.4rem;
+  accent-color: var(--c-pericolo);
+  flex: none;
+}
+.campo--casella label { font-weight: 600; }
+
+.azioni { margin-top: var(--sp-3); display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.azioni--salvataggio { margin-top: var(--sp-4); }
+
+.bottone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tocco);
+  min-width: var(--tocco);
+  padding: 0 var(--sp-3);
+  border: 2px solid var(--c-primario);
+  border-radius: var(--raggio);
+  background: var(--c-superficie);
+  color: var(--c-testo);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.bottone--primario { background: var(--c-primario); color: var(--c-primario-testo); }
+.bottone--muto { border-color: var(--c-linea-forte); }
+.bottone--pericolo { background: var(--c-pericolo); border-color: var(--c-pericolo); color: #fff; }
+.bottone--spento { opacity: 0.45; border-style: dashed; cursor: default; }
+
+@media (prefers-color-scheme: dark) {
+  .bottone--pericolo { color: #2a0d0b; }
+}
+
+/* ---------- accesso */
+
+.accesso { max-width: 24rem; margin: 0 auto; }
+.accesso__modulo { margin-bottom: var(--sp-2); }
+.nota { color: var(--c-muto); font-size: 0.9rem; }
+
+/* ---------- filtri */
+
+.filtri { margin-bottom: var(--sp-3); }
+.filtri__lista { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+
+.filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: var(--tocco);
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--c-linea-forte);
+  border-radius: 999px;
+  background: var(--c-superficie);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+.filtro--attivo {
+  background: var(--c-primario);
+  color: var(--c-primario-testo);
+  border-color: var(--c-primario);
+  font-weight: 600;
+}
+.filtro__conteggio {
+  font-variant-numeric: tabular-nums;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0 0.4rem;
+  font-size: 0.85em;
+}
+
+/* ---------- stati: si distinguono per segno ed etichetta, non per colore */
+
+.stato {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid var(--c-linea-forte);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: var(--c-superficie-2);
+}
+.stato__segno { font-size: 1em; line-height: 1; }
+
+.stato--in_attesa_pagamento { border-color: var(--c-attenzione); background: var(--c-attenzione-fondo); }
+.stato--pagato,
+.stato--confermato { border-color: var(--c-buono); background: var(--c-buono-fondo); }
+.stato--in_lavorazione { border-style: dashed; }
+.stato--spedito { border-style: double; border-width: 4px; }
+.stato--consegnato { border-color: var(--c-buono); background: var(--c-buono-fondo); }
+.stato--annullato,
+.stato--rimborsato {
+  border-color: var(--c-pericolo);
+  background: var(--c-pericolo-fondo);
+  text-decoration: line-through;
+}
+
+/* ---------- elenco ordini: schede su telefono, tabella da 48em in su */
+
+.tabella-cornice { overflow-x: auto; }
+.tabella { width: 100%; border-collapse: collapse; }
+.tabella caption { text-align: left; }
+
+.tabella thead { display: none; }
+
+.tabella__riga {
+  display: block;
+  background: var(--c-superficie);
+  border: 1px solid var(--c-linea);
+  border-radius: var(--raggio);
+  padding: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+.tabella__riga td {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: 0.2rem 0;
+  text-align: right;
+}
+
+/* L'etichetta della colonna, che nella tabella sta nell'intestazione, su
+   scheda torna davanti al valore: senza, "12/09/2026" e "90,00 €" sono due
+   numeri senza nome. */
+.tabella__riga td::before {
+  content: attr(data-etichetta);
+  font-weight: 600;
+  color: var(--c-muto);
+  text-align: left;
+}
+
+.tabella__azione { margin-top: var(--sp-1); }
+.tabella__azione .bottone { width: 100%; }
+
+.collegamento-forte { font-weight: 600; }
+
+@media (min-width: 48em) {
+  .tabella thead { display: table-header-group; }
+  .tabella__riga {
+    display: table-row;
+    border: 0;
+    border-bottom: 1px solid var(--c-linea);
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    background: none;
+  }
+  .tabella th {
+    text-align: left;
+    padding: var(--sp-1) var(--sp-2);
+    border-bottom: 2px solid var(--c-linea-forte);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c-muto);
+  }
+  .tabella__riga td {
+    display: table-cell;
+    text-align: left;
+    padding: var(--sp-2);
+    vertical-align: middle;
+  }
+  .tabella__riga td::before { content: none; }
+  .tabella__azione .bottone { width: auto; }
+}
+
+/* ---------- impaginazione */
+
+.impaginazione {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin: var(--sp-3) 0;
+}
+.impaginazione__posizione { color: var(--c-muto); }
+
+/* ---------- dettaglio ordine */
+
+.testa-ordine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+.testa-ordine__dati { color: var(--c-muto); font-size: 0.95rem; }
+
+.righe > li + li { border-top: 1px solid var(--c-linea); margin-top: var(--sp-2); padding-top: var(--sp-2); }
+.riga__testa { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-1); }
+.riga__nome { font-weight: 600; }
+.riga__conti { color: var(--c-muto); }
+
+/* La personalizzazione è l'istruzione di lavorazione: se si legge male, il
+   pezzo esce sbagliato. Quindi riquadro proprio, testo grande, a capo
+   rispettati come li ha scritti il cliente. */
+.personalizzazione {
+  margin-top: var(--sp-2);
+  border: 2px solid var(--c-attenzione);
+  background: var(--c-attenzione-fondo);
+  border-radius: var(--raggio);
+  padding: var(--sp-2);
+}
+.personalizzazione__titolo {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-attenzione);
+}
+.personalizzazione__testo {
+  font-size: 1.15rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.personalizzazione--vuota { font-size: 0.95rem; }
+
+.totali__voce,
+.dati__voce {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--c-linea);
+}
+.totali__voce dd, .dati__voce dd { text-align: right; overflow-wrap: anywhere; }
+.totali__voce--forte { font-weight: 700; font-size: 1.1rem; border-bottom-width: 2px; }
+.totali__voce--iva { color: var(--c-muto); border-bottom: 0; }
+
+.indirizzo {
+  font-family: var(--f-mono);
+  font-size: 1.05rem;
+  background: var(--c-superficie-2);
+  border: 1px solid var(--c-linea-forte);
+  border-radius: var(--raggio);
+  padding: var(--sp-2);
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.note-cliente {
+  margin-top: var(--sp-2);
+  border-left: 4px solid var(--c-linea-forte);
+  padding-left: var(--sp-2);
+}
+.note-cliente__titolo { font-weight: 600; color: var(--c-muto); }
+.note-cliente p { overflow-wrap: anywhere; }
+
+.eventi > li { padding: var(--sp-2) 0; border-bottom: 1px solid var(--c-linea); }
+.eventi > li:last-child { border-bottom: 0; }
+.evento__quando { font-size: 0.9rem; color: var(--c-muto); }
+.evento__stato { margin: 0.3rem 0; }
+.evento__nota { overflow-wrap: anywhere; }
+
+/* ---------- magazzino */
+
+.varianti > li { padding: var(--sp-2) 0; border-bottom: 1px solid var(--c-linea); }
+.varianti > li:last-child { border-bottom: 0; }
+
+.variante__testa { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-1); }
+.variante__nome { font-weight: 600; }
+.variante--esaurita { background: var(--c-attenzione-fondo); }
+
+.etichetta {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 0 0.35rem;
+  vertical-align: middle;
+}
+.etichetta--bozza { color: var(--c-attenzione); }
+.etichetta--attivo { color: var(--c-buono); }
+.etichetta--archiviato { color: var(--c-muto); }
+.etichetta--esaurita { color: var(--c-pericolo); }
+
+/* Il campo toccato ma non ancora salvato: lo marca admin.js. Il bordo doppio
+   serve a chi il colore non lo vede. */
+.campo__valore--modificato {
+  border-color: var(--c-attenzione);
+  border-style: double;
+  border-width: 4px;
+  background: var(--c-attenzione-fondo);
+}
+
+@media (min-width: 48em) {
+  .varianti > li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+  }
+  .varianti .campo { margin-bottom: 0; }
+}
+
+/* ---------- esportazione */
+
+@media (min-width: 40em) {
+  .esportazione__modulo {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+  }
+  .esportazione__modulo .campo { margin-bottom: 0; }
+  .esportazione__modulo .azioni { margin-top: 0; }
+}
+
+/* ---------- movimento */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- stampa: capita di stampare un ordine da mettere nel pacco */
+
+@media print {
+  .barra, .filtri, .impaginazione, .azioni, .esportazione,
+  .scheda--pericolo, .salta { display: none !important; }
+  body { background: #fff; color: #000; }
+  .scheda { border: 1px solid #000; break-inside: avoid; }
+}

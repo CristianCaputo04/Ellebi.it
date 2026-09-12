@@ -1,22 +1,73 @@
-# Configurazione Cloudflare Workers — sito EMMELÙ.
+# Configurazione Cloudflare Workers — negozio EMMELÙ.
 #
 # Il nome del Worker ("ellebi-it") e il dominio restano quelli di prima: il
 # rebrand ha cambiato marchio e testi, non l'indirizzo del sito. Rinominare
 # il Worker creerebbe un'applicazione nuova e staccherebbe i domini già
 # collegati, quindi non va fatto insieme al rebrand.
 #
-# Il sito non ha codice lato server: Cloudflare pubblica direttamente i file
-# della cartella "public" (funzione Workers Static Assets). Tutto ciò che sta
-# fuori da "public" — README, script di servizio, cronologia Git — resta
-# privato e non finisce online.
+# Il sito non è più solo statico: c'è uno script in "src/index.js" che serve
+# catalogo, carrello, pagamento, pannello e API leggendo il database D1. I
+# file di "public/" continuano a essere pubblicati come prima — home, pagine
+# legali, immagini, fogli di stile — e il Worker li serve tramite il binding
+# ASSETS quando la richiesta non è di sua competenza.
 #
 # I file public/_headers e public/_redirects vengono letti in automatico.
 
 name = "ellebi-it"
+main = "src/index.js"
 compatibility_date = "2026-08-11"
 
 [assets]
 directory = "./public"
+# Il binding permette allo script di servire i file statici da sé: senza,
+# Cloudflare li servirebbe PRIMA di eseguire lo script, e le rotte generate
+# (/negozio, /prodotto/...) non arriverebbero mai al codice.
+binding = "ASSETS"
+
+# QUESTA RIGA E' INDISPENSABILE, E IL MOTIVO NON E' OVVIO.
+#
+# Il livello Static Assets di Cloudflare intercetta le richieste PRIMA che lo
+# script venga eseguito. Per le richieste normali non e' un problema — un file
+# che esiste viene servito senza svegliare il Worker, ed e' il comportamento
+# che vogliamo per immagini, fogli di stile e pagine statiche.
+#
+# Ma per le richieste di NAVIGAZIONE (quelle che il browser marca con
+# Sec-Fetch-Mode: navigate) e con not_found_handling = "404-page", il livello
+# assets risponde da se' con 404.html appena l'indirizzo non corrisponde a un
+# file. Risultato: /negozio, /prodotto/..., /carrello e /checkout funzionavano
+# con curl e restituivano 404 in un browser vero. L'intero negozio sarebbe
+# stato irraggiungibile per i clienti, e invisibile alle prove fatte da riga
+# di comando.
+#
+# run_worker_first elenca i percorsi in cui lo script deve girare PRIMA del
+# livello assets. Si elencano solo le rotte generate, non "/*": cosi' le
+# immagini e i fogli di stile continuano a uscire dalla cache dei bordi senza
+# costare un'invocazione.
+run_worker_first = [
+  "/negozio",
+  "/prodotto/*",
+  "/carrello",
+  "/checkout",
+  "/ordine/*",
+  "/admin",
+  "/admin/*",
+  "/api/*",
+  # Le pagine legali contengono i segnaposto {{PIVA}}, {{SEDE_LEGALE}} e simili,
+  # che il Worker sostituisce al volo leggendo le variabili qui sotto. Servite
+  # dal livello assets uscirebbero con i segnaposto in chiaro davanti al
+  # pubblico. Sono pagine poco visitate: l'invocazione in piu' non pesa, e in
+  # cambio i dati fiscali restano in un posto solo il giorno in cui arrivano.
+  "/privacy",
+  "/privacy.html",
+  "/cookie",
+  "/cookie.html",
+  "/termini",
+  "/termini.html",
+  "/vendita",
+  "/vendita.html",
+  "/resi",
+  "/resi.html",
+]
 
 # Un indirizzo inesistente mostra la pagina 404 del sito
 not_found_handling = "404-page"
@@ -24,5 +75,120 @@ not_found_handling = "404-page"
 # /privacy pubblica privacy.html senza mostrare l'estensione
 html_handling = "auto-trailing-slash"
 
+# ---------------------------------------------------------------- database
+#
+# Il catalogo, gli ordini e le giacenze stanno in D1 (SQLite gestito da
+# Cloudflare, nella stessa rete del Worker).
+#
+# Per crearlo una volta sola:
+#   npx wrangler@4 d1 create emmelu
+# poi si incolla qui sotto il database_id che il comando restituisce, e si
+# applicano le migrazioni:
+#   npx wrangler@4 d1 execute emmelu --remote --file=migrazioni/0001-schema.sql
+#   npx wrangler@4 d1 execute emmelu --remote --file=migrazioni/0002-dati-iniziali.sql
+# Il blocco e' COMMENTATO di proposito: il database non e' ancora stato
+# creato, e un database_id inventato farebbe fallire ogni pubblicazione
+# automatica — cioe' bloccherebbe anche le modifiche che non c'entrano nulla
+# col negozio. Cosi' invece il sito continua a pubblicarsi e a funzionare come
+# vetrina, ed e' il codice ad accorgersi che il database manca.
+#
+# Per attivarlo (una volta sola):
+#   1. npx wrangler@4 d1 create emmelu
+#   2. togliere i cancelletti qui sotto e incollare l'id restituito
+#   3. npx wrangler@4 d1 execute emmelu --remote --file=migrazioni/0001-schema.sql
+#   4. npx wrangler@4 d1 execute emmelu --remote --file=migrazioni/0002-dati-iniziali.sql
+#
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "emmelu"
+# database_id = "incollare-qui-l-id"
+
+# ------------------------------------------------------- compiti periodici
+#
+# Ogni ora: si annullano gli ordini PayPal mai pagati liberando la giacenza
+# (altrimenti un carrello abbandonato a metà pagamento terrebbe un pezzo
+# unico fuori commercio per sempre), si cancellano sessioni e contatori
+# scaduti, e si anonimizzano gli ordini oltre il termine fiscale dei 10 anni.
+[triggers]
+crons = ["17 * * * *"]
+
 [observability]
 enabled = true
+
+# ------------------------------------------------------------- variabili
+#
+# Qui stanno solo valori NON segreti: finiscono nel repository e sono
+# visibili a chiunque lo legga.
+#
+# I SEGRETI si impostano con `npx wrangler@4 secret put NOME` e non vanno mai
+# scritti in questo file:
+#   PAYPAL_SECRET         chiave privata dell'applicazione PayPal
+#   PAYPAL_WEBHOOK_ID     identificativo del webhook, serve a verificarne la firma
+#   ADMIN_PASSWORD_HASH   nella forma "sale:hash" — la genera tools/genera-password-admin.mjs
+#   HASH_SALE             stringa casuale lunga, per gli hash di IP ed e-mail
+#   EMAIL_API_KEY         chiave del fornitore di posta transazionale
+[vars]
+# ---- L'INTERRUTTORE ----
+# "0" = vetrina: catalogo e prezzi visibili, carrello e pagamento spenti.
+# "1" = negozio aperto.
+#
+# Resta a "0" finché non è aperta la partita IVA: incassare online senza
+# è un illecito. Il Worker si rifiuta comunque di attivarsi se RAGIONE_SOCIALE
+# o PIVA sono vuote, e lo scrive nei log.
+# Prima di metterlo a "1", vedi docs/CHECKLIST-APERTURA-NEGOZIO.md.
+NEGOZIO_ATTIVO = "0"
+
+# ---- Dati fiscali obbligatori per vendere (D.Lgs 70/2003 art. 7) ----
+# Vuoti finché la partita IVA non esiste. Riempiono da soli i segnaposto
+# {{PIVA}}, {{SEDE_LEGALE}} ecc. nelle pagine legali.
+RAGIONE_SOCIALE = ""
+PIVA = ""
+CODICE_FISCALE = ""
+SEDE_LEGALE = ""
+REA = ""
+PEC = ""
+CODICE_SDI = ""
+
+# ---- Recapiti e indirizzo del sito ----
+EMAIL_PUBBLICA = "ellebi.style@gmail.com"
+SITO = "https://ellebi.it"
+
+# ---- Regole commerciali (importi in CENTESIMI) ----
+# Sopra i 150 € la spedizione è offerta.
+SOGLIA_SPEDIZIONE_GRATIS_CENT = "15000"
+# Quello che il corriere addebita per incassare alla consegna.
+SUPPLEMENTO_CONTRASSEGNO_CENT = "500"
+# Sopra i 500 € il contrassegno non si offre: è il tetto abituale dei
+# corrieri, e un rifiuto alla consegna su un pezzo di valore costa due
+# spedizioni e un pezzo tornato indietro.
+LIMITE_CONTRASSEGNO_CENT = "50000"
+ALIQUOTA_IVA = "22"
+# Per quanti minuti un ordine non pagato tiene bloccata la giacenza.
+MINUTI_SCADENZA_ORDINE = "30"
+MAX_ARTICOLI_PER_ORDINE = "20"
+
+# ---- PayPal ----
+# "sandbox" per le prove, "live" per incassare davvero.
+PAYPAL_AMBIENTE = "sandbox"
+# Chiave PUBBLICA: finisce nell'HTML del checkout, non è un segreto.
+PAYPAL_CLIENT_ID = ""
+
+# ---- Posta transazionale ----
+# "resend" oppure "brevo".
+EMAIL_FORNITORE = "resend"
+EMAIL_MITTENTE = "ordini@ellebi.it"
+EMAIL_NOME_MITTENTE = "EmmeLù"
+
+# ---- Versione dell'informativa, registrata come prova del consenso ----
+# Si cambia ogni volta che cambia il testo di privacy o condizioni di vendita:
+# è quello che permette di dimostrare QUALE testo una persona ha letto.
+VERSIONE_INFORMATIVA = "2026-09-12"
+
+# ---- Marche di cache dei file serviti alle pagine generate ----
+# NON si scrivono a mano: le riallinea `python3 tools/aggiorna-versioni.py`
+# calcolandole dal contenuto di style.css + negozio.css + admin.css e di
+# main.js + negozio.js + admin.js. Servono perche' public/_headers dichiara
+# quei file "immutable" per un anno: senza una marca che cambia, una modifica
+# non arriverebbe mai a chi ha gia' visitato il sito.
+VERSIONE_CSS = "57201ef015"
+VERSIONE_JS = "4e2ac07a25"
