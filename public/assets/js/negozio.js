@@ -169,6 +169,13 @@
 
       var nome = modulo.getAttribute("data-nome") || "Il pezzo";
       mostraEsitoAggiunta(esito, nome);
+
+      /* Il pannello si apre e mostra cosa e' successo. La riga di testo qui
+         sopra resta comunque: e' quella che legge un lettore di schermo, ed
+         e' l'unica cosa che rimane se il pannello non c'e' (vetrina spenta).
+         Pannello e' definito piu' in basso nel file, ma questa funzione gira
+         solo al submit, quando la dichiarazione e' gia' stata valutata. */
+      if (typeof Pannello !== "undefined" && Pannello.attivo) { Pannello.apri(); }
     });
   })();
 
@@ -716,6 +723,327 @@
 
     aggiornaRiepilogo().then(caricaPaypal);
   })();
+
+  /* ================================================================
+     Carrello a scomparsa
+
+     Quello che rende un sito un negozio: aggiungi, e il carrello si apre di
+     lato a dirti cosa hai fatto. Prima al suo posto c'era una riga di testo
+     sotto il pulsante, che nessuno guardava.
+
+     Il pannello non calcola NIENTE. Chiede a /api/preventivo e disegna quel
+     che torna: se i conti li facesse qui, basterebbero gli strumenti del
+     browser per cambiarli, e il checkout li smentirebbe comunque.
+     ================================================================ */
+
+  var Pannello = (function () {
+    var radice = $("#pannello-carrello");
+    if (!radice) { return { apri: function () {}, attivo: false }; }
+
+    var righeNodo = $("[data-pannello-righe]", radice);
+    var piede = $("[data-pannello-piede]", radice);
+    var subtotaleNodo = $("[data-pannello-subtotale]", radice);
+    var spedizione = $("[data-spedizione-gratis]", radice);
+    var spedizioneTesto = $("[data-spedizione-testo]", radice);
+    var spedizioneBarra = $("[data-spedizione-barra]", radice);
+    var ultimoAperto = null;
+    var richiestaInCorso = 0;
+
+    /* --------------------------------------------------- apri e chiudi */
+
+    function apri() {
+      if (!radice.hidden) { disegna(); return; }
+      ultimoAperto = document.activeElement;
+      radice.hidden = false;
+      radice.removeAttribute("inert");
+      /* La classe arriva un fotogramma dopo, altrimenti il browser non ha
+         nulla da cui animare e il pannello compare di scatto. */
+      requestAnimationFrame(function () { radice.classList.add("is-aperto"); });
+      document.documentElement.classList.add("ha-pannello");
+      var chiudi = $(".pannello__chiudi", radice);
+      if (chiudi) { chiudi.focus(); }
+      disegna();
+    }
+
+    function chiudi() {
+      if (radice.hidden) { return; }
+      radice.classList.remove("is-aperto");
+      document.documentElement.classList.remove("ha-pannello");
+      /* `inert` subito: il pannello sta ancora sfumando via, ma non deve piu'
+         essere raggiungibile col tabulatore da sotto. */
+      radice.setAttribute("inert", "");
+      window.setTimeout(function () {
+        if (!radice.classList.contains("is-aperto")) { radice.hidden = true; }
+      }, 260);
+      if (ultimoAperto && document.contains(ultimoAperto)) { ultimoAperto.focus(); }
+      ultimoAperto = null;
+    }
+
+    $$("[data-pannello-chiudi]", radice).forEach(function (nodo) {
+      nodo.addEventListener("click", chiudi);
+    });
+
+    document.addEventListener("keydown", function (evento) {
+      if (evento.key === "Escape" && !radice.hidden) { chiudi(); }
+    });
+
+    /* Il fuoco resta dentro finche' il pannello e' aperto: un pannello
+       modale da cui si esce col tabulatore e' un pannello che confonde chi
+       naviga da tastiera. */
+    radice.addEventListener("keydown", function (evento) {
+      if (evento.key !== "Tab" || radice.hidden) { return; }
+      var fuocabili = $$(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        radice
+      ).filter(function (n) { return n.offsetParent !== null; });
+      if (!fuocabili.length) { return; }
+      var primo = fuocabili[0];
+      var ultimo = fuocabili[fuocabili.length - 1];
+      if (evento.shiftKey && document.activeElement === primo) {
+        evento.preventDefault();
+        ultimo.focus();
+      } else if (!evento.shiftKey && document.activeElement === ultimo) {
+        evento.preventDefault();
+        primo.focus();
+      }
+    });
+
+    /* ------------------------------------------------------- disegno */
+
+    function disegna() {
+      var righe = leggiCarrello();
+      righeNodo.setAttribute("aria-busy", "true");
+
+      if (!righe.length) {
+        righeNodo.textContent = "";
+        righeNodo.appendChild(vuoto());
+        righeNodo.setAttribute("aria-busy", "false");
+        piede.hidden = true;
+        if (spedizione) { spedizione.hidden = true; }
+        return;
+      }
+
+      var mio = ++richiestaInCorso;
+      preventivo(righe).then(function (esito) {
+        /* Due clic rapidi lanciano due richieste: se torna prima la vecchia,
+           disegnerebbe uno stato superato. Vince sempre l'ultima partita. */
+        if (mio !== richiestaInCorso) { return; }
+        righeNodo.setAttribute("aria-busy", "false");
+
+        if (!esito.ok || !esito.dati || !Array.isArray(esito.dati.righe)) {
+          righeNodo.textContent = "";
+          var errore = document.createElement("p");
+          errore.className = "pannello__errore";
+          errore.textContent = "Non riesco a leggere il carrello. Ricarica la pagina, oppure aprilo per intero.";
+          righeNodo.appendChild(errore);
+          piede.hidden = true;
+          return;
+        }
+
+        disegnaRighe(esito.dati.righe);
+        subtotaleNodo.textContent = euro(esito.dati.subtotale_cent);
+        piede.hidden = false;
+        disegnaSpedizione(esito.dati);
+      });
+    }
+
+    function vuoto() {
+      var p = document.createElement("p");
+      p.className = "pannello__vuoto";
+      p.appendChild(document.createTextNode("Il carrello è vuoto. "));
+      var a = document.createElement("a");
+      a.className = "link-line";
+      a.href = "/negozio";
+      a.textContent = "Guarda i pezzi disponibili";
+      p.appendChild(a);
+      return p;
+    }
+
+    /* Tutto costruito con createElement e textContent: nomi e
+       personalizzazioni arrivano dal database, e comporre marcatura con
+       quelli sarebbe un'iniezione. In questo file innerHTML non compare. */
+    function disegnaRighe(righe) {
+      righeNodo.textContent = "";
+      var lista = document.createElement("ul");
+      lista.className = "pannello__righe";
+      lista.setAttribute("role", "list");
+
+      righe.forEach(function (r) {
+        var li = document.createElement("li");
+        li.className = "pannello__riga" + (r.disponibile === false ? " is-esaurito" : "");
+
+        var testi = document.createElement("div");
+        testi.className = "pannello__riga-testi";
+
+        var nome = document.createElement("p");
+        nome.className = "pannello__riga-nome";
+        nome.textContent = r.nome_prodotto || "Pezzo";
+        testi.appendChild(nome);
+
+        if (r.nome_variante && r.nome_variante !== "Unica") {
+          var variante = document.createElement("p");
+          variante.className = "pannello__riga-variante";
+          variante.textContent = r.nome_variante;
+          testi.appendChild(variante);
+        }
+
+        if (r.personalizzazione) {
+          var pers = document.createElement("p");
+          pers.className = "pannello__riga-pers";
+          pers.textContent = "Personalizzato: " + r.personalizzazione;
+          testi.appendChild(pers);
+        }
+
+        if (r.disponibile === false) {
+          var ko = document.createElement("p");
+          ko.className = "pannello__riga-ko";
+          ko.textContent = "Non più disponibile: toglilo per proseguire.";
+          testi.appendChild(ko);
+        }
+
+        var conti = document.createElement("div");
+        conti.className = "pannello__riga-conti";
+
+        var prezzo = document.createElement("p");
+        prezzo.className = "pannello__riga-prezzo numerico";
+        prezzo.textContent = euro(r.totale_cent);
+        conti.appendChild(prezzo);
+
+        conti.appendChild(passoQuantita(r));
+
+        var togli = document.createElement("button");
+        togli.type = "button";
+        togli.className = "pannello__togli";
+        togli.textContent = "Togli";
+        togli.setAttribute("aria-label", "Togli " + (r.nome_prodotto || "questo pezzo") + " dal carrello");
+        togli.addEventListener("click", function () { cambia(r, 0); });
+        conti.appendChild(togli);
+
+        li.appendChild(testi);
+        li.appendChild(conti);
+        lista.appendChild(li);
+      });
+
+      righeNodo.appendChild(lista);
+    }
+
+    function passoQuantita(r) {
+      var gruppo = document.createElement("div");
+      gruppo.className = "pannello__quantita";
+
+      var meno = document.createElement("button");
+      meno.type = "button";
+      meno.textContent = "−";
+      meno.setAttribute("aria-label", "Uno in meno");
+      meno.addEventListener("click", function () { cambia(r, Number(r.quantita) - 1); });
+
+      var valore = document.createElement("span");
+      valore.className = "pannello__quantita-num";
+      valore.textContent = String(r.quantita);
+
+      var piu = document.createElement("button");
+      piu.type = "button";
+      piu.textContent = "+";
+      piu.setAttribute("aria-label", "Uno in più");
+      /* Oltre la giacenza il pulsante si spegne: proporre un secondo pezzo
+         unico che non esiste porta dritti a un errore al checkout. */
+      var tetto = Number(r.giacenza);
+      if (Number.isFinite(tetto) && Number(r.quantita) >= tetto) { piu.disabled = true; }
+      piu.addEventListener("click", function () { cambia(r, Number(r.quantita) + 1); });
+
+      gruppo.appendChild(meno);
+      gruppo.appendChild(valore);
+      gruppo.appendChild(piu);
+      return gruppo;
+    }
+
+    function cambia(riga, nuovaQuantita) {
+      var righe = leggiCarrello();
+      var pers = String(riga.personalizzazione || "");
+      var restanti = [];
+      righe.forEach(function (r) {
+        if (r.sku === riga.sku && String(r.personalizzazione || "") === pers) {
+          if (nuovaQuantita > 0) {
+            r.quantita = nuovaQuantita;
+            restanti.push(r);
+          }
+          return;
+        }
+        restanti.push(r);
+      });
+      scriviCarrello(restanti);
+      disegna();
+    }
+
+    /* --------------------------------- quanto manca alla spedizione gratis */
+
+    function disegnaSpedizione(dati) {
+      if (!spedizione) { return; }
+      var soglia = Number(spedizione.getAttribute("data-soglia")) || 0;
+      if (soglia <= 0) { spedizione.hidden = true; return; }
+
+      /* Le due cifre le manda il server dentro il preventivo: qui non si
+         sottrae niente, si disegna soltanto. */
+      var manca = Number(dati.manca_a_gratis_cent);
+      if (!Number.isFinite(manca)) { spedizione.hidden = true; return; }
+
+      spedizione.hidden = false;
+      if (manca <= 0) {
+        spedizioneTesto.textContent = "Spedizione gratuita inclusa.";
+        spedizione.classList.add("is-raggiunta");
+        spedizioneBarra.style.width = "100%";
+        return;
+      }
+
+      spedizione.classList.remove("is-raggiunta");
+      spedizioneTesto.textContent = "Ti mancano " + euro(manca) + " alla spedizione gratuita.";
+      var fatto = Math.max(0, Math.min(100, ((soglia - manca) / soglia) * 100));
+      spedizioneBarra.style.width = fatto.toFixed(1) + "%";
+    }
+
+    /* L'indicatore in testa apre il pannello invece di cambiare pagina. Resta
+       un collegamento vero: senza JavaScript porta a /carrello. */
+    var indicatore = $("[data-carrello-indicatore]");
+    if (indicatore) {
+      indicatore.addEventListener("click", function (evento) {
+        /* Ctrl/cmd-clic e rotellina devono continuare ad aprire in una scheda
+           nuova: chi lo fa si aspetta quello, non un pannello. */
+        if (evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.button !== 0) { return; }
+        evento.preventDefault();
+        apri();
+      });
+    }
+
+    return { apri: apri, attivo: true };
+  })();
+
+  /* -------------------------------------- aggiunta rapida dalla griglia */
+
+  /* Un pezzo unico ha una variante sola: chiedere di aprire la scheda per
+     scoprirlo e' un passaggio in piu' fra chi guarda e chi compra. I pezzi
+     con piu' varianti, o personalizzabili, restano un collegamento alla
+     scheda: li' c'e' una scelta da fare, e saltarla farebbe arrivare in
+     carrello il pezzo sbagliato. */
+  $$("[data-aggiungi-rapido]").forEach(function (bottone) {
+    /* Il server lo stampa nascosto: se questo file non gira, il pulsante non
+       compare affatto invece di comparire e non fare niente. */
+    bottone.hidden = false;
+    bottone.addEventListener("click", function () {
+      var sku = bottone.getAttribute("data-sku");
+      if (!sku) { return; }
+
+      var righe = leggiCarrello();
+      var trovata = null;
+      for (var i = 0; i < righe.length; i++) {
+        if (righe[i].sku === sku && !righe[i].personalizzazione) { trovata = righe[i]; break; }
+      }
+      if (trovata) { trovata.quantita = Number(trovata.quantita) + 1; }
+      else { righe.push({ sku: sku, quantita: 1, personalizzazione: "" }); }
+
+      scriviCarrello(righe);
+      if (Pannello.attivo) { Pannello.apri(); }
+    });
+  });
 
   /* All'apertura di qualunque pagina l'indicatore va allineato al cookie:
      una pagina servita dalla cache del browser potrebbe mostrarne uno vecchio. */

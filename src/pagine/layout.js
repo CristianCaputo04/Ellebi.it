@@ -292,6 +292,62 @@ function datiFiscali(config) {
       </div>`;
 }
 
+/**
+ * Il carrello a scomparsa.
+ *
+ * È il pezzo che mancava perché il sito somigliasse a un negozio e non a un
+ * catalogo: finora premere «Aggiungi al carrello» scriveva una riga di testo
+ * sotto il pulsante, e chi comprava doveva accorgersene da solo. Ora il
+ * pannello si apre di lato, mostra cosa c'è dentro e porta al pagamento.
+ *
+ * Tre scelte da non disfare:
+ *
+ * · qui dentro NON c'è nessun totale. Il pannello nasce vuoto e lo riempie
+ *   negozio.js con la risposta di /api/preventivo: i conti li fa il server,
+ *   sempre, anche quando servono solo a disegnare una cifra;
+ * · l'indicatore in testa resta un <a href="/carrello"> vero. Il pannello si
+ *   aggancia al clic e previene la navigazione solo se lo script gira: senza
+ *   JavaScript si finisce sulla pagina del carrello, che funziona;
+ * · il pannello è marcato `inert` e `hidden` finché è chiuso, così non si
+ *   raggiunge col tabulatore da dietro il velo.
+ */
+function pannelloCarrello(config) {
+  if (!config.negozioAttivo) { return ""; }
+
+  const soglia = Number(config.sogliaSpedizioneGratisCent) || 0;
+
+  return `<div class="pannello" id="pannello-carrello" hidden inert>
+  <div class="pannello__velo" data-pannello-chiudi></div>
+  <aside class="pannello__foglio" role="dialog" aria-modal="true" aria-labelledby="pannello-titolo">
+    <header class="pannello__testa">
+      <h2 class="pannello__titolo" id="pannello-titolo">Il tuo carrello</h2>
+      <button class="pannello__chiudi" type="button" data-pannello-chiudi aria-label="Chiudi il carrello">
+        <svg aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
+      </button>
+    </header>
+
+    ${soglia > 0 ? `<div class="pannello__spedizione" data-spedizione-gratis data-soglia="${esc(String(soglia))}" hidden>
+      <p class="pannello__spedizione-testo" data-spedizione-testo></p>
+      <div class="pannello__barra"><span class="pannello__barra-riempi" data-spedizione-barra></span></div>
+    </div>` : ""}
+
+    <div class="pannello__corpo" data-pannello-righe aria-live="polite" aria-busy="true">
+      <p class="pannello__attesa">Un momento…</p>
+    </div>
+
+    <footer class="pannello__piede" data-pannello-piede hidden>
+      <div class="pannello__totale">
+        <span>Subtotale</span>
+        <strong class="numerico" data-pannello-subtotale>—</strong>
+      </div>
+      <p class="pannello__nota">Spedizione e IVA nel passaggio successivo.</p>
+      <a class="btn btn--solid pannello__paga" href="/checkout">Vai al pagamento</a>
+      <a class="link-line pannello__vedi" href="/carrello">Vedi il carrello completo</a>
+    </footer>
+  </aside>
+</div>`;
+}
+
 function piePagina(ctx) {
   const config = ctx.config || {};
   const instagram = config.instagram || "https://www.instagram.com/emmeluofficial/";
@@ -545,6 +601,9 @@ ${intestazione(ctx)}
 ${menuMobile(ctx)}
 
 ${corpo}
+
+<!-- ===================== Carrello a scomparsa ===================== -->
+${pannelloCarrello(config)}
 
 <!-- ===================== Footer ===================== -->
 ${piePagina(ctx)}

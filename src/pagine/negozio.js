@@ -73,11 +73,42 @@ function scheda(prodotto, config) {
           ${p.sottotitolo ? `<p class="card__meta">${esc(p.sottotitolo)}</p>` : ""}
           <p class="negozio__prezzo">${daPrezzo ? "da " : ""}${esc(euro(prezzo))}</p>
           <p class="negozio__stato ${stato.classe}">${esc(stato.testo)}</p>
-          <a class="card__cta" href="${url}" aria-label="Vedi la scheda di ${esc(p.nome || "questo pezzo")}">
-            ${config.negozioAttivo ? "Vedi il pezzo" : "Guarda il pezzo"}
-            <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
-          </a>
+          ${azioniScheda(p, stato, url, config)}
         </article>`;
+}
+
+/**
+ * I pulsanti in fondo a una scheda del catalogo.
+ *
+ * Prima c'era solo «Vedi il pezzo»: un passaggio in piu' fra chi guarda e
+ * chi compra, su un catalogo fatto di pezzi unici con una variante sola.
+ * Ora, quando il pezzo e' acquistabile con un clic, il clic c'e'.
+ *
+ * Si aggiunge direttamente SOLO se la variante e' una e c'e' giacenza. Con
+ * piu' varianti la scelta esiste davvero, e saltarla farebbe finire in
+ * carrello il pezzo sbagliato: li' si va alla scheda.
+ */
+function azioniScheda(p, stato, url, config) {
+  const vediEtichetta = config.negozioAttivo ? "Vedi il pezzo" : "Guarda il pezzo";
+  const vedi = `<a class="card__cta" href="${url}" aria-label="Vedi la scheda di ${esc(p.nome || "questo pezzo")}">
+            ${vediEtichetta}
+            <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+          </a>`;
+
+  const unaVariante = Number(p.numero_varianti) === 1 && p.sku_unico;
+  const acquistabile = config.negozioAttivo && unaVariante && stato.classe !== "is-esaurito";
+  if (!acquistabile) { return vedi; }
+
+  /* Il pulsante nasce nascosto e lo accende negozio.js. Senza JavaScript il
+     carrello non funziona comunque: mostrarlo spento sarebbe una promessa
+     che la pagina non puo' mantenere, e resterebbe solo «Vedi il pezzo»,
+     che invece funziona sempre. */
+  return `<div class="card__azioni">
+            <button class="btn btn--solid card__aggiungi" type="button" hidden
+                    data-aggiungi-rapido data-sku="${esc(String(p.sku_unico))}"
+                    aria-label="Aggiungi ${esc(p.nome || "questo pezzo")} al carrello">Aggiungi al carrello</button>
+            ${vedi}
+          </div>`;
 }
 
 /* Ordinamenti offerti. Le chiavi coincidono con quelle accettate da

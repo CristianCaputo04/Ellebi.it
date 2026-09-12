@@ -194,8 +194,36 @@
   color: var(--c-muted);
 }
 
+/* I nomi veri emessi da src/pagine/negozio.js e prodotto.js sono is-esaurito,
+   is-ultimo e is-disponibile. Le regole con i vecchi nomi --esaurito non si
+   applicavano a niente: ogni stato usciva grigio spento, compreso «Ultimo
+   pezzo» — che su un catalogo di pezzi unici e' l'informazione che fa
+   decidere. Restano elencati anche i nomi vecchi per non rompere nulla. */
 .negozio__stato--esaurito,
-.prodotto__stato--esaurito { color: var(--c-terracotta-ink); }
+.prodotto__stato--esaurito,
+.negozio__stato.is-esaurito,
+.prodotto__stato.is-esaurito { color: var(--c-terracotta-ink); }
+
+/* «Ultimo pezzo» non e' una nota di servizio: e' il motivo per cui chi sta
+   guardando dovrebbe decidere adesso. Ha un colore pieno, il peso del testo
+   piu' alto e un punto davanti — cosi' si distingue anche stampato in bianco
+   e nero e per chi non percepisce la differenza di colore. */
+.negozio__stato.is-ultimo,
+.prodotto__stato.is-ultimo {
+  color: var(--c-terracotta-ink);
+  font-weight: 500;
+}
+
+.negozio__stato.is-ultimo::before,
+.prodotto__stato.is-ultimo::before {
+  content: "●";
+  margin-right: 0.4em;
+  font-size: 0.7em;
+  vertical-align: 0.15em;
+}
+
+.negozio__stato.is-disponibile,
+.prodotto__stato.is-disponibile { color: var(--c-espresso-2); }
 
 .negozio__conteggio { justify-content: space-between; }
 
@@ -751,4 +779,235 @@
   .carrello__togli,
   .carrello__vai,
   #paypal-bottoni { display: none !important; }
+}
+
+/* =========================================================================
+   Carrello a scomparsa
+
+   È il pezzo che cambia la sensazione del sito: prima «Aggiungi al carrello»
+   scriveva una riga di testo sotto il pulsante e non succedeva nient'altro.
+   Ora il carrello entra da destra e mostra cosa hai fatto.
+
+   Si muove con `transform`, non con `right`: il primo il browser lo compone
+   sulla scheda grafica, il secondo lo fa ricalcolare a ogni fotogramma e su
+   telefono si vede.
+   ========================================================================= */
+
+.pannello { position: fixed; inset: 0; z-index: 1200; }
+
+.pannello__velo {
+  position: absolute;
+  inset: 0;
+  background: var(--c-overlay);
+  opacity: 0;
+  transition: opacity var(--dur-1) var(--ease);
+}
+
+.pannello.is-aperto .pannello__velo { opacity: 1; }
+
+.pannello__foglio {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(26rem, 100%);
+  height: 100%;
+  background: var(--c-paper);
+  box-shadow: -12px 0 40px rgba(35, 19, 12, 0.18);
+  transform: translateX(100%);
+  transition: transform var(--dur-1) var(--ease);
+}
+
+.pannello.is-aperto .pannello__foglio { transform: translateX(0); }
+
+/* Chi ha chiesto meno animazioni non ne riceve: il pannello compare e basta,
+   senza scorrimento laterale. */
+@media (prefers-reduced-motion: reduce) {
+  .pannello__foglio,
+  .pannello__velo { transition: none; }
+}
+
+/* Con il pannello aperto la pagina sotto non deve scorrere: su telefono è il
+   difetto classico: si scorre il contenuto invece del carrello. */
+.ha-pannello, .ha-pannello body { overflow: hidden; }
+
+.pannello__testa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.pannello__titolo {
+  margin: 0;
+  font-size: var(--fs-small);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.pannello__chiudi {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.pannello__chiudi:hover { background: var(--c-paper-2); }
+.pannello__chiudi svg { width: 1.1rem; height: 1.1rem; }
+
+.pannello__corpo {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--sp-3);
+}
+
+.pannello__attesa,
+.pannello__vuoto,
+.pannello__errore { color: var(--c-muted); font-size: var(--fs-small); }
+
+.pannello__righe { list-style: none; margin: 0; padding: 0; }
+
+.pannello__riga {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+.pannello__riga.is-esaurito { opacity: 0.7; }
+.pannello__riga-testi { min-width: 0; }
+.pannello__riga-nome { margin: 0; font-size: var(--fs-small); }
+
+.pannello__riga-variante,
+.pannello__riga-pers {
+  margin: 0.15rem 0 0;
+  font-size: var(--fs-micro);
+  color: var(--c-muted);
+  overflow-wrap: anywhere;
+}
+
+.pannello__riga-ko {
+  margin: 0.3rem 0 0;
+  font-size: var(--fs-micro);
+  color: var(--c-terracotta-ink);
+}
+
+.pannello__riga-conti {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+
+.pannello__riga-prezzo { margin: 0; font-size: var(--fs-small); }
+
+.pannello__quantita {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--c-line);
+  border-radius: 999px;
+}
+
+.pannello__quantita button {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pannello__quantita button:disabled { opacity: 0.35; cursor: not-allowed; }
+.pannello__quantita-num { min-width: 1.5rem; text-align: center; font-size: var(--fs-micro); }
+
+.pannello__togli {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--c-muted);
+  font-size: var(--fs-micro);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pannello__togli:hover { color: var(--c-terracotta-ink); }
+
+/* ---------- quanto manca alla spedizione gratuita
+
+   È la leva più onesta che ci sia: dice una cosa vera e misurabile, e chi
+   la legge decide da sé. Le due cifre le calcola il server. */
+
+.pannello__spedizione {
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--c-blush-soft);
+  border-bottom: 1px solid var(--c-line-soft);
+}
+
+.pannello__spedizione-testo {
+  margin: 0 0 0.45rem;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+}
+
+.pannello__barra {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(63, 36, 24, 0.14);
+  overflow: hidden;
+}
+
+.pannello__barra-riempi {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--c-terracotta);
+  transition: width var(--dur-1) var(--ease);
+}
+
+.pannello__spedizione.is-raggiunta .pannello__barra-riempi { background: var(--c-espresso); }
+
+.pannello__piede {
+  flex: 0 0 auto;
+  padding: var(--sp-3);
+  border-top: 1px solid var(--c-line);
+  background: var(--c-paper);
+  /* Su iPhone la barra di sistema copre il fondo: senza questo il pulsante
+     di pagamento finisce sotto la tacca. */
+  padding-bottom: calc(var(--sp-3) + env(safe-area-inset-bottom, 0px));
+}
+
+.pannello__totale {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--fs-small);
+}
+
+.pannello__nota { margin: 0.2rem 0 var(--sp-2); font-size: var(--fs-micro); color: var(--c-muted); }
+.pannello__paga { display: block; width: 100%; text-align: center; }
+.pannello__vedi { display: block; margin-top: var(--sp-2); text-align: center; font-size: var(--fs-micro); }
+
+/* ---------- aggiunta rapida nella griglia */
+
+.card__azioni { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.2rem; }
+.card__aggiungi { width: 100%; text-align: center; }
+
+@media print {
+  .pannello { display: none !important; }
+  .card__aggiungi { display: none !important; }
 }

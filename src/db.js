@@ -39,7 +39,12 @@ export async function prodottiInVetrina(db, { categoriaSlug = null } = {}) {
            p.personalizzabile, p.pezzo_unico,
            c.slug AS categoria_slug, c.nome AS categoria_nome,
            MIN(v.prezzo_cent)        AS prezzo_cent,
-           COALESCE(SUM(v.giacenza), 0) AS giacenza_totale
+           COALESCE(SUM(v.giacenza), 0) AS giacenza_totale,
+           -- Servono all'aggiunta rapida dalla griglia: si puo' comprare con
+           -- un clic solo se la variante e' una sola, altrimenti c'e' una
+           -- scelta da fare e va fatta sulla scheda.
+           COUNT(v.id)               AS numero_varianti,
+           MIN(v.sku)                AS sku_unico
       FROM prodotti p
       JOIN categorie c ON c.id = p.categoria_id
       LEFT JOIN varianti v ON v.prodotto_id = p.id
@@ -212,6 +217,8 @@ export async function cercaProdotti(db, { termine = "", categoriaSlug = null, or
            c.slug AS categoria_slug, c.nome AS categoria_nome,
            MIN(v.prezzo_cent) AS prezzo_cent,
            COALESCE(SUM(v.giacenza), 0) AS giacenza_totale,
+           COUNT(v.id) AS numero_varianti,
+           MIN(v.sku) AS sku_unico,
            CASE WHEN COALESCE(SUM(v.giacenza), 0) > 0 THEN 1 ELSE 0 END AS disponibile
       FROM prodotti p
       JOIN categorie c ON c.id = p.categoria_id
