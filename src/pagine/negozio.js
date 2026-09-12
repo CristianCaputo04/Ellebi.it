@@ -17,10 +17,22 @@ import { paginaCompleta, figuraProdotto } from "./layout.js";
    aprire il pezzo. */
 function disponibilita(prodotto) {
   const varianti = Array.isArray(prodotto.varianti) ? prodotto.varianti : [];
-  const pezzi = varianti.reduce(function (somma, v) {
-    const g = Number(v && v.giacenza);
-    return somma + (Number.isFinite(g) && g > 0 ? g : 0);
-  }, 0);
+
+  /* La giacenza la somma gia' la query, in `giacenza_totale`. Le varianti si
+     usano solo se il chiamante le ha davvero allegate.
+
+     Prima qui si sommavano SOLO le varianti — e nessuna delle due query del
+     catalogo (prodottiInVetrina, cercaProdotti) le allega. La somma era
+     quindi sempre 0, e OGNI pezzo compariva "Esaurito" anche con il
+     magazzino pieno: il negozio mostrava quattro borse tutte non
+     acquistabili. E' il genere di guasto che non fa rumore — nessun errore,
+     nessun log — e si limita a non vendere niente. */
+  const pezzi = varianti.length
+    ? varianti.reduce(function (somma, v) {
+        const g = Number(v && v.giacenza);
+        return somma + (Number.isFinite(g) && g > 0 ? g : 0);
+      }, 0)
+    : Math.max(0, Math.floor(Number(prodotto.giacenza_totale) || 0));
 
   if (!prodotto.disponibile || pezzi <= 0) {
     return { testo: "Esaurito", classe: "is-esaurito", badge: prodotto.pezzo_unico ? "Non replicato" : "Esaurito" };
