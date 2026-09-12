@@ -13,8 +13,19 @@ name: Prepara il negozio (database e dominio)
 # Nessun segreto viene stampato. L'identificativo del database NON è un
 # segreto: finisce in wrangler.toml, che sta nel repository.
 
+# L'avvio manuale (workflow_dispatch) GitHub lo accetta solo per i flussi che
+# stanno sul ramo PREDEFINITO del repository, che qui non e' main. Finche'
+# resta cosi', questo flusso si innesca da solo quando cambia il file qui
+# sotto: per rieseguirlo basta toccare la riga "esecuzione" e spingere.
+# Il filtro sui percorsi lo tiene fuori da tutte le altre pubblicazioni.
+#
+# esecuzione: 1
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/prepara-negozio.yml"
 
 jobs:
   prepara:
