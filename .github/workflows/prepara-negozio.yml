@@ -19,7 +19,7 @@ name: Prepara il negozio (database e dominio)
 # sotto: per rieseguirlo basta toccare la riga "esecuzione" e spingere.
 # Il filtro sui percorsi lo tiene fuori da tutte le altre pubblicazioni.
 #
-# esecuzione: 1
+# esecuzione: 2
 on:
   workflow_dispatch:
   push:
