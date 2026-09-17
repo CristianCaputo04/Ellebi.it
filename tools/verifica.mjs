@@ -212,6 +212,65 @@ verifica(
   `in src/pagine/layout.js ci sono script in linea senza \${nonce}, che la CSP bloccherebbe: ${senzaNonce.join(" ")}`
 );
 
+/* ---- 10. il catalogo di riserva coincide con il seed del database
+
+   src/catalogo-statico.js serve il negozio finche' D1 non esiste. Sono gli
+   stessi dati di migrazioni/0002-dati-iniziali.sql scritti due volte, e due
+   copie della stessa cosa divergono sempre: un prezzo cambiato di qua e non
+   di la' significa mostrare al pubblico una cifra che il database poi
+   smentisce al checkout. Qui si confrontano i valori che contano. */
+
+const seed = readFileSync(join(RADICE, "migrazioni/0002-dati-iniziali.sql"), "utf8");
+const statico = readFileSync(join(RADICE, "src/catalogo-statico.js"), "utf8");
+
+// Dal seed: ogni variante e' "SELECT id, 'SKU', 'nome', prezzo, peso, giacenza"
+const variantiSeed = new Map();
+for (const m of seed.matchAll(/SELECT id, '([A-Z0-9-]+)', '[^']*', (\d+), (\d+), (\d+)/g)) {
+  variantiSeed.set(m[1], { prezzo: Number(m[2]), peso: Number(m[3]), giacenza: Number(m[4]) });
+}
+
+const variantiStatiche = new Map();
+for (const m of statico.matchAll(/sku: "([A-Z0-9-]+)", nome: "[^"]*", prezzo_cent: (\d+), peso_g: (\d+), giacenza: (\d+)/g)) {
+  variantiStatiche.set(m[1], { prezzo: Number(m[2]), peso: Number(m[3]), giacenza: Number(m[4]) });
+}
+
+verifica(
+  "il catalogo di riserva elenca gli stessi SKU del seed",
+  variantiSeed.size > 0 &&
+    variantiSeed.size === variantiStatiche.size &&
+    [...variantiSeed.keys()].every((sku) => variantiStatiche.has(sku)),
+  `SKU nel seed: ${[...variantiSeed.keys()].join(", ") || "nessuno"} — nel catalogo di riserva: ${[...variantiStatiche.keys()].join(", ") || "nessuno"}`
+);
+
+for (const [sku, atteso] of variantiSeed) {
+  const trovato = variantiStatiche.get(sku);
+  if (!trovato) continue;
+  verifica(
+    `${sku}: prezzo, peso e giacenza coincidono col seed`,
+    trovato.prezzo === atteso.prezzo && trovato.peso === atteso.peso && trovato.giacenza === atteso.giacenza,
+    `seed = ${atteso.prezzo}/${atteso.peso}/${atteso.giacenza}, catalogo di riserva = ${trovato.prezzo}/${trovato.peso}/${trovato.giacenza} (prezzo/peso/giacenza)`
+  );
+}
+
+// Gli slug dei prodotti e le categorie devono esistere in entrambi.
+const slugSeed = [...seed.matchAll(/SELECT '([a-z-]+)', c\.id, '/g)].map((m) => m[1]);
+for (const slug of slugSeed) {
+  verifica(
+    `il catalogo di riserva contiene il prodotto "${slug}"`,
+    new RegExp(`slug: "${slug}"`).test(statico),
+    "il prodotto sta nel seed ma non nel catalogo di riserva: senza database non comparirebbe"
+  );
+}
+
+const categorieSeed = [...seed.matchAll(/^\s+\('([a-z-]+)',\s+'/gm)].map((m) => m[1]);
+for (const slug of categorieSeed) {
+  verifica(
+    `il catalogo di riserva contiene la categoria "${slug}"`,
+    new RegExp(`slug: "${slug}"`).test(statico),
+    "la categoria sta nel seed ma non nel catalogo di riserva"
+  );
+}
+
 /* ------------------------------------------------------------ risultati */
 
 console.log(`${ok.length} controlli superati.`);

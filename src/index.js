@@ -28,6 +28,9 @@ import {
   prodottiConVarianti, consumaLimite, pulisciDatiScaduti,
   cercaProdotti, ritrovaOrdine,
 } from "./db.js";
+import {
+  categorieAttiveStatiche, cercaProdottiStatici, prodottoPerSlugStatico,
+} from "./catalogo-statico.js";
 import { calcolaOrdine } from "./prezzi.js";
 import {
   creaOrdine, cambiaStato, impostaTracciatura, scadiOrdiniNonPagati,
@@ -453,6 +456,27 @@ async function apiPaypalWebhook(db, env, richiesta, config) {
 
 /* --------------------------------------------------------------- pagine */
 
+/* Il catalogo si legge dal database quando c'e', dal modulo di riserva
+   quando non c'e'. Il database vince SEMPRE: e' l'unico che sa cosa e'
+   stato venduto dieci minuti fa. Il modulo di riserva serve a non lasciare
+   il negozio invisibile finche' D1 non esiste. */
+function fonteCatalogo(db) {
+  if (db) {
+    return {
+      categorie: () => categorieAttive(db),
+      cerca: (opzioni) => cercaProdotti(db, opzioni),
+      perSlug: (slug) => prodottoPerSlug(db, slug),
+      vetrina: (opzioni) => prodottiInVetrina(db, opzioni),
+    };
+  }
+  return {
+    categorie: async () => categorieAttiveStatiche(),
+    cerca: async (opzioni) => cercaProdottiStatici(opzioni),
+    perSlug: async (slug) => prodottoPerSlugStatico(slug),
+    vetrina: async ({ categoriaSlug } = {}) => cercaProdottiStatici({ categoriaSlug }),
+  };
+}
+
 async function paginaCatalogo(db, ctx) {
   const slug = ctx.url.searchParams.get("categoria");
   const categoriaSlug = slug && slugValido(slug) ? slug : null;
@@ -463,9 +487,10 @@ async function paginaCatalogo(db, ctx) {
   const termine = testoPulito(ctx.url.searchParams.get("q"), 60);
   const ordine = testoPulito(ctx.url.searchParams.get("ordine"), 30);
 
+  const fonte = fonteCatalogo(db);
   const [categorie, prodotti] = await Promise.all([
-    categorieAttive(db),
-    cercaProdotti(db, { termine, categoriaSlug, ordine }),
+    fonte.categorie(),
+    fonte.cerca({ termine, categoriaSlug, ordine }),
   ]);
   // `paginaNegozio` si aspetta lo slug, non l'oggetto categoria: è lei a
   // ritrovarselo nell'elenco che le passiamo.
@@ -482,9 +507,10 @@ async function paginaCatalogo(db, ctx) {
 }
 
 async function paginaSchedaProdotto(db, ctx, slug) {
-  const prodotto = await prodottoPerSlug(db, slug);
+  const fonte = fonteCatalogo(db);
+  const prodotto = await fonte.perSlug(slug);
   if (!prodotto) return null;
-  const correlati = (await prodottiInVetrina(db, { categoriaSlug: prodotto.categoria_slug }))
+  const correlati = (await fonte.vetrina({ categoriaSlug: prodotto.categoria_slug }))
     .filter((p) => p.slug !== prodotto.slug)
     .slice(0, 3);
   return paginaProdotto(ctx, {
@@ -789,20 +815,20 @@ export default {
       /* --- pagine generate --- */
       const contesto = creaContesto(richiesta, url, config, nonce);
 
-      // Finche' il database non esiste il catalogo non puo' esistere: invece
-      // di una 404, che sembrerebbe un guasto a chi arriva da un link, si
-      // rimanda alla sezione delle collezioni della home, che quel contenuto
-      // ce l'ha gia'. La stessa cosa vale per le schede prodotto.
+      /* Il catalogo esiste anche senza database: fonteCatalogo() ripiega sul
+         modulo di riserva. Prima queste due rotte rimandavano alla home, e
+         il risultato era che il negozio restava invisibile a chiunque finche'
+         D1 non veniva creato — comprese le schede prodotto raggiunte da un
+         collegamento condiviso. Il carrello e il pagamento restano spenti
+         dall'interruttore del negozio, che e' un'altra cosa e resta dov'e'. */
       if (percorso === "/negozio") {
-        if (!db) return rispostaRedirect("/#collezioni", 302);
         return rispostaHtml(await paginaCatalogo(db, contesto), {
           intestazioni: intestazioniSicurezza({ nonce }),
         });
       }
 
       const scheda = percorso.match(/^\/prodotto\/([a-z0-9-]+)$/);
-      if (scheda && !db) return rispostaRedirect("/#pezzi", 302);
-      if (scheda && db) {
+      if (scheda) {
         const html = await paginaSchedaProdotto(db, contesto, scheda[1]);
         if (html) {
           return rispostaHtml(html, { intestazioni: intestazioniSicurezza({ nonce }) });
