@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — parte d'acquisto del sito
+   Emmelù — parte d'acquisto del sito
    Vanilla, nessuna dipendenza, stesso stile difensivo di main.js: ogni
    modulo esce subito se gli elementi che gli servono non ci sono, così lo
    stesso file può stare su tutte le pagine senza fare danni su nessuna.

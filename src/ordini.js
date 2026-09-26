@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — ciclo di vita degli ordini
+   Emmelù — ciclo di vita degli ordini
 
    Due cose in questo file vanno lette prima di modificarlo.
 

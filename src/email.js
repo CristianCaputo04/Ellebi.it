@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — posta transazionale
+   Emmelù — posta transazionale
 
    Un Worker non parla SMTP, quindi le e-mail passano da un fornitore via API.
    Qui sono supportati Resend e Brevo, scelti con `EMAIL_FORNITORE`.
@@ -105,7 +105,7 @@ function cornice(titolo, contenuto) {
 <title>${esc(titolo)}</title></head>
 <body style="margin:0;padding:24px;background:#fbf7f4;font-family:Georgia,'Times New Roman',serif;color:#3f2418;line-height:1.6">
 <div style="max-width:560px;margin:0 auto;background:#ffffff;padding:32px;border-radius:8px">
-<p style="margin:0 0 24px;font-size:22px;letter-spacing:.18em;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif">EmmeL&ugrave;</p>
+<p style="margin:0 0 24px;font-size:22px;letter-spacing:.18em;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif">Emmel&ugrave;</p>
 ${contenuto}
 <hr style="border:0;border-top:1px solid #e8d9cf;margin:32px 0">
 <p style="margin:0;font-size:13px;color:#6f5346">Capsule limited edition cucite a mano in Italia.</p>
@@ -195,9 +195,9 @@ ${personalizzati.length > 0
     : "Hai 14 giorni dalla consegna per cambiare idea."}
 Condizioni complete: ${config.sito}/resi
 
-EmmeLu' — capsule limited edition cucite a mano in Italia.`;
+Emmelu' — capsule limited edition cucite a mano in Italia.`;
 
-  return { oggetto: `Ordine ${ordine.numero} ricevuto — EmmeLù`, html, testo };
+  return { oggetto: `Ordine ${ordine.numero} ricevuto — Emmelù`, html, testo };
 }
 
 /** Avviso di cambio stato al cliente (spedito, annullato, rimborsato…). */
@@ -221,7 +221,7 @@ Stato aggiornato: ${etichetta}
 ${nota ? `\n${nota}\n` : ""}${ordine.tracciatura ? `\nCorriere: ${ordine.corriere || ""}\nCodice di spedizione: ${ordine.tracciatura}\n` : ""}
 Vedi l'ordine: ${link}`;
 
-  return { oggetto: `Ordine ${ordine.numero}: ${etichetta} — EmmeLù`, html, testo };
+  return { oggetto: `Ordine ${ordine.numero}: ${etichetta} — Emmelù`, html, testo };
 }
 
 /** Avviso alla titolare che è arrivato un ordine. */

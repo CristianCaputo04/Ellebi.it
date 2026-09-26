@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — accesso al database D1
+   Emmelù — accesso al database D1
 
    Tutte le query del progetto passano da qui. Il motivo non è l'eleganza: è
    che così esiste un solo file in cui verificare che si usino sempre query

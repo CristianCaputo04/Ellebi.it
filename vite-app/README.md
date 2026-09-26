@@ -1,6 +1,6 @@
 # EMMELÙ — scaffold Vite
 
-Nuova architettura di build per **EmmeLù** (dominio `ellebi.it`, invariato),
+Nuova architettura di build per **Emmelù** (dominio `ellebi.it`, invariato),
 pensata per affiancare il sito
 statico esistente in `../public` senza sostituirlo: finché questo scaffold
 non è completo (tutte le pagine migrate e verificate), il sito in produzione

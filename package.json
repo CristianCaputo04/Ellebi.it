@@ -2,7 +2,7 @@
   "name": "emmelu",
   "private": true,
   "type": "module",
-  "description": "Negozio EmmeLù su Cloudflare Workers. Nessuna dipendenza a runtime: questo file esiste per due motivi, non per installare pacchetti.",
+  "description": "Negozio Emmelù su Cloudflare Workers. Nessuna dipendenza a runtime: questo file esiste per due motivi, non per installare pacchetti.",
   "//": [
     "1. \"type\": \"module\" fa sì che `node --check` analizzi i file di src/ come",
     "   moduli ES, che è quello che sono. Senza, Node li legge come script",

@@ -1,5 +1,5 @@
 -- =========================================================================
--- EmmeLù — registro dei rimborsi
+-- Emmelù — registro dei rimborsi
 --
 -- I rimborsi hanno una tabella propria e non una colonna su "ordini" per un
 -- motivo concreto: un ordine può essere rimborsato più volte — un pezzo su

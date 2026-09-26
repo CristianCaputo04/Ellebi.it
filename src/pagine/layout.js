@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — scheletro HTML condiviso dalle pagine generate dal Worker
+   Emmelù — scheletro HTML condiviso dalle pagine generate dal Worker
    (negozio, scheda prodotto, carrello, checkout, stato dell'ordine).
 
    Questo modulo è l'unico posto in cui vive la testa del documento, l'header,
@@ -157,7 +157,7 @@ function intestazione(ctx) {
       <a class="header__link" href="/#domande">Domande</a>
     </nav>
 
-    <a class="header__brand" href="/" aria-label="EmmeLù — torna alla home">
+    <a class="header__brand" href="/" aria-label="Emmelù — torna alla home">
       <svg viewBox="0 0 260 198" role="img" aria-hidden="true" focusable="false">
         <use href="#emmelu-mark" x="91" y="0" width="78" height="78"></use>
         <text x="130" y="152" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="98" fill="currentColor">LM</text>
@@ -397,7 +397,7 @@ function piePagina(ctx) {
     </div>
   </div>
 
-  <p class="footer__wordmark" aria-hidden="true">EmmeLù</p>
+  <p class="footer__wordmark" aria-hidden="true">Emmelù</p>
 
   <div class="wrap">
     <div class="footer__bottom">
@@ -477,7 +477,7 @@ export function paginaCompleta(opzioni) {
   const ctx = o.ctx || {};
   const config = ctx.config || {};
 
-  const titolo = String(o.titolo || "EmmeLù");
+  const titolo = String(o.titolo || "Emmelù");
   const descrizione = String(o.descrizione || "");
   const canonical = o.canonical || null;
   const noindex = o.noindex === true;
@@ -497,7 +497,7 @@ export function paginaCompleta(opzioni) {
      aggiungere l'hash. Vedi la nota nel resoconto. */
   const nonce = config.nonceCsp ? ` nonce="${esc(String(config.nonceCsp))}"` : "";
 
-  const titoloCompleto = `${titolo} — EmmeLù`;
+  const titoloCompleto = `${titolo} — Emmelù`;
   const ogImage = `${sito}/assets/img/og-cover.jpg`;
 
   const fogli = ["/assets/css/style.css", "/assets/css/negozio.css"]
@@ -538,7 +538,7 @@ _iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","
 <script type="text/javascript" src="https://cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
 <title>${esc(titoloCompleto)}</title>
 <meta name="description" content="${esc(descrizione)}">
-<meta name="author" content="EmmeLù">
+<meta name="author" content="Emmelù">
 <meta name="robots" content="${noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}">
 <meta name="theme-color" content="#fbeae1">
 <meta name="color-scheme" content="light">
@@ -546,7 +546,7 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ""}
 
 <!-- SEO social -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="EmmeLù">
+<meta property="og:site_name" content="Emmelù">
 <meta property="og:locale" content="it_IT">
 <meta property="og:title" content="${esc(titoloCompleto)}">
 <meta property="og:description" content="${esc(descrizione)}">
@@ -554,7 +554,7 @@ ${canonical ? `<meta property="og:url" content="${esc(canonical)}">` : ""}
 <meta property="og:image" content="${esc(ogImage)}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Una borsa EmmeLù cucita a mano in filato tortora">
+<meta property="og:image:alt" content="Una borsa Emmelù cucita a mano in filato tortora">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(titoloCompleto)}">
 <meta name="twitter:description" content="${esc(descrizione)}">

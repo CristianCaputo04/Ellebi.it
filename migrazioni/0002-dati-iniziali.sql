@@ -1,5 +1,5 @@
 -- =========================================================================
--- EmmeLù — dati iniziali
+-- Emmelù — dati iniziali
 --
 -- Si applica DOPO 0001-schema.sql. È scritta per poter essere rieseguita
 -- senza danni: gli INSERT usano ON CONFLICT DO NOTHING o DO UPDATE, così

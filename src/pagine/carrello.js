@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — pagina del carrello
+   Emmelù — pagina del carrello
 
    La pagina esce dal server praticamente vuota, e la riempie `negozio.js`
    chiamando `/api/preventivo`. Non è pigrizia: è l'unico modo per non avere

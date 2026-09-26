@@ -1,4 +1,4 @@
-# EmmeLù — contratto tecnico dell'e-commerce
+# Emmelù — contratto tecnico dell'e-commerce
 
 Fonte unica di verità per chi lavora su questo repo. Se una cosa qui è scritta in
 un modo, va implementata così: contratti divergenti fra backend e frontend sono
@@ -291,7 +291,7 @@ Oggi sono **vuoti**, e finché lo sono `NEGOZIO_ATTIVO` deve restare `0`:
 
 | Variabile | Esempio | Obbligatoria per vendere |
 |---|---|---|
-| `RAGIONE_SOCIALE` | `EmmeLù di Lucy Basilicata` | sì |
+| `RAGIONE_SOCIALE` | `Emmelù di Lucy Basilicata` | sì |
 | `PIVA` | `IT01234567890` | sì |
 | `CODICE_FISCALE` | | sì |
 | `SEDE_LEGALE` | via, civico, CAP, città, provincia | sì |

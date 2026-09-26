@@ -40,7 +40,7 @@ PESO_LEGALE = ("yearly", "0.3")
 
 # Foto che raccontano il lavoro ma non sono prodotti, quindi non compaiono
 # nei dati strutturati come Product.
-EXTRA = [("atelier.jpg", "La lavorazione a mano EmmeLù",
+EXTRA = [("atelier.jpg", "La lavorazione a mano Emmelù",
           "Le mani al lavoro sul filato, un punto alla volta: cucito a mano in Italia.")]
 
 

@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — comodità del pannello di gestione
+   Emmelù — comodità del pannello di gestione
 
    Questo file aggiunge SOLO comodità. Il pannello è fatto di <form> veri, e
    senza JavaScript funziona tutto: si cambia stato, si salva il magazzino, si

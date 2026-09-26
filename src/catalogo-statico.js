@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — catalogo di riserva, senza database
+   Emmelù — catalogo di riserva, senza database
 
    A che serve.
 

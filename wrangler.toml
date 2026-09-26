@@ -39,38 +39,21 @@ binding = "ASSETS"
 # stato irraggiungibile per i clienti, e invisibile alle prove fatte da riga
 # di comando.
 #
-# run_worker_first elenca i percorsi in cui lo script deve girare PRIMA del
-# livello assets. Si elencano solo le rotte generate, non "/*": cosi' le
-# immagini e i fogli di stile continuano a uscire dalla cache dei bordi senza
-# costare un'invocazione.
+# run_worker_first: su quali percorsi lo script gira PRIMA del livello assets.
+#
+# Adesso e' "tutto tranne /assets/*". Serve alla pagina "in arrivo"
+# (IN_ARRIVO piu' sotto): per mostrarla al posto della home e delle pagine
+# statiche lo script deve vedere quelle richieste, che prima uscivano dal
+# livello assets senza passare da qui. Immagini, fogli di stile, script e
+# font stanno tutti sotto /assets/ e restano esclusi: continuano a uscire
+# dalla cache dei bordi senza costare un'invocazione.
+#
+# Copre da solo anche quello che prima andava elencato a mano: le rotte
+# generate (/negozio, /prodotto/*, /carrello, /checkout, /ordine, /admin,
+# /api) e le pagine legali con i segnaposto {{PIVA}} da riempire.
 run_worker_first = [
-  "/negozio",
-  "/prodotto/*",
-  "/carrello",
-  "/checkout",
-  # "/ordine" e "/ordine/*" sono due voci distinte: il carattere jolly non
-  # copre il percorso nudo, e senza la prima riga il modulo "ritrova il tuo
-  # ordine" finirebbe nel livello assets, che non ha nessun file da servire.
-  "/ordine",
-  "/ordine/*",
-  "/admin",
-  "/admin/*",
-  "/api/*",
-  # Le pagine legali contengono i segnaposto {{PIVA}}, {{SEDE_LEGALE}} e simili,
-  # che il Worker sostituisce al volo leggendo le variabili qui sotto. Servite
-  # dal livello assets uscirebbero con i segnaposto in chiaro davanti al
-  # pubblico. Sono pagine poco visitate: l'invocazione in piu' non pesa, e in
-  # cambio i dati fiscali restano in un posto solo il giorno in cui arrivano.
-  "/privacy",
-  "/privacy.html",
-  "/cookie",
-  "/cookie.html",
-  "/termini",
-  "/termini.html",
-  "/vendita",
-  "/vendita.html",
-  "/resi",
-  "/resi.html",
+  "/*",
+  "!/assets/*",
 ]
 
 # Un indirizzo inesistente mostra la pagina 404 del sito
@@ -128,7 +111,8 @@ database_id = "solo-locale-non-usato"
 
 [env.sviluppo.vars]
 NEGOZIO_ATTIVO = "1"
-RAGIONE_SOCIALE = "EmmeLu (prova locale)"
+IN_ARRIVO = "0"
+RAGIONE_SOCIALE = "Emmelu (prova locale)"
 PIVA = "IT00000000000"
 SEDE_LEGALE = "Via di Prova 1, 75100 Matera (MT)"
 REA = "MT-000000"
@@ -146,12 +130,12 @@ PAYPAL_AMBIENTE = "sandbox"
 PAYPAL_CLIENT_ID = ""
 EMAIL_FORNITORE = "resend"
 EMAIL_MITTENTE = "ordini@ellebi.it"
-EMAIL_NOME_MITTENTE = "EmmeLu"
+EMAIL_NOME_MITTENTE = "Emmelu"
 VERSIONE_INFORMATIVA = "2026-09-12"
 HASH_SALE = "sale-solo-per-lo-sviluppo-locale"
 # Riallineate da tools/aggiorna-versioni.py insieme a quelle di [vars].
 VERSIONE_CSS = "36fba5c178"
-VERSIONE_JS = "dd2ec7c845"
+VERSIONE_JS = "18968dd613"
 
 # ------------------------------------------------------- compiti periodici
 #
@@ -187,6 +171,14 @@ enabled = true
 # o PIVA sono vuote, e lo scrive nei log.
 # Prima di metterlo a "1", vedi docs/CHECKLIST-APERTURA-NEGOZIO.md.
 NEGOZIO_ATTIVO = "0"
+
+# ---- SITO IN ARRIVO ----
+# "1" = chi apre il link vede la pagina "in arrivo" (public/in-arrivo.html).
+#       Restano raggiungibili privacy, cookie e le altre pagine legali.
+#       Per vedere il sito vero da un browser: aggiungere ?anteprima=1
+#       a qualsiasi indirizzo (?anteprima=0 per tornare all'avviso).
+# "0" = sito normale.
+IN_ARRIVO = "1"
 
 # ---- Dati fiscali obbligatori per vendere (D.Lgs 70/2003 art. 7) ----
 # Vuoti finché la partita IVA non esiste. Riempiono da soli i segnaposto
@@ -227,7 +219,7 @@ PAYPAL_CLIENT_ID = ""
 # "resend" oppure "brevo".
 EMAIL_FORNITORE = "resend"
 EMAIL_MITTENTE = "ordini@ellebi.it"
-EMAIL_NOME_MITTENTE = "EmmeLù"
+EMAIL_NOME_MITTENTE = "Emmelù"
 
 # ---- Versione dell'informativa, registrata come prova del consenso ----
 # Si cambia ogni volta che cambia il testo di privacy o condizioni di vendita:
@@ -241,4 +233,4 @@ VERSIONE_INFORMATIVA = "2026-09-12"
 # quei file "immutable" per un anno: senza una marca che cambia, una modifica
 # non arriverebbe mai a chi ha gia' visitato il sito.
 VERSIONE_CSS = "36fba5c178"
-VERSIONE_JS = "dd2ec7c845"
+VERSIONE_JS = "18968dd613"

@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — funzioni di servizio condivise
+   Emmelù — funzioni di servizio condivise
    Nessuna dipendenza esterna: tutto quello che serve lo offre già il runtime
    dei Worker (WebCrypto, TextEncoder, Intl).
    ========================================================================= */

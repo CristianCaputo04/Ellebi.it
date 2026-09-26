@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — pagina di pagamento
+   Emmelù — pagina di pagamento
 
    Tre cose da sapere prima di modificarla.
 
@@ -203,7 +203,7 @@ export function paginaCheckout(ctx, dati) {
 
   return paginaCompleta({
     titolo: "Pagamento",
-    descrizione: "Concludi il tuo ordine EmmeLù.",
+    descrizione: "Concludi il tuo ordine Emmelù.",
     canonical: `${sito}/checkout`,
     noindex: true,
     corpo,

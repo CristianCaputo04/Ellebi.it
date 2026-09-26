@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — autenticazione del pannello di gestione
+   Emmelù — autenticazione del pannello di gestione
 
    Il pannello vede tutti gli ordini, quindi tutti i dati personali dei
    clienti: nomi, indirizzi, telefoni. Chi entra qui ha accesso a un archivio

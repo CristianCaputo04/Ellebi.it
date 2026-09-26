@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — /negozio, il catalogo.
+   Emmelù — /negozio, il catalogo.
 
    Il filtro per categoria è fatto di collegamenti veri (/negozio?categoria=…)
    e non di un filtro che nasconde nodi con JavaScript: così funziona con lo
@@ -212,7 +212,7 @@ function datiStrutturati(prodotti, categoriaAttiva, sito) {
       "@type": "Product",
       name: String(p.nome || ""),
       url: `${sito}/prodotto/${String(p.slug || "")}`,
-      brand: { "@type": "Brand", name: "EmmeLù" },
+      brand: { "@type": "Brand", name: "Emmelù" },
       offers: {
         "@type": "Offer",
         price: (Number(p.prezzo_cent) / 100).toFixed(2),
@@ -233,7 +233,7 @@ function datiStrutturati(prodotti, categoriaAttiva, sito) {
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: categoriaAttiva ? `Negozio EmmeLù — ${categoriaAttiva}` : "Negozio EmmeLù",
+    name: categoriaAttiva ? `Negozio Emmelù — ${categoriaAttiva}` : "Negozio Emmelù",
     itemListOrder: "https://schema.org/ItemListOrderAscending",
     numberOfItems: elenco.length,
     itemListElement: elenco,
@@ -264,7 +264,7 @@ export function paginaNegozio(ctx, dati) {
   const titolo = categoria ? `${nomeCategoria} — Negozio` : "Negozio";
   const descrizione = categoria && categoria.descrizione
     ? String(categoria.descrizione)
-    : "Il catalogo EmmeLù: pezzi cuciti a mano in Italia, capsule limited edition. Prezzi, disponibilità e dettagli di ogni pezzo.";
+    : "Il catalogo Emmelù: pezzi cuciti a mano in Italia, capsule limited edition. Prezzi, disponibilità e dettagli di ogni pezzo.";
 
   const avvisoVetrina = config.negozioAttivo
     ? ""

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emmelù — Il nuovo sito è in arrivo</title>
+<meta name="description" content="Emmelù: capsule limited edition cucite a mano in Italia. Il nuovo sito è in lavorazione — nel frattempo si ordina su Instagram.">
+<!-- Pagina provvisoria: non deve prendere il posto della home nei risultati
+     di ricerca. Il giorno in cui si apre, il Worker smette di servirla. -->
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#fbeae1">
+<meta name="color-scheme" content="light">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Emmelù — Il nuovo sito è in arrivo">
+<meta property="og:description" content="Capsule limited edition cucite a mano in Italia. Stiamo cucendo il nuovo sito: nel frattempo ordina su Instagram.">
+<meta property="og:url" content="https://ellebi.it/">
+<meta property="og:image" content="https://ellebi.it/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Emmelù">
+<meta property="og:locale" content="it_IT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/jost-300-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/cormorant-garamond-300-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/fonts.css">
+<!-- Nessuno script, di proposito: questa pagina non raccoglie dati e non
+     imposta cookie, quindi non ha bisogno del banner del consenso, e la CSP
+     non deve autorizzare niente di in linea. Lo stile sta qui dentro perché
+     la pagina deve reggersi da sola, senza il foglio della home. -->
+<style>
+  :root {
+    --espresso: #3f2418;
+    --muted: #6f5346;
+    --paper: #fbf7f4;
+    --blush: #fbeae1;
+    --terracotta: #9c5539;
+    --line: rgba(63, 36, 24, 0.16);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    background:
+      radial-gradient(120% 80% at 50% 0%, var(--blush) 0%, var(--paper) 62%);
+    color: var(--espresso);
+    font-family: "Jost", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    padding-inline: 1.25rem;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-block: 3rem 2rem;
+    max-width: 38rem;
+    margin-inline: auto;
+  }
+  .marchio { width: 4.5rem; height: 4.5rem; color: var(--espresso); }
+  .nome {
+    margin: 1rem 0 0;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 300;
+    font-size: clamp(2.4rem, 1.6rem + 4vw, 4rem);
+    letter-spacing: 0.28em;
+    /* la spaziatura aggiunge aria anche dopo l'ultima lettera: si compensa
+       perché la parola resti centrata davvero */
+    margin-right: -0.28em;
+    line-height: 1;
+  }
+  .sottonome {
+    margin: 0.9rem 0 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  /* ogni frase va a capo intera, mai spezzata a metà */
+  .sottonome span { white-space: nowrap; }
+  .filo {
+    width: 3rem;
+    height: 1px;
+    margin: 2.2rem auto;
+    background: var(--terracotta);
+  }
+  .etichetta {
+    display: inline-block;
+    margin: 0 0 1rem;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+  }
+  h1 {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.3rem);
+    line-height: 1.2;
+  }
+  .testo {
+    margin: 1rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .azioni {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+    margin-top: 2.2rem;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.95rem 1.8rem;
+    border-radius: 999px;
+    background: var(--espresso);
+    color: var(--paper);
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  .btn:hover, .btn:focus-visible { background: #5c3d2e; }
+  .link {
+    color: var(--espresso);
+    font-size: 0.9rem;
+    text-underline-offset: 0.25em;
+  }
+  a:focus-visible { outline: 2px solid #8a4a2c; outline-offset: 3px; }
+  footer {
+    padding-block: 1.5rem 2rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  footer a { color: inherit; margin-inline: 0.5rem; }
+  /* Una sola animazione, lenta, e solo per chi non l'ha disattivata: il
+     marchio compare come un punto che si chiude. */
+  @media (prefers-reduced-motion: no-preference) {
+    main > * { animation: entra 0.9s ease both; }
+    main > *:nth-child(2) { animation-delay: 0.08s; }
+    main > *:nth-child(3) { animation-delay: 0.16s; }
+    main > *:nth-child(n+4) { animation-delay: 0.26s; }
+    @keyframes entra {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <svg class="marchio" viewBox="0 0 120 120" role="img" aria-label="Marchio Emmelù">
+    <g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round">
+      <path d="M60 46 C 55 58, 49 66, 44 73"/>
+      <path d="M60 46 C 66 56, 72 63, 77 70"/>
+    </g>
+    <g fill="currentColor">
+      <path d="M60 45 C 43 47, 26 36, 15 13 C 38 13, 55 25, 60 45 Z"/>
+      <path d="M60 45 C 77 47, 94 36, 105 13 C 82 13, 65 25, 60 45 Z" opacity=".92"/>
+      <circle cx="42" cy="88" r="13.5"/>
+      <circle cx="78" cy="85" r="13.5" opacity=".93"/>
+    </g>
+  </svg>
+  <p class="nome">EMMELÙ</p>
+  <p class="sottonome"><span>Capsule limited edition</span> <span aria-hidden="true">·</span> <span>cucito a mano in Italia</span></p>
+  <div class="filo" aria-hidden="true"></div>
+  <p class="etichetta">Presto online</p>
+  <h1>Il nuovo sito è in lavorazione</h1>
+  <p class="testo">Lo stiamo cucendo con la stessa cura dei nostri pezzi: un punto alla volta.
+  Tra poco qui troverai tutte le collezioni e potrai ordinare direttamente online.</p>
+  <div class="azioni">
+    <a class="btn" href="https://www.instagram.com/emmeluofficial/" target="_blank" rel="noopener noreferrer">Nel frattempo, ordina su Instagram</a>
+    <a class="link" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
+  </div>
+</main>
+<footer>
+  © 2026 Emmelù
+  <a href="/privacy">Privacy</a>
+  <a href="/cookie">Cookie</a>
+</footer>
+</body>
+</html>

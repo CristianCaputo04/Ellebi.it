@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — ritrova un ordine
+   Emmelù — ritrova un ordine
 
    Serve a chi ha perso l'e-mail di conferma, e quindi il token che apre la
    pagina di stato. Il numero d'ordine da solo non basta (si indovina: sono

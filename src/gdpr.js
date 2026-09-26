@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — esercizio dei diritti dell'interessato e conservazione
+   Emmelù — esercizio dei diritti dell'interessato e conservazione
 
    Questo file esiste perché una politica di conservazione scritta soltanto
    nell'informativa non è una politica: è una promessa. Qui la promessa

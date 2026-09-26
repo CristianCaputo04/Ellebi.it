@@ -129,7 +129,7 @@ export function paginaAdmin({ titolo, corpo, ctx, vocaleAttiva = null, csrf = ""
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light dark">
-<title>${esc(titolo)} · EmmeLù Gestione</title>
+<title>${esc(titolo)} · Emmelù Gestione</title>
 <link rel="stylesheet" href="/assets/css/admin.css?v=${vCss}">
 <script src="/assets/js/admin.js?v=${vJs}" defer></script>
 </head>
@@ -137,7 +137,7 @@ export function paginaAdmin({ titolo, corpo, ctx, vocaleAttiva = null, csrf = ""
 <a class="salta" href="#principale">Salta al contenuto</a>
 <header class="barra">
   <div class="barra__dentro">
-    <p class="barra__logo"><a href="/admin/ordini">EmmeLù <span aria-hidden="true">·</span> Gestione</a></p>
+    <p class="barra__logo"><a href="/admin/ordini">Emmelù <span aria-hidden="true">·</span> Gestione</a></p>
     ${navigazione}
   </div>
 </header>

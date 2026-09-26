@@ -1,6 +1,6 @@
 # EMMELÙ — negozio delle capsule cucite a mano
 
-E-commerce di **EmmeLù**: capsule limited edition cucite a mano in Italia, su
+E-commerce di **Emmelù**: capsule limited edition cucite a mano in Italia, su
 nove linee (borse, piccola pelletteria, abbigliamento, accessori, gioielli,
 lingerie, beachwear, linea home, linea baby).
 

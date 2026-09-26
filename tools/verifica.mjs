@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — controlli che girano prima di ogni pubblicazione
+   Emmelù — controlli che girano prima di ogni pubblicazione
 
    Non è una suite di test: è la rete che impedisce di mandare online cose
    che si possono accorgere da sole di essere sbagliate. Gira in CI e blocca
@@ -95,8 +95,14 @@ verifica("nessun HASH_SALE nella configurazione di produzione",
 const attese = ["/negozio", "/prodotto/*", "/carrello", "/checkout", "/ordine/*",
   "/admin", "/admin/*", "/api/*", "/privacy", "/cookie", "/termini", "/vendita", "/resi"];
 const elenco = (wrangler.match(/run_worker_first\s*=\s*\[([\s\S]*?)\]/) || [])[1] || "";
+// "/*" copre tutto; si controlla allora che nessuna esclusione "!/..." tolga
+// proprio una rotta generata (escludere "/assets/*" va bene, "/negozio" no).
+const tutto = elenco.includes('"/*"');
+const esclusioni = [...elenco.matchAll(/"!([^"]+)"/g)].map((m) => m[1]);
+const escluso = (rotta) => esclusioni.some((e) =>
+  e === rotta || (e.endsWith("/*") && (rotta + "/").startsWith(e.slice(0, -1))));
 for (const rotta of attese) {
-  verifica(`run_worker_first contiene ${rotta}`, elenco.includes(`"${rotta}"`),
+  verifica(`run_worker_first contiene ${rotta}`, (tutto && !escluso(rotta)) || elenco.includes(`"${rotta}"`),
     "senza, la rotta risponde 404 nei browser pur funzionando con curl");
 }
 

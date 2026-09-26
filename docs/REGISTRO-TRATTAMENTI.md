@@ -1,4 +1,4 @@
-# Registro delle attività di trattamento — EmmeLù
+# Registro delle attività di trattamento — Emmelù
 
 Documento previsto dall'**art. 30 del GDPR**. Va tenuto aggiornato e mostrato
 al Garante se lo chiede. Non si pubblica sul sito: è un documento interno.

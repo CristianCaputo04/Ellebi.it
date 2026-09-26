@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — pagina di stato di un ordine
+   Emmelù — pagina di stato di un ordine
 
    Raggiungibile solo con il token ricevuto per e-mail: non c'è registrazione,
    non ci sono account, e questa pagina mostra nome, indirizzo e telefono. Il

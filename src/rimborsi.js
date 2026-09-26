@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — rimborsi
+   Emmelù — rimborsi
 
    È l'operazione più pericolosa del sistema dopo l'incasso: qui esce denaro,
    e un errore non si annulla con un tasto. Le regole che ne derivano:

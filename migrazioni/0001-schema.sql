@@ -1,5 +1,5 @@
 -- =========================================================================
--- EmmeLù — schema del negozio (Cloudflare D1 / SQLite)
+-- Emmelù — schema del negozio (Cloudflare D1 / SQLite)
 --
 -- Convenzioni valide per tutto il file:
 --   · ogni importo è un INTEGER in CENTESIMI. Mai REAL sui soldi: 0.1 + 0.2

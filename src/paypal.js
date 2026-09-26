@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — integrazione PayPal (API Orders v2)
+   Emmelù — integrazione PayPal (API Orders v2)
 
    Il principio che regge tutto il file: PAYPAL NON È UNA FONTE DI VERITÀ SUI
    PREZZI, MA È L'UNICA FONTE DI VERITÀ SUL PAGAMENTO.
@@ -100,7 +100,7 @@ export async function creaOrdinePaypal(env, config, ordine) {
           reference_id: ordine.numero,
           custom_id: ordine.numero,
           invoice_id: ordine.numero,
-          description: `Ordine ${ordine.numero} — EmmeLù`,
+          description: `Ordine ${ordine.numero} — Emmelù`,
           amount: {
             currency_code: "EUR",
             value: euroDecimale(ordine.totale_cent),
@@ -113,7 +113,7 @@ export async function creaOrdinePaypal(env, config, ordine) {
         },
       ],
       application_context: {
-        brand_name: "EmmeLù",
+        brand_name: "Emmelù",
         locale: "it-IT",
         // L'indirizzo lo abbiamo già raccolto noi: farlo richiedere di nuovo
         // da PayPal significa avere due indirizzi che possono divergere, e

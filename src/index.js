@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — punto d'ingresso del Worker
+   Emmelù — punto d'ingresso del Worker
 
    Il sito è ibrido di proposito:
 
@@ -165,6 +165,70 @@ function provenienzaLecita(richiesta, url) {
 function corpoTroppoGrande(richiesta, massimoByte = 16 * 1024) {
   const dichiarato = Number(richiesta.headers.get("Content-Length"));
   return Number.isFinite(dichiarato) && dichiarato > massimoByte;
+}
+
+/* ------------------------------------------------------ sito in arrivo */
+
+const COOKIE_ANTEPRIMA = "emmelu_anteprima";
+
+/* Cosa resta raggiungibile anche con il sito in costruzione:
+   · le pagine legali, perché privacy e cookie devono esserlo SEMPRE — la
+     pagina "in arrivo" stessa vi rimanda;
+   · pannello e API, che sono strumenti di lavoro e non vetrina;
+   · i file che non sono pagine (robots.txt, sitemap, favicon, manifest). */
+const SEMPRE_APERTE = new Set([
+  "/privacy", "/cookie", "/termini", "/vendita", "/resi", "/accessibilita",
+  "/in-arrivo",
+]);
+
+/**
+ * Con IN_ARRIVO = "1" chi apre il sito vede la pagina "in arrivo".
+ *
+ * Restituisce la risposta da servire, oppure null se la richiesta deve
+ * proseguire normalmente.
+ *
+ * Per lavorare sul sito vero mentre il pubblico vede l'avviso: aprire
+ * qualsiasi indirizzo con ?anteprima=1. Lascia un cookie per 30 giorni e da
+ * quel browser si vede tutto; ?anteprima=0 lo toglie. Non e' una protezione
+ * — chi conosce il trucco vede il sito in costruzione, e non c'e' niente di
+ * segreto da vedere — e' solo un modo comodo per non spegnere l'avviso ogni
+ * volta che si vuole controllare una modifica.
+ */
+async function paginaInArrivo(richiesta, url, percorso, config, env) {
+  if (!config.inArrivo) return null;
+
+  const anteprima = url.searchParams.get("anteprima");
+  if (anteprima === "1" || anteprima === "0") {
+    const pulito = new URL(url);
+    pulito.searchParams.delete("anteprima");
+    const cookie = anteprima === "1"
+      ? scriviCookie(COOKIE_ANTEPRIMA, "1", { maxEta: 30 * 86400, percorso: "/", soloHttp: true, stessoSito: "Lax" })
+      : `${COOKIE_ANTEPRIMA}=; Path=/; Max-Age=0; SameSite=Lax; Secure`;
+    return rispostaRedirect(pulito.pathname + pulito.search, 303, { "Set-Cookie": cookie });
+  }
+  if (leggiCookie(richiesta, COOKIE_ANTEPRIMA) === "1") return null;
+
+  if (richiesta.method !== "GET" && richiesta.method !== "HEAD") return null;
+  if (percorso.startsWith("/api/") || percorso === "/admin" || percorso.startsWith("/admin/")) return null;
+  if (percorso.startsWith("/assets/") || percorso.startsWith("/.well-known/")) return null;
+
+  const senzaEstensione = percorso.replace(/\.html$/, "");
+  if (SEMPRE_APERTE.has(senzaEstensione)) return null;
+  // Un file con estensione che non sia una pagina (robots.txt, sitemap.xml,
+  // favicon.svg, site.webmanifest) passa: e' materiale per i programmi, non
+  // per le persone, e toglierlo romperebbe icone e motori di ricerca.
+  if (/\.[a-z0-9]+$/i.test(percorso) && !percorso.endsWith(".html")) return null;
+
+  const pagina = await env.ASSETS.fetch(new Request(`${url.origin}/in-arrivo.html`));
+  const intestazioni = new Headers(pagina.headers);
+  intestazioni.set("X-Robots-Tag", "noindex, follow");
+  // Mai in cache: il giorno dell'apertura tutti devono vedere il sito vero
+  // al primo caricamento, non la pagina provvisoria ricordata dal browser.
+  intestazioni.set("Cache-Control", "no-store");
+  return new Response(richiesta.method === "HEAD" ? null : pagina.body, {
+    status: 200,
+    headers: intestazioni,
+  });
 }
 
 /* -------------------------------------------------------------- carrello */
@@ -761,6 +825,10 @@ export default {
     const negozioUtilizzabile = Boolean(db) && config.negozioAttivo;
 
     try {
+      /* --- sito in costruzione --- */
+      const inArrivo = await paginaInArrivo(richiesta, url, percorso, config, env);
+      if (inArrivo) return inArrivo;
+
       /* --- API --- */
       if (percorso.startsWith("/api/")) {
         if (!db) return rispostaErrore("database_assente", "Servizio non disponibile.", 503);

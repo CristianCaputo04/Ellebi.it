@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — motore di calcolo di un ordine
+   Emmelù — motore di calcolo di un ordine
 
    Regola che vale per tutto il file e non ammette eccezioni:
    IL CLIENTE NON CALCOLA MAI UN TOTALE CHE CONTI.

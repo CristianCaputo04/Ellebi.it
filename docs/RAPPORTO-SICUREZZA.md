@@ -1,4 +1,4 @@
-# Rapporto di sicurezza — negozio EmmeLù
+# Rapporto di sicurezza — negozio Emmelù
 
 Revisione del 12 settembre 2026, sul codice al commit che accompagna questo
 documento. Riguarda tutto il percorso d'acquisto (catalogo, carrello,

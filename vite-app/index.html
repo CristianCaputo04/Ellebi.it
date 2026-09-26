@@ -1,6 +1,6 @@
 <%
 /* =========================================================================
-   EmmeLù — home
+   Emmelù — home
    Tutti i contenuti ripetuti (linee, pilastri, pezzi, domande) vivono in un
    solo array: il markup visibile e il JSON-LD leggono la stessa fonte, così
    non possono divergere (requisito dei rich result di Google per la FAQ).
@@ -59,10 +59,10 @@ const gallerySizes = "(min-width: 48em) 28vw, 40vw";
 
 // Domande: stesso testo, parola per parola, nel markup e nella FAQPage.
 const domande = [
-  { q: "Come si ordina un pezzo EmmeLù?", a: "Si ordina in direct su Instagram, @emmeluofficial. Mi scrivi il pezzo o la linea che ti interessa, ti dico se è disponibile, in quanto tempo arriva e quanto costa. Se preferisci l'e-mail, scrivi a ellebi.style@gmail.com. Non c'è un carrello: rispondo io, di persona." },
+  { q: "Come si ordina un pezzo Emmelù?", a: "Si ordina in direct su Instagram, @emmeluofficial. Mi scrivi il pezzo o la linea che ti interessa, ti dico se è disponibile, in quanto tempo arriva e quanto costa. Se preferisci l'e-mail, scrivi a ellebi.style@gmail.com. Non c'è un carrello: rispondo io, di persona." },
   { q: "Cosa significa «capsule limited edition»?", a: "Che ogni collezione nasce in un numero chiuso di pezzi e non viene rimessa in produzione. Alcuni pezzi, una volta consegnati, non saranno mai più replicati: non esiste una seconda copia identica, nemmeno nello stesso colore." },
   { q: "Posso personalizzare un capo?", a: "Sì, ogni linea può essere personalizzata: colore, misura, dettagli, iniziali. Se ne parla per messaggio prima di iniziare, così sai già cosa è realizzabile con i materiali disponibili e quanto tempo serve." },
-  { q: "Dove vengono realizzati i capi EmmeLù?", a: "In Italia, dal primo all'ultimo passaggio: creato, cucito e confezionato qui. I materiali sono selezionati uno a uno e sono di altissima qualità — è la parte che non si vede in foto ma che si sente addosso." },
+  { q: "Dove vengono realizzati i capi Emmelù?", a: "In Italia, dal primo all'ultimo passaggio: creato, cucito e confezionato qui. I materiali sono selezionati uno a uno e sono di altissima qualità — è la parte che non si vede in foto ma che si sente addosso." },
   { q: "Quali linee esistono?", a: "Nove: borse, piccola pelletteria, abbigliamento, accessori, gioielli, lingerie, beachwear, linea home e linea baby. Tutte cucite a mano e tutte personalizzabili." },
   { q: "Come si cura un capo cucito a mano?", a: "Si pulisce a mano, con poca acqua tiepida e un panno morbido, trattando solo il punto da smacchiare. Niente lavatrice e niente asciugatrice. Le borse vanno tenute riempite quando riposano, così i lati non si afflosciano." },
 ];
@@ -70,10 +70,10 @@ const domande = [
 const jsonld = JSON.stringify({
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "Organization", "@id": "https://ellebi.it/#org", "name": "EMMELÙ", "alternateName": "EmmeLù", "url": "https://ellebi.it/", "logo": "https://ellebi.it/assets/img/logo-badge.svg", "image": "https://ellebi.it/assets/img/og-cover.jpg", "description": "Capsule limited edition cucite a mano in Italia: borse, abbigliamento, gioielli e accessori. Alcuni pezzi, una volta consegnati, non saranno mai più replicati.", "email": EMAIL, "areaServed": "IT", "founder": { "@type": "Person", "name": "Lucy Basilicata" }, "knowsAbout": linee.map((l) => l.nome), "sameAs": [IG], "slogan": "Stile • Armonia • Autenticità" },
-    { "@type": "WebSite", "@id": "https://ellebi.it/#site", "url": "https://ellebi.it/", "name": "EmmeLù", "inLanguage": "it-IT", "publisher": { "@id": "https://ellebi.it/#org" } },
-    { "@type": "WebPage", "@id": "https://ellebi.it/#page", "url": "https://ellebi.it/", "name": "EmmeLù — Unicità oggi, per sempre", "isPartOf": { "@id": "https://ellebi.it/#site" }, "about": { "@id": "https://ellebi.it/#org" }, "inLanguage": "it-IT", "primaryImageOfPage": "https://ellebi.it/assets/img/hero.jpg" },
-    { "@type": "ItemList", "@id": "https://ellebi.it/#pezzi", "name": "Pezzi disponibili EmmeLù", "itemListOrder": "https://schema.org/ItemListUnordered", "numberOfItems": collezione.length, "itemListElement": collezione.map((b, i) => ({ "@type": "ListItem", "position": i + 1, "item": { "@id": "https://ellebi.it/#" + b.id } })) },
+    { "@type": "Organization", "@id": "https://ellebi.it/#org", "name": "EMMELÙ", "alternateName": "Emmelù", "url": "https://ellebi.it/", "logo": "https://ellebi.it/assets/img/logo-badge.svg", "image": "https://ellebi.it/assets/img/og-cover.jpg", "description": "Capsule limited edition cucite a mano in Italia: borse, abbigliamento, gioielli e accessori. Alcuni pezzi, una volta consegnati, non saranno mai più replicati.", "email": EMAIL, "areaServed": "IT", "founder": { "@type": "Person", "name": "Lucy Basilicata" }, "knowsAbout": linee.map((l) => l.nome), "sameAs": [IG], "slogan": "Stile • Armonia • Autenticità" },
+    { "@type": "WebSite", "@id": "https://ellebi.it/#site", "url": "https://ellebi.it/", "name": "Emmelù", "inLanguage": "it-IT", "publisher": { "@id": "https://ellebi.it/#org" } },
+    { "@type": "WebPage", "@id": "https://ellebi.it/#page", "url": "https://ellebi.it/", "name": "Emmelù — Unicità oggi, per sempre", "isPartOf": { "@id": "https://ellebi.it/#site" }, "about": { "@id": "https://ellebi.it/#org" }, "inLanguage": "it-IT", "primaryImageOfPage": "https://ellebi.it/assets/img/hero.jpg" },
+    { "@type": "ItemList", "@id": "https://ellebi.it/#pezzi", "name": "Pezzi disponibili Emmelù", "itemListOrder": "https://schema.org/ItemListUnordered", "numberOfItems": collezione.length, "itemListElement": collezione.map((b, i) => ({ "@type": "ListItem", "position": i + 1, "item": { "@id": "https://ellebi.it/#" + b.id } })) },
     ...collezione.map((b) => ({
       "@type": "Product",
       "@id": "https://ellebi.it/#" + b.id,
@@ -103,14 +103,14 @@ const extraPreload = `
 <html lang="it">
 <head>
 <%- include('./src/partials/head-meta.html', {
-  title: "EmmeLù — Capsule limited edition cucite a mano in Italia",
+  title: "Emmelù — Capsule limited edition cucite a mano in Italia",
   description: "Borse, abbigliamento, gioielli e accessori cuciti a mano in Italia. Capsule limited edition: alcuni pezzi, una volta consegnati, non saranno mai più replicati. Ordina su Instagram.",
   canonical: "/",
   ogType: "website",
-  ogTitle: "EmmeLù — Unicità oggi, per sempre",
+  ogTitle: "Emmelù — Unicità oggi, per sempre",
   ogDescription: "Capsule limited edition cucite a mano in Italia. Nove linee, un solo pezzo per volta. Ordina su Instagram.",
   ogImageWidth: 1200, ogImageHeight: 630,
-  ogImageAlt: "Una borsa EmmeLù cucita a mano in filato tortora",
+  ogImageAlt: "Una borsa Emmelù cucita a mano in filato tortora",
   extraPreload,
   jsonld,
 }) %>
@@ -316,13 +316,13 @@ const extraPreload = `
     <div class="wrap wrap--narrow">
       <p class="eyebrow eyebrow--center" data-reveal>Più di un brand</p>
       <h2 class="philosophy__title" id="filosofia-title" data-split>Più di un brand, una storia italiana.</h2>
-      <p class="philosophy__text" data-reveal data-reveal-delay="200">EmmeLù è stile, passione e artigianalità. Dal primo taglio all'ultimo punto passano ore, tutte con le stesse due mani — creato, cucito e confezionato in Italia. È per questo che ogni capo racconta una storia. La tua.</p>
+      <p class="philosophy__text" data-reveal data-reveal-delay="200">Emmelù è stile, passione e artigianalità. Dal primo taglio all'ultimo punto passano ore, tutte con le stesse due mani — creato, cucito e confezionato in Italia. È per questo che ogni capo racconta una storia. La tua.</p>
     </div>
   </section>
 
   <section class="section pillars" aria-labelledby="pilastri-title">
     <div class="wrap">
-      <h2 class="visually-hidden" id="pilastri-title">I cinque pilastri di EmmeLù</h2>
+      <h2 class="visually-hidden" id="pilastri-title">I cinque pilastri di Emmelù</h2>
       <div class="pillars__mark" data-reveal="scale" aria-hidden="true">
         <svg viewBox="0 0 120 120" focusable="false"><use href="#emmelu-mark"></use></svg>
       </div>
@@ -348,7 +348,7 @@ const extraPreload = `
       <%- include('./src/partials/picture.html', { base: "atelier", widths: [480, 800, 1200, 1920], realWidth: 1920, realHeight: 1080, alt: "Dettaglio della borsa Sera: filato cioccolato con lurex dorato, alla luce naturale", sizes: "100vw", loading: "lazy" }) %>
     </div>
     <div class="banner__inner">
-      <p class="banner__eyebrow" data-reveal>EmmeLù — 100% italiano · 100% autentico · 100% tu</p>
+      <p class="banner__eyebrow" data-reveal>Emmelù — 100% italiano · 100% autentico · 100% tu</p>
       <h2 class="banner__title" id="banner-title" data-reveal data-reveal-delay="80">Quando un pezzo finisce, finisce</h2>
       <p class="banner__text" data-reveal data-reveal-delay="150">Tutte le collezioni sono capsule limited edition. Alcuni pezzi, una volta consegnati, non saranno mai più replicati: se è ancora qui, è perché nessuno se l'è portato via.</p>
       <div class="banner__actions" data-reveal data-reveal-delay="240">

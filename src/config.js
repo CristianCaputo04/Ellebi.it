@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — configurazione derivata dall'ambiente
+   Emmelù — configurazione derivata dall'ambiente
 
    Tutto ciò che cambia fra sviluppo e produzione, o che la titolare deve
    poter modificare senza toccare il codice, entra da qui. Niente valori
@@ -51,6 +51,10 @@ export function leggiConfig(env) {
   }
 
   return {
+    // Sito in costruzione: con IN_ARRIVO = "1" chi apre il link vede la
+    // pagina "in arrivo" invece del sito. Vedi paginaInArrivo() in index.js.
+    inArrivo: testo(env.IN_ARRIVO) === "1",
+
     negozioAttivo,
     negozioRichiesto,
     datiFiscaliCompleti,
@@ -94,7 +98,7 @@ export function leggiConfig(env) {
 
     // --- posta transazionale ---
     email_mittente: testo(env.EMAIL_MITTENTE) || "ordini@ellebi.it",
-    email_nome_mittente: testo(env.EMAIL_NOME_MITTENTE) || "EmmeLù",
+    email_nome_mittente: testo(env.EMAIL_NOME_MITTENTE) || "Emmelù",
 
     // --- versione dei testi legali, registrata come prova del consenso ---
     versioneInformativa: testo(env.VERSIONE_INFORMATIVA) || "2026-09-12",

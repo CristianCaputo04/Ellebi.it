@@ -1,5 +1,5 @@
 /* =========================================================================
-   EmmeLù — /prodotto/:slug, la scheda del pezzo.
+   Emmelù — /prodotto/:slug, la scheda del pezzo.
 
    È la pagina che deve uscire completa dalla prima risposta: nome, prezzo,
    disponibilità e JSON-LD Product sono già nel markup, non aggiunti dopo da
@@ -304,8 +304,8 @@ function datiStrutturati(prodotto, categoria, stato, sito) {
     description: String(prodotto.descrizione || prodotto.sottotitolo || ""),
     url: url,
     sku: (Array.isArray(prodotto.varianti) && prodotto.varianti[0] && prodotto.varianti[0].sku) || undefined,
-    brand: { "@type": "Brand", name: "EmmeLù" },
-    manufacturer: { "@type": "Organization", name: "EmmeLù" },
+    brand: { "@type": "Brand", name: "Emmelù" },
+    manufacturer: { "@type": "Organization", name: "Emmelù" },
     itemCondition: "https://schema.org/NewCondition",
     offers: {
       "@type": "Offer",
@@ -314,7 +314,7 @@ function datiStrutturati(prodotto, categoria, stato, sito) {
       availability: stato.schema,
       itemCondition: "https://schema.org/NewCondition",
       url: url,
-      seller: { "@type": "Organization", name: "EmmeLù" },
+      seller: { "@type": "Organization", name: "Emmelù" },
     },
   };
   if (immagini.length) {
@@ -396,7 +396,7 @@ export function paginaProdotto(ctx, dati) {
         ${galleria(prodotto)}
 
         <div class="prodotto__info">
-          <p class="eyebrow">${esc(String((categoria && categoria.nome) || prodotto.categoria_nome || "EmmeLù"))}</p>
+          <p class="eyebrow">${esc(String((categoria && categoria.nome) || prodotto.categoria_nome || "Emmelù"))}</p>
           <h1 class="title prodotto__nome" id="prodotto-titolo">${esc(String(prodotto.nome || "Pezzo senza nome"))}</h1>
           ${prodotto.sottotitolo ? `<p class="lead prodotto__sottotitolo">${esc(String(prodotto.sottotitolo))}</p>` : ""}
 
@@ -425,7 +425,7 @@ export function paginaProdotto(ctx, dati) {
 ${barraAcquistoMobile(prodotto, stato, prezzo, config)}`;
 
   const descrizione = String(prodotto.descrizione || prodotto.sottotitolo || "")
-    .slice(0, 300) || `${String(prodotto.nome || "")}: pezzo EmmeLù cucito a mano in Italia.`;
+    .slice(0, 300) || `${String(prodotto.nome || "")}: pezzo Emmelù cucito a mano in Italia.`;
 
   return paginaCompleta({
     titolo: String(prodotto.nome || "Pezzo"),
