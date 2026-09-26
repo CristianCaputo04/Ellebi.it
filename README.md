@@ -17,7 +17,8 @@ servizio, cronologia Git — resta privato.
 ```
 .
 ├── public/                 ← QUESTO è il sito pubblicato
-│   ├── index.html          pagina principale
+│   ├── index.html          pagina "coming soon" (temporanea, vedi sotto)
+│   ├── anteprima.html      sito completo, visibile su /anteprima (noindex)
 │   ├── privacy.html        informativa privacy
 │   ├── cookie.html         cookie policy + riepilogo della scelta attiva
 │   ├── accessibilita.html  dichiarazione di accessibilità
@@ -43,6 +44,19 @@ servizio, cronologia Git — resta privato.
 └── tools/
     └── aggiorna-csp-hash.py  rigenera l'hash CSP del blocco dati strutturati
 ```
+
+### Pagina "coming soon"
+
+Finché il sito è in lavorazione, chi apre `https://ellebi.it/` vede una pagina
+"in arrivo" (`public/index.html`: solo HTML e CSS, nessuno script né cookie).
+Il sito completo resta consultabile su `/anteprima` ed è escluso dai motori di
+ricerca. Per andare online col sito vero:
+
+```bash
+git mv public/anteprima.html public/index.html   # dopo aver cancellato la pagina coming soon
+```
+
+e nel nuovo `index.html` rimetti `<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">`.
 
 ---
 

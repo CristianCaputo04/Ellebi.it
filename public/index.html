@@ -2,714 +2,244 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<!-- Cookie Solution iubenda: deve restare il primo script del documento,
-     così l'autoblocking impedisce a qualunque altro script di partire
-     prima che la persona scelga (https://www.iubenda.com/it/help/1205). -->
-<script type="text/javascript">
-var _iub = _iub || [];
-_iub.csConfiguration = {"siteId":4652493,"cookiePolicyId":91176910,"lang":"it","consentOnScroll":false,"banner":{"acceptButtonDisplay":false,"rejectButtonDisplay":false,"customizeButtonDisplay":false,"closeButtonDisplay":false},"callback":{"onPreferenceExpressed":function(){var b=document.getElementById("cookie-banner");if(b){b.classList.remove("is-visible");localStorage.setItem("ellebi_cookie_seen","1");}}}};
-</script>
-<script type="text/javascript" src="https://cs.iubenda.com/autoblocking/4652493.js" async></script>
-<script type="text/javascript" src="https://cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ELLEBI — Borse fatte a mano | Ogni borsa esiste una volta sola</title>
-<meta name="description" content="Borse all'uncinetto fatte a mano, un pezzo alla volta. Nessuna produzione in serie: quando una borsa finisce, finisce. Guarda i pezzi ancora disponibili.">
-<meta name="author" content="ELLEBI">
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<title>ELLEBI — Il sito è in lavorazione</title>
+<meta name="description" content="Stiamo preparando il nuovo sito di ELLEBI, borse all'uncinetto fatte a mano. Nel frattempo trovi i pezzi disponibili su Vinted e le novità su Instagram.">
+<meta name="robots" content="index, follow">
 <meta name="theme-color" content="#fbeae1">
 <meta name="color-scheme" content="light">
 <link rel="canonical" href="https://ellebi.it/">
-<link rel="alternate" hreflang="it-IT" href="https://ellebi.it/">
-<link rel="alternate" hreflang="x-default" href="https://ellebi.it/">
 
-<!-- SEO social -->
+<!-- Anteprima quando il link viene condiviso -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ELLEBI">
 <meta property="og:locale" content="it_IT">
-<meta property="og:title" content="ELLEBI — Ogni borsa esiste una volta sola">
-<meta property="og:description" content="Borse all'uncinetto fatte a mano, un nodo alla volta. Nessuna serie, nessuna copia.">
+<meta property="og:title" content="ELLEBI — Il sito è in lavorazione">
+<meta property="og:description" content="Borse all'uncinetto fatte a mano. Il nuovo sito arriva presto, un punto alla volta.">
 <meta property="og:url" content="https://ellebi.it/">
 <meta property="og:image" content="https://ellebi.it/assets/img/og-cover.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Una borsa ELLEBI fatta a mano in filato tortora">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ELLEBI — Ogni borsa esiste una volta sola">
-<meta name="twitter:description" content="Borse all'uncinetto fatte a mano, un nodo alla volta. Nessuna serie, nessuna copia.">
-<meta name="twitter:image" content="https://ellebi.it/assets/img/og-cover.jpg">
 
-<!-- Icone -->
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-
-<!-- Risorse critiche -->
-<link rel="preload" href="/assets/fonts/jost-300-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/jost-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-<!-- Si anticipa esattamente il file che il browser userà davvero: con `type`
-     chi non legge AVIF salta la riga e scarica il WebP/JPEG del <picture>
-     una volta sola, senza doppio download. Un solo formato per non far
-     scaricare due copie dell'hero a chi supporta sia AVIF sia WebP. -->
-<link rel="preload" as="image" type="image/avif" imagesrcset="/assets/img/hero-w960.avif 960w, /assets/img/hero.avif 1920w" imagesizes="100vw" fetchpriority="high" media="(min-width: 48em)">
-<link rel="preload" as="image" type="image/avif" imagesrcset="/assets/img/hero-mobile-w500.avif 500w, /assets/img/hero-mobile.avif 1000w" imagesizes="100vw" fetchpriority="high" media="(max-width: 47.99em)">
 <link rel="stylesheet" href="/assets/css/fonts.css">
-<link rel="stylesheet" href="/assets/css/style.css?v=6a773dfb9f">
-<script src="/assets/js/head.js"></script>
 
-<script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://ellebi.it/#org","name":"ELLEBI","alternateName":"ELLEBI | Handmade & Style","url":"https://ellebi.it/","logo":"https://ellebi.it/assets/img/logo-badge.svg","image":"https://ellebi.it/assets/img/og-cover.jpg","description":"Borse all'uncinetto fatte a mano in Italia, un pezzo alla volta, senza produzione in serie.","email":"ellebi.style@gmail.com","areaServed":"IT","sameAs":["https://www.instagram.com/ellebi.it/","https://www.vinted.it/member/65695128-pinkstraw7"],"slogan":"Stile • Armonia • Autenticità"},{"@type":"WebSite","@id":"https://ellebi.it/#site","url":"https://ellebi.it/","name":"ELLEBI","inLanguage":"it-IT","publisher":{"@id":"https://ellebi.it/#org"}},{"@type":"WebPage","@id":"https://ellebi.it/#page","url":"https://ellebi.it/","name":"ELLEBI — Ogni borsa esiste una volta sola","isPartOf":{"@id":"https://ellebi.it/#site"},"about":{"@id":"https://ellebi.it/#org"},"inLanguage":"it-IT","primaryImageOfPage":"https://ellebi.it/assets/img/hero.jpg"},{"@type":"ItemList","@id":"https://ellebi.it/#collezione","name":"La collezione ELLEBI","itemListOrder":"https://schema.org/ItemListUnordered","numberOfItems":4,"itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"CreativeWork","name":"Nuvola","description":"Pouch morbida in filato tortora, lavorata a mano all'uncinetto.","image":"https://ellebi.it/assets/img/borsa-01.jpg","creator":{"@id":"https://ellebi.it/#org"}}},{"@type":"ListItem","position":2,"item":{"@type":"CreativeWork","name":"Perla","description":"Mini bag color cacao con manico rigido e tre perle cucite a mano.","image":"https://ellebi.it/assets/img/borsa-02.jpg","creator":{"@id":"https://ellebi.it/#org"}}},{"@type":"ListItem","position":3,"item":{"@type":"CreativeWork","name":"Sera","description":"Pouch in filato cioccolato con filo lurex, per le occasioni serali.","image":"https://ellebi.it/assets/img/borsa-03.jpg","creator":{"@id":"https://ellebi.it/#org"}}},{"@type":"ListItem","position":4,"item":{"@type":"CreativeWork","name":"Cacao","description":"Pouch capiente in filato cioccolato opaco, lavorata a mano.","image":"https://ellebi.it/assets/img/borsa-04.jpg","creator":{"@id":"https://ellebi.it/#org"}}}]}]}
-</script>
+<!-- Pagina "in arrivo": nessuno script e nessun cookie, solo HTML e CSS. -->
+<style>
+  :root {
+    --c-espresso: #3f2418;
+    --c-muted: #6f5346;
+    --c-blush: #f6ddd0;
+    --c-blush-soft: #fbeae1;
+    --c-paper: #fbf7f4;
+    --c-terracotta: #c2836a;
+    --c-terracotta-ink: #9c5539;
+    --c-line: rgba(63, 36, 24, 0.16);
+    --c-focus: #8a4a2c;
+    --f-sans: "Jost", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --f-serif: "Cormorant Garamond", Iowan Old Style, Georgia, "Times New Roman", serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--f-sans);
+    font-weight: 300;
+    font-size: clamp(0.94rem, 0.9rem + 0.24vw, 1.06rem);
+    line-height: 1.65;
+    color: var(--c-espresso);
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 0%, var(--c-blush) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 45% at 100% 100%, var(--c-blush-soft) 0%, transparent 70%),
+      var(--c-paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    padding: clamp(2.5rem, 6vh, 5rem) clamp(1rem, 0.6rem + 2.6vw, 4rem);
+  }
+
+  .soon {
+    width: 100%;
+    max-width: 38rem;
+    text-align: center;
+    animation: rise 1.2s cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  .soon__logo {
+    display: block;
+    width: clamp(7.5rem, 5rem + 12vw, 11rem);
+    height: auto;
+    margin: 0 auto clamp(1.75rem, 4vh, 2.75rem);
+    border-radius: 50%;
+    box-shadow: 0 1.5rem 3rem -1.5rem rgba(63, 36, 24, 0.35);
+  }
+
+  .soon__eyebrow {
+    margin: 0 0 1rem;
+    font-size: clamp(0.66rem, 0.62rem + 0.16vw, 0.74rem);
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--c-terracotta-ink);
+  }
+
+  .soon__title {
+    margin: 0;
+    font-family: var(--f-serif);
+    font-weight: 300;
+    font-size: clamp(2.3rem, 1.3rem + 4.6vw, 4.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .soon__title em { font-style: italic; color: var(--c-terracotta-ink); }
+
+  /* Filo che si "cuce" da sinistra a destra, all'infinito */
+  .stitch {
+    position: relative;
+    width: min(15rem, 70%);
+    height: 2px;
+    margin: clamp(1.75rem, 4vh, 2.5rem) auto;
+    background-image: linear-gradient(to right, var(--c-line) 55%, transparent 0);
+    background-size: 12px 2px;
+    overflow: hidden;
+  }
+
+  .stitch::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to right, var(--c-terracotta) 55%, transparent 0);
+    background-size: 12px 2px;
+    transform-origin: left;
+    animation: sew 3.6s ease-in-out infinite;
+  }
+
+  .soon__text {
+    margin: 0 auto;
+    max-width: 30rem;
+    font-size: clamp(1.02rem, 0.96rem + 0.4vw, 1.2rem);
+    color: var(--c-muted);
+  }
+
+  .soon__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: clamp(2rem, 5vh, 3rem);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0.8rem 1.6rem;
+    border: 1px solid var(--c-espresso);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--c-espresso);
+    transition: background-color .3s, color .3s, transform .3s;
+  }
+
+  .btn:hover { transform: translateY(-2px); }
+  .btn--solid { background: var(--c-espresso); color: var(--c-paper); }
+  .btn--solid:hover { background: var(--c-terracotta-ink); border-color: var(--c-terracotta-ink); }
+  .btn:not(.btn--solid):hover { background: var(--c-espresso); color: var(--c-paper); }
+
+  a:focus-visible {
+    outline: 2px solid var(--c-focus);
+    outline-offset: 3px;
+  }
+
+  .soon__mail {
+    margin: 1.75rem 0 0;
+    font-size: 0.9rem;
+    color: var(--c-muted);
+  }
+
+  .soon__mail a {
+    color: var(--c-espresso);
+    text-decoration-color: var(--c-terracotta);
+    text-underline-offset: 0.2em;
+  }
+
+  footer {
+    padding: 1.25rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+    text-align: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--c-muted);
+  }
+
+  footer a { color: inherit; text-underline-offset: 0.2em; }
+  footer span { margin: 0 0.5em; opacity: 0.5; }
+
+  @keyframes sew {
+    0%   { transform: scaleX(0); }
+    50%  { transform: scaleX(1); }
+    100% { transform: scaleX(1); opacity: 0; }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(1.25rem); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .soon, .stitch::after { animation: none; }
+    .stitch::after { transform: scaleX(0.6); }
+    .btn { transition: none; }
+    .btn:hover { transform: none; }
+  }
+</style>
 </head>
 
 <body>
-<a class="skip-link" href="#main">Vai al contenuto principale</a>
+<main>
+  <div class="soon">
+    <img class="soon__logo" src="/assets/img/logo-ellebi.svg" alt="ELLEBI" width="176" height="176">
 
-<!-- ===================== Banner Cookie ===================== -->
-<div class="cookie-banner" id="cookie-banner" role="region" aria-label="Consenso ai cookie" aria-live="polite">
-  <div class="cookie-banner__content">
-    <div class="cookie-banner__text">
-      <p>Utilizziamo cookie e tecnologie simili per garantirti la migliore esperienza sul sito. Puoi gestire le tue preferenze in qualsiasi momento.</p>
+    <p class="soon__eyebrow">Coming soon</p>
+    <h1 class="soon__title">Il nuovo sito<br>è <em>in lavorazione</em></h1>
+
+    <div class="stitch" aria-hidden="true"></div>
+
+    <p class="soon__text">Come le nostre borse, anche il sito lo stiamo creando a mano, un punto alla volta. Torna a trovarci presto: manca poco.</p>
+
+    <div class="soon__actions">
+      <a class="btn btn--solid" href="https://www.instagram.com/ellebi.it/" rel="noopener">Seguici su Instagram</a>
+      <a class="btn" href="https://www.vinted.it/member/65695128-pinkstraw7" rel="noopener">Pezzi disponibili</a>
     </div>
-    <div class="cookie-banner__actions">
-      <button class="cookie-banner__btn cookie-banner__btn--accept" type="button" id="cookie-accept">Accetta tutto</button>
-      <button class="cookie-banner__btn cookie-banner__btn--reject" type="button" id="cookie-reject">Rifiuta</button>
-      <button class="cookie-banner__btn cookie-banner__btn--settings iubenda-cs-preferences-link" type="button">Preferenze</button>
-    </div>
+
+    <p class="soon__mail">Per informazioni: <a href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a></p>
   </div>
-</div>
-
-<!-- ===================== Preloader ===================== -->
-<div class="preloader" role="status" aria-live="polite">
-  <span class="visually-hidden">Caricamento in corso…</span>
-  <svg class="preloader__mark" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-    <use href="#ellebi-mark"></use>
-  </svg>
-  <span class="preloader__bar" aria-hidden="true"></span>
-</div>
-
-<!-- ===================== Simboli SVG ===================== -->
-<svg class="visually-hidden" aria-hidden="true" focusable="false" width="0" height="0">
-  <defs>
-    <!-- Marchio ELLEBI: le ciliegie del logo -->
-    <symbol id="ellebi-mark" viewBox="0 0 120 120">
-      <g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round">
-        <path d="M60 46 C 55 58, 49 66, 44 73"/>
-        <path d="M60 46 C 66 56, 72 63, 77 70"/>
-      </g>
-      <g fill="currentColor">
-        <path d="M60 45 C 43 47, 26 36, 15 13 C 38 13, 55 25, 60 45 Z"/>
-        <path d="M60 45 C 77 47, 94 36, 105 13 C 82 13, 65 25, 60 45 Z" opacity=".92"/>
-        <circle cx="42" cy="88" r="13.5"/>
-        <circle cx="78" cy="85" r="13.5" opacity=".93"/>
-      </g>
-    </symbol>
-
-    <symbol id="i-arrow-right" viewBox="0 0 24 24">
-      <path d="M5 12h14m0 0-5.5-5.5M19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-    <symbol id="i-arrow-up" viewBox="0 0 24 24">
-      <path d="M12 19V5m0 0-5.5 5.5M12 5l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-    <symbol id="i-arrow-left" viewBox="0 0 24 24">
-      <path d="M19 12H5m0 0 5.5-5.5M5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-    <symbol id="i-close" viewBox="0 0 24 24">
-      <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    </symbol>
-    <symbol id="i-expand" viewBox="0 0 24 24">
-      <path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-  </defs>
-</svg>
-
-<!-- ===================== Header ===================== -->
-<header class="header" id="site-header">
-  <div class="header__inner">
-    <nav class="header__nav" aria-label="Navigazione principale">
-      <a class="header__link" href="#collezione">Collezione</a>
-      <a class="header__link" href="#filosofia">Perché a mano</a>
-      <a class="header__link" href="#lavorazione">Lavorazione</a>
-    </nav>
-
-    <a class="header__brand" href="/" aria-label="ELLEBI — torna alla home">
-      <svg viewBox="0 0 260 198" role="img" aria-hidden="true" focusable="false">
-        <use href="#ellebi-mark" x="91" y="0" width="78" height="78"></use>
-        <text x="130" y="152" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="98" fill="currentColor">LB</text>
-        <text x="134" y="190" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="27" letter-spacing="8" fill="currentColor">ELLEBI</text>
-      </svg>
-    </a>
-
-    <nav class="header__nav header__nav--end" aria-label="Collegamenti esterni">
-      <a class="header__link" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a>
-      <a class="header__link" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Pezzi disponibili</a>
-    </nav>
-
-    <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Apri il menu">
-      <span class="burger__label" aria-hidden="true">
-        <span class="burger__word">Menu</span>
-        <span class="burger__word">Chiudi</span>
-      </span>
-      <span class="burger__icon" aria-hidden="true">
-        <svg viewBox="0 0 16 16" fill="none" focusable="false">
-          <path d="M7.333 16V0h1.334v16H7.333Z" fill="currentColor"></path>
-          <path d="M16 8.667H0V7.333h16v1.334Z" fill="currentColor"></path>
-        </svg>
-      </span>
-    </button>
-  </div>
-</header>
-
-<!-- ===================== Menu mobile ===================== -->
-<div class="menu" id="menu" hidden>
-  <!-- tre pannelli che entrano da destra uno dopo l'altro -->
-  <div class="menu__bg" aria-hidden="true">
-    <span class="menu__panel"></span>
-    <span class="menu__panel"></span>
-    <span class="menu__panel"></span>
-  </div>
-
-  <!-- forme che affiorano dietro la voce sotto il puntatore -->
-  <div class="menu__shapes" aria-hidden="true">
-    <svg class="menu__shape" data-shape="1" viewBox="0 0 400 400" fill="none">
-      <circle class="menu__shape-el" fill="currentColor" cx="86" cy="118" r="42"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="298" cy="84" r="62"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="198" cy="298" r="82"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="342" cy="282" r="30"></circle>
-    </svg>
-    <svg class="menu__shape" data-shape="2" viewBox="0 0 400 400" fill="none">
-      <path class="menu__shape-el" stroke="currentColor" fill="none" d="M0 196 Q100 96, 200 196 T400 196" stroke-width="58" fill="none"></path>
-      <path class="menu__shape-el" stroke="currentColor" fill="none" d="M0 282 Q100 182, 200 282 T400 282" stroke-width="38" fill="none"></path>
-    </svg>
-    <svg class="menu__shape" data-shape="3" viewBox="0 0 400 400" fill="none">
-      <circle class="menu__shape-el" fill="currentColor" cx="70" cy="96" r="9"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="170" cy="96" r="9"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="270" cy="96" r="9"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="120" cy="196" r="13"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="220" cy="196" r="13"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="320" cy="196" r="13"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="170" cy="300" r="10"></circle>
-      <circle class="menu__shape-el" fill="currentColor" cx="270" cy="300" r="10"></circle>
-    </svg>
-    <svg class="menu__shape" data-shape="4" viewBox="0 0 400 400" fill="none">
-      <path class="menu__shape-el" fill="currentColor" d="M104 104 Q154 54, 204 104 Q254 154, 204 204 Q154 254, 104 204 Q54 154, 104 104"></path>
-      <path class="menu__shape-el" fill="currentColor" d="M244 206 Q294 156, 344 206 Q394 256, 344 306 Q294 356, 244 306 Q194 256, 244 206"></path>
-    </svg>
-    <svg class="menu__shape" data-shape="5" viewBox="0 0 400 400" fill="none">
-      <line class="menu__shape-el" stroke="currentColor" x1="0" y1="104" x2="300" y2="400" stroke-width="30"></line>
-      <line class="menu__shape-el" stroke="currentColor" x1="104" y1="0" x2="400" y2="296" stroke-width="24"></line>
-      <line class="menu__shape-el" stroke="currentColor" x1="204" y1="0" x2="400" y2="196" stroke-width="18"></line>
-    </svg>
-  </div>
-
-  <nav aria-label="Navigazione del sito">
-    <ul class="menu__list" role="list">
-      <li class="menu__item" data-shape="1"><a class="menu__link" href="#collezione">Collezione</a></li>
-      <li class="menu__item" data-shape="2"><a class="menu__link" href="#filosofia">Perché a mano</a></li>
-      <li class="menu__item" data-shape="3"><a class="menu__link" href="#lavorazione">Lavorazione</a></li>
-      <li class="menu__item" data-shape="4"><a class="menu__link" href="#dettagli">Dettagli</a></li>
-      <li class="menu__item" data-shape="5"><a class="menu__link" href="#contatti">Contatti</a></li>
-    </ul>
-  </nav>
-  <div class="menu__foot">
-    <a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Pezzi disponibili</a>
-    <a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
-  </div>
-</div>
-
-<main id="main">
-
-  <!-- ===================== Hero ===================== -->
-  <!-- Quattro piani che scorrono a velocità diverse: foto, velatura, testo,
-       foschia in primo piano. Il numero è la distanza percorsa in percentuale
-       dell'altezza dell'hero: più il piano è lontano, più si muove. -->
-  <section class="hero" aria-labelledby="hero-title" data-hero-layers>
-    <div class="hero__media" data-hero-layer data-hero-shift="12">
-      <picture>
-        <!-- ritaglio verticale sul telefono: si vede tutta la borsa -->
-        <source type="image/avif" srcset="/assets/img/hero-mobile-w500.avif 500w, /assets/img/hero-mobile.avif 1000w" sizes="100vw" media="(max-width: 47.99em)">
-        <source type="image/webp" srcset="/assets/img/hero-mobile-w500.webp 500w, /assets/img/hero-mobile.webp 1000w" sizes="100vw" media="(max-width: 47.99em)">
-        <source type="image/jpeg" srcset="/assets/img/hero-mobile-w500.jpg 500w, /assets/img/hero-mobile.jpg 1000w" sizes="100vw" media="(max-width: 47.99em)">
-        <source type="image/avif" srcset="/assets/img/hero-w960.avif 960w, /assets/img/hero.avif 1920w" sizes="100vw" media="(min-width: 48em)">
-        <source type="image/webp" srcset="/assets/img/hero-w960.webp 960w, /assets/img/hero.webp 1920w" sizes="100vw" media="(min-width: 48em)">
-        <source type="image/jpeg" srcset="/assets/img/hero-w960.jpg 960w, /assets/img/hero.jpg 1920w" sizes="100vw" media="(min-width: 48em)">
-        <source media="(max-width: 47.99em)" srcset="/assets/img/hero-mobile.jpg" width="1000" height="1400">
-        <img src="/assets/img/hero.jpg" alt="La pouch Nuvola in filato tortora, lavorata a mano, tenuta in mano davanti a una parete chiara" width="1920" height="1280" fetchpriority="high" decoding="async">
-      </picture>
-    </div>
-
-    <div class="hero__wash" data-hero-layer data-hero-shift="9.5" aria-hidden="true"></div>
-
-    <div class="hero__inner" data-hero-layer data-hero-shift="6.5">
-      <div class="hero__content" data-hero-content>
-        <p class="hero__eyebrow">Borse all'uncinetto fatte a mano, una alla volta</p>
-        <h1 class="hero__title" id="hero-title">Ogni borsa esiste una volta sola</h1>
-        <p class="hero__sub">Filato, mani, ore. Nessuna serie, nessuna copia: <em>quando un pezzo finisce, finisce.</em></p>
-
-        <div class="hero__actions">
-          <a class="btn btn--solid" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
-            Vedi i pezzi disponibili su Vinted
-            <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
-          </a>
-          <a class="btn" href="#collezione">Guarda la collezione</a>
-        </div>
-        <p class="hero__note">Questo sito mostra il lavoro — l'acquisto avviene su Vinted.</p>
-      </div>
-    </div>
-
-    <div class="hero__fore" data-hero-layer data-hero-shift="2" aria-hidden="true"></div>
-
-    <a class="hero__scroll" href="#collezione" aria-label="Scorri alla collezione">
-      <span>Scorri</span>
-    </a>
-  </section>
-
-  <!-- ===================== Marquee ===================== -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <div class="marquee__group">
-        <span>Fatto a mano in Italia</span><span>Un pezzo alla volta</span><span>Nessuna produzione in serie</span><span>Stile</span><span>Armonia</span><span>Autenticità</span>
-      </div>
-      <div class="marquee__group">
-        <span>Fatto a mano in Italia</span><span>Un pezzo alla volta</span><span>Nessuna produzione in serie</span><span>Stile</span><span>Armonia</span><span>Autenticità</span>
-      </div>
-    </div>
-  </div>
-  <p class="visually-hidden">Fatto a mano in Italia, un pezzo alla volta, senza produzione in serie. Stile, armonia, autenticità.</p>
-
-  <!-- ===================== Collezione ===================== -->
-  <section class="section collection" id="collezione" aria-labelledby="collezione-title">
-    <div class="wrap">
-      <div class="collection__head">
-        <div data-reveal>
-          <p class="eyebrow">La collezione</p>
-          <h2 class="title" id="collezione-title">Quattro borse.<br>Zero copie.</h2>
-        </div>
-        <p class="lead" data-reveal data-reveal-delay="120">Dietro non c'è un magazzino: c'è un tavolo, un uncinetto e il tempo che serve. Ogni pezzo nasce una volta e resta com'è.</p>
-      </div>
-
-      <div class="collection__grid" data-stagger>
-        <article class="card" data-reveal="scale">
-          <div class="card__media">
-            <span class="card__badge">Pezzo unico</span>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-01-w450.avif 450w, /assets/img/borsa-01.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/webp" srcset="/assets/img/borsa-01-w450.webp 450w, /assets/img/borsa-01.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-01-w450.jpg 450w, /assets/img/borsa-01.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-01.jpg" alt="Nuvola: pouch morbida in filato tortora con bordo intrecciato, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-01b-w450.avif 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/webp" srcset="/assets/img/borsa-01b-w450.webp 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-01b-w450.jpg 450w, /assets/img/borsa-01b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-01b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-01.jpg" data-caption="Nuvola — tortora, morbida fuori e ferma nella forma" aria-label="Ingrandisci la foto della borsa Nuvola">
-              <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
-            </button>
-          </div>
-          <h3 class="card__name">Nuvola</h3>
-          <p class="card__meta">Tortora · morbida fuori, ferma nella forma</p>
-        </article>
-
-        <article class="card" data-reveal="scale">
-          <div class="card__media">
-            <span class="card__badge">Pezzo unico</span>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-02-w450.avif 450w, /assets/img/borsa-02.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/webp" srcset="/assets/img/borsa-02-w450.webp 450w, /assets/img/borsa-02.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-02-w450.jpg 450w, /assets/img/borsa-02.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-02.jpg" alt="Perla: mini bag color cacao con manico rigido e tre perle bianche cucite a mano" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-02b-w450.avif 450w, /assets/img/borsa-02b.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/webp" srcset="/assets/img/borsa-02b-w450.webp 450w, /assets/img/borsa-02b.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-02b-w450.jpg 450w, /assets/img/borsa-02b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-02b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-02.jpg" data-caption="Perla — cacao, manico rigido e tre perle cucite a mano" aria-label="Ingrandisci la foto della borsa Perla">
-              <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
-            </button>
-          </div>
-          <h3 class="card__name">Perla</h3>
-          <p class="card__meta">Cacao · manico rigido, tre perle cucite a mano</p>
-        </article>
-
-        <article class="card" data-reveal="scale">
-          <div class="card__media">
-            <span class="card__badge">Pezzo unico</span>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-03-w450.avif 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/webp" srcset="/assets/img/borsa-03-w450.webp 450w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-03-w450.jpg 450w, /assets/img/borsa-03.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-03.jpg" alt="Sera: pouch in filato cioccolato attraversato da lurex dorato, appoggiata su un muretto" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-03b-w450.avif 450w, /assets/img/borsa-03b.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-03b-w450.jpg 450w, /assets/img/borsa-03b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-03b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-03.jpg" data-caption="Sera — cioccolato lurex, quella che si nota di sera" aria-label="Ingrandisci la foto della borsa Sera">
-              <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
-            </button>
-          </div>
-          <h3 class="card__name">Sera</h3>
-          <p class="card__meta">Cioccolato lurex · quella che si nota di sera</p>
-        </article>
-
-        <article class="card" data-reveal="scale">
-          <div class="card__media">
-            <span class="card__badge">Pezzo unico</span>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-04-w450.avif 450w, /assets/img/borsa-04.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/webp" srcset="/assets/img/borsa-04-w450.webp 450w, /assets/img/borsa-04.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-04-w450.jpg 450w, /assets/img/borsa-04.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-04.jpg" alt="Cacao: pouch capiente in filato cioccolato opaco, tenuta in mano" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <picture>
-              <source type="image/avif" srcset="/assets/img/borsa-04b-w450.avif 450w, /assets/img/borsa-04b.avif 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/webp" srcset="/assets/img/borsa-04b-w450.webp 450w, /assets/img/borsa-04b.webp 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <source type="image/jpeg" srcset="/assets/img/borsa-04b-w450.jpg 450w, /assets/img/borsa-04b.jpg 900w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 46vw, 90vw">
-              <img src="/assets/img/borsa-04b.jpg" alt="" aria-hidden="true" width="900" height="1200" loading="lazy" decoding="async">
-            </picture>
-            <button class="card__zoom" type="button" data-lightbox="/assets/img/borsa-04.jpg" data-caption="Cacao — cioccolato opaco, la misura che ti porti ovunque" aria-label="Ingrandisci la foto della borsa Cacao">
-              <svg aria-hidden="true" focusable="false"><use href="#i-expand"></use></svg>
-            </button>
-          </div>
-          <h3 class="card__name">Cacao</h3>
-          <p class="card__meta">Cioccolato opaco · la misura che ti porti ovunque</p>
-        </article>
-      </div>
-
-      <div class="collection__note" data-reveal>
-        <p>Questo sito mostra, non vende. I pezzi ancora disponibili stanno sul mio profilo Vinted.</p>
-        <a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Guarda cosa c'è adesso</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== Filosofia ===================== -->
-  <section class="section philosophy" id="filosofia" aria-labelledby="filosofia-title">
-    <div class="wrap wrap--narrow">
-      <p class="eyebrow eyebrow--center" data-reveal>Perché fatte a mano</p>
-      <h2 class="philosophy__title" id="filosofia-title" data-split>Una macchina ne farebbe mille uguali. Io ne faccio una.</h2>
-      <p class="philosophy__text" data-reveal data-reveal-delay="200">Dal primo giro all'ultimo filo tirato dentro passano ore, tutte con le stesse due mani. È per questo che due ELLEBI non saranno mai identiche: cambia la tensione del punto, cambia il filato, e quello che ne esce resta tuo e basta.</p>
-    </div>
-  </section>
-
-  <!-- ===================== Pilastri ===================== -->
-  <section class="section pillars" aria-labelledby="pilastri-title">
-    <div class="wrap">
-      <h2 class="visually-hidden" id="pilastri-title">I tre valori di ELLEBI</h2>
-
-      <div class="diagram" data-diagram>
-        <svg class="diagram__lines" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <path d="M410 230 C 340 230, 300 150, 210 140"></path>
-          <path d="M590 230 C 660 230, 700 140, 790 130"></path>
-          <path d="M590 250 C 670 260, 700 330, 790 345"></path>
-        </svg>
-
-        <ul class="diagram__items diagram__items--left" role="list">
-          <li class="pillar" data-reveal="left">
-            <h3 class="pillar__name">Armonia <small>equilibrio</small></h3>
-            <p class="pillar__text">Colori caldi scelti per stare bene con quello che hai già nell'armadio, senza rubare la scena.</p>
-          </li>
-        </ul>
-
-        <div class="diagram__core" data-reveal="scale">
-          <svg viewBox="0 0 120 120" role="img" aria-label="Marchio ELLEBI" focusable="false">
-            <use href="#ellebi-mark"></use>
-          </svg>
-        </div>
-
-        <ul class="diagram__items diagram__items--right" role="list">
-          <li class="pillar" data-reveal="right">
-            <h3 class="pillar__name">Stile <small>forma</small></h3>
-            <p class="pillar__text">Forme essenziali che non scadono a fine stagione: le porti quest'anno e anche il prossimo.</p>
-          </li>
-          <li class="pillar" data-reveal="right" data-reveal-delay="140">
-            <h3 class="pillar__name">Autenticità <small>unicità</small></h3>
-            <p class="pillar__text">Nessun pezzo è uguale a un altro: la mano che lavora lascia sempre una firma diversa.</p>
-          </li>
-        </ul>
-      </div>
-
-      <div class="pillars__cta" data-reveal>
-        <a class="btn" href="#lavorazione">
-          Guarda come nasce
-          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== Banner ===================== -->
-  <section class="banner" aria-labelledby="banner-title">
-    <div class="banner__media" data-parallax="0.12">
-      <picture>
-        <source type="image/avif" srcset="/assets/img/atelier-w960.avif 960w, /assets/img/atelier.avif 1920w" sizes="100vw">
-        <source type="image/jpeg" srcset="/assets/img/atelier-w960.jpg 960w, /assets/img/atelier.jpg 1920w" sizes="100vw">
-        <img src="/assets/img/atelier.jpg" alt="Dettaglio della borsa Sera: filato cioccolato con lurex dorato, alla luce naturale" width="1920" height="1080" loading="lazy" decoding="async">
-      </picture>
-    </div>
-    <div class="banner__inner">
-      <h2 class="banner__title" id="banner-title" data-reveal>Quando un pezzo finisce, finisce</h2>
-      <p class="banner__text" data-reveal data-reveal-delay="150">Non riordino, non replico, non produco in serie. Se una borsa è ancora lì, è perché nessuno se l'è portata via.</p>
-      <div class="banner__actions" data-reveal data-reveal-delay="240">
-        <a class="btn btn--light" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
-          Vedi cosa è ancora disponibile
-          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== Lavorazione ===================== -->
-  <section class="section steps" id="lavorazione" aria-labelledby="lavorazione-title">
-    <div class="wrap">
-      <div class="steps__head">
-        <p class="steps__figure" aria-hidden="true" data-reveal>4</p>
-        <div>
-          <h2 class="steps__title" id="lavorazione-title" data-reveal data-reveal-delay="80">Passaggi, nessuna scorciatoia</h2>
-          <p class="steps__intro" data-reveal data-reveal-delay="160">Dal gomitolo alla borsa che tieni in mano. È qui che si decide se durerà una stagione o dieci anni.</p>
-        </div>
-      </div>
-
-      <ol class="steps__list" role="list">
-        <li class="step" data-reveal>
-          <div class="step__media">
-            <picture>
-              <source type="image/avif" srcset="/assets/img/step-01-w600.avif 600w, /assets/img/step-01.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <source type="image/jpeg" srcset="/assets/img/step-01-w600.jpg 600w, /assets/img/step-01.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <img src="/assets/img/step-01.jpg" alt="Dettaglio ravvicinato del filato tortora della borsa Nuvola" width="1200" height="900" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="step__body">
-            <p class="step__index"><span class="step__num">1</span><span class="step__label">Scegliere</span></p>
-            <h3 class="step__name">Il filato decide tutto</h3>
-            <p class="step__text">Fettuccia di cotone pesante: è il filato che tiene in piedi la borsa senza rinforzi rigidi. Sbagli qui, e la forma cede al primo utilizzo.</p>
-            <ul class="step__tags" role="list"><li>Fettuccia di cotone</li><li>Tenuta della forma</li><li>Mano morbida</li></ul>
-          </div>
-        </li>
-
-        <li class="step" data-reveal>
-          <div class="step__media">
-            <picture>
-              <source type="image/avif" srcset="/assets/img/step-02-w600.avif 600w, /assets/img/step-02.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <source type="image/jpeg" srcset="/assets/img/step-02-w600.jpg 600w, /assets/img/step-02.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <img src="/assets/img/step-02.jpg" alt="Dettaglio del punto a uncinetto sul filato cioccolato della borsa Cacao" width="1200" height="900" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="step__body">
-            <p class="step__index"><span class="step__num">2</span><span class="step__label">Intrecciare</span></p>
-            <h3 class="step__name">Punto dopo punto, a mano</h3>
-            <p class="step__text">Nessuna macchina: la tensione la decide la mano. Ed è la tensione a fare la differenza tra un tessuto compatto e uno che si affloscia dopo un mese.</p>
-            <ul class="step__tags" role="list"><li>Uncinetto</li><li>Tensione costante</li><li>Ore di lavoro</li></ul>
-          </div>
-        </li>
-
-        <li class="step" data-reveal>
-          <div class="step__media">
-            <picture>
-              <source type="image/avif" srcset="/assets/img/step-03-w600.avif 600w, /assets/img/step-03.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <source type="image/webp" srcset="/assets/img/step-03-w600.webp 600w, /assets/img/step-03.webp 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <source type="image/jpeg" srcset="/assets/img/step-03-w600.jpg 600w, /assets/img/step-03.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <img src="/assets/img/step-03.jpg" alt="Il manico rigido e le tre perle cucite a mano della borsa Perla" width="1200" height="900" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="step__body">
-            <p class="step__index"><span class="step__num">3</span><span class="step__label">Rifinire</span></p>
-            <h3 class="step__name">Dove si vede la differenza</h3>
-            <p class="step__text">Bordo, manico, chiusura, dettagli cuciti uno a uno. È la parte che nessuno fotografa, ed è esattamente quella che fa durare la borsa.</p>
-            <ul class="step__tags" role="list"><li>Bordo intrecciato</li><li>Manico</li><li>Perle cucite a mano</li></ul>
-          </div>
-        </li>
-
-        <li class="step" data-reveal>
-          <div class="step__media">
-            <picture>
-              <source type="image/avif" srcset="/assets/img/step-04-w600.avif 600w, /assets/img/step-04.avif 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <source type="image/jpeg" srcset="/assets/img/step-04-w600.jpg 600w, /assets/img/step-04.jpg 1200w" sizes="(min-width: 64em) 50vw, 95vw">
-              <img src="/assets/img/step-04.jpg" alt="La borsa Sera finita, appoggiata su un muretto davanti a delle foglie" width="1200" height="900" loading="lazy" decoding="async">
-            </picture>
-          </div>
-          <div class="step__body">
-            <p class="step__index"><span class="step__num">4</span><span class="step__label">Custodire</span></p>
-            <h3 class="step__name">Come farla durare anni</h3>
-            <p class="step__text">Riempila quando riposa, tienila lontana dall'umidità, pulisci a mano con poca acqua tiepida. Tre gesti, e resta come il primo giorno.</p>
-            <ul class="step__tags" role="list"><li>Forma piena</li><li>Lontana dall'umidità</li><li>Pulizia a mano</li></ul>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ===================== Dettagli ===================== -->
-  <section class="section gallery" id="dettagli" aria-labelledby="dettagli-title">
-    <div class="wrap">
-      <div class="gallery__head">
-        <div data-reveal>
-          <p class="eyebrow">Dettagli</p>
-          <h2 class="title" id="dettagli-title">Guarda da vicino <em>il punto</em></h2>
-        </div>
-        <a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer" data-reveal>Altri scatti su Instagram</a>
-      </div>
-
-      <div class="gallery__grid" data-stagger>
-        <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-01.jpg" data-caption="Nuvola — il bordo intrecciato" aria-label="Ingrandisci: il bordo intrecciato della borsa Nuvola">
-          <picture>
-            <source type="image/avif" srcset="/assets/img/gallery-01-w400.avif 400w, /assets/img/gallery-01.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/webp" srcset="/assets/img/gallery-01-w400.webp 400w, /assets/img/gallery-01.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/jpeg" srcset="/assets/img/gallery-01-w400.jpg 400w, /assets/img/gallery-01.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <img src="/assets/img/gallery-01.jpg" alt="Il bordo intrecciato della borsa Nuvola visto da vicino" width="800" height="800" loading="lazy" decoding="async">
-          </picture>
-        </button>
-        <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-02.jpg" data-caption="Perla — il manico rigido" aria-label="Ingrandisci: il manico rigido della borsa Perla">
-          <picture>
-            <source type="image/avif" srcset="/assets/img/gallery-02-w400.avif 400w, /assets/img/gallery-02.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/webp" srcset="/assets/img/gallery-02-w400.webp 400w, /assets/img/gallery-02.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/jpeg" srcset="/assets/img/gallery-02-w400.jpg 400w, /assets/img/gallery-02.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <img src="/assets/img/gallery-02.jpg" alt="Il manico rigido della borsa Perla, avvolto nel filato" width="800" height="800" loading="lazy" decoding="async">
-          </picture>
-        </button>
-        <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-03.jpg" data-caption="Sera — il lurex alla luce" aria-label="Ingrandisci: il filo lurex della borsa Sera">
-          <picture>
-            <source type="image/avif" srcset="/assets/img/gallery-03-w400.avif 400w, /assets/img/gallery-03.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/jpeg" srcset="/assets/img/gallery-03-w400.jpg 400w, /assets/img/gallery-03.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <img src="/assets/img/gallery-03.jpg" alt="Il filo lurex dorato della borsa Sera che riflette la luce" width="800" height="800" loading="lazy" decoding="async">
-          </picture>
-        </button>
-        <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-04.jpg" data-caption="Cacao — la trama piena" aria-label="Ingrandisci: la trama della borsa Cacao">
-          <picture>
-            <source type="image/avif" srcset="/assets/img/gallery-04-w400.avif 400w, /assets/img/gallery-04.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/webp" srcset="/assets/img/gallery-04-w400.webp 400w, /assets/img/gallery-04.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/jpeg" srcset="/assets/img/gallery-04-w400.jpg 400w, /assets/img/gallery-04.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <img src="/assets/img/gallery-04.jpg" alt="La trama fitta del filato cioccolato della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">
-          </picture>
-        </button>
-        <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-05.jpg" data-caption="Nuvola — l'apertura morbida" aria-label="Ingrandisci: l'apertura della borsa Nuvola">
-          <picture>
-            <source type="image/avif" srcset="/assets/img/gallery-05-w400.avif 400w, /assets/img/gallery-05.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/webp" srcset="/assets/img/gallery-05-w400.webp 400w, /assets/img/gallery-05.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/jpeg" srcset="/assets/img/gallery-05-w400.jpg 400w, /assets/img/gallery-05.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <img src="/assets/img/gallery-05.jpg" alt="L'apertura morbida della borsa Nuvola vista dall'alto" width="800" height="800" loading="lazy" decoding="async">
-          </picture>
-        </button>
-        <button class="gallery__item" type="button" data-reveal="scale" data-lightbox="/assets/img/gallery-06.jpg" data-caption="Cacao — il fondo" aria-label="Ingrandisci: il fondo della borsa Cacao">
-          <picture>
-            <source type="image/avif" srcset="/assets/img/gallery-06-w400.avif 400w, /assets/img/gallery-06.avif 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/webp" srcset="/assets/img/gallery-06-w400.webp 400w, /assets/img/gallery-06.webp 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <source type="image/jpeg" srcset="/assets/img/gallery-06-w400.jpg 400w, /assets/img/gallery-06.jpg 800w" sizes="(min-width: 48em) 28vw, 40vw">
-            <img src="/assets/img/gallery-06.jpg" alt="Il fondo lavorato a mano della borsa Cacao" width="800" height="800" loading="lazy" decoding="async">
-          </picture>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== Contatti ===================== -->
-  <section class="section contact" id="contatti" aria-labelledby="contatti-title">
-    <div class="wrap wrap--narrow">
-      <p class="eyebrow eyebrow--center" data-reveal>Dove trovarle</p>
-      <h2 class="contact__title" id="contatti-title" data-reveal data-reveal-delay="80">Se te ne innamori,<br>fammelo sapere</h2>
-      <p class="contact__text" data-reveal data-reveal-delay="140">Qui non c'è un carrello: c'è il mio profilo Vinted con i pezzi ancora disponibili e i miei messaggi aperti per tutto il resto — colori, misure, tempi di lavorazione. Rispondo io, non un assistente automatico.</p>
-
-      <div class="contact__actions" data-reveal data-reveal-delay="200">
-        <a class="btn btn--solid" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">
-          Vedi i pezzi su Vinted
-          <svg class="btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
-        </a>
-        <a class="btn" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Scrivimi su Instagram</a>
-        <a class="btn" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a>
-      </div>
-
-      <p class="contact__note" data-reveal data-reveal-delay="260">Nessun modulo, nessun dato raccolto da questo sito.</p>
-    </div>
-  </section>
 </main>
 
-<!-- ===================== Footer ===================== -->
-<footer class="footer" id="footer">
-  <div class="wrap">
-    <div class="footer__grid">
-      <div class="footer__col" data-reveal>
-        <h2>ELLEBI</h2>
-        <p class="footer__text">Borse fatte a mano, un nodo alla volta. Nessuna serie, nessuna copia.</p>
-      </div>
-
-      <div class="footer__col" data-reveal data-reveal-delay="80">
-        <h3>Naviga</h3>
-        <ul class="footer__list" role="list">
-          <li><a class="link-line" href="#collezione">Collezione</a></li>
-          <li><a class="link-line" href="#filosofia">Perché a mano</a></li>
-          <li><a class="link-line" href="#lavorazione">Lavorazione</a></li>
-          <li><a class="link-line" href="#dettagli">Dettagli</a></li>
-        </ul>
-      </div>
-
-      <div class="footer__col" data-reveal data-reveal-delay="160">
-        <h3>Trovami</h3>
-        <ul class="footer__list" role="list">
-          <li><a class="link-line" href="https://www.vinted.it/member/65695128-pinkstraw7" target="_blank" rel="noopener noreferrer">Vinted</a></li>
-          <li><a class="link-line" href="https://www.instagram.com/ellebi.it/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-          <li><a class="link-line" href="mailto:ellebi.style@gmail.com">ellebi.style@gmail.com</a></li>
-        </ul>
-      </div>
-
-      <div class="footer__col" data-reveal data-reveal-delay="240">
-        <h3>Informazioni</h3>
-        <ul class="footer__list" role="list">
-          <li><a class="link-line" href="/termini">Termini e condizioni</a></li>
-          <li><a class="link-line" href="/privacy">Privacy policy</a></li>
-          <li><a class="link-line" href="/cookie">Cookie policy</a></li>
-          <li><a class="link-line" href="/accessibilita">Accessibilità</a></li>
-          <li><button class="cookie-prefs iubenda-cs-preferences-link" type="button">Preferenze cookie</button></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <p class="footer__wordmark" aria-hidden="true">Ellebi</p>
-
-  <div class="wrap">
-    <div class="footer__bottom">
-      <p>© <span data-year>2026</span> ELLEBI — Borse fatte a mano</p>
-      <ul class="footer__legal" role="list">
-        <li><a class="link-line" href="/">Home</a></li>
-        <li><a class="link-line" href="/termini">Termini</a></li>
-        <li><a class="link-line" href="/privacy">Privacy</a></li>
-        <li><a class="link-line" href="/cookie">Cookie</a></li>
-        <li><a class="link-line" href="/accessibilita">Accessibilità</a></li>
-        <li><button class="cookie-prefs iubenda-cs-preferences-link" type="button">Preferenze cookie</button></li>
-      </ul>
-    </div>
-  </div>
+<footer>
+  © 2026 ELLEBI — Borse fatte a mano
+  <span>·</span><a href="/privacy">Privacy</a>
+  <span>·</span><a href="/cookie">Cookie</a>
 </footer>
-
-<button class="to-top" type="button" id="to-top" aria-label="Torna all'inizio della pagina">
-  <svg aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
-</button>
-
-<!-- ===================== Lightbox ===================== -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Immagine ingrandita" hidden>
-  <div class="lightbox__bar">
-    <span id="lightbox-counter">1 / 1</span>
-    <button class="lightbox__close" type="button" data-lightbox-close aria-label="Chiudi l'immagine ingrandita">
-      <svg aria-hidden="true" focusable="false"><use href="#i-close"></use></svg>
-    </button>
-  </div>
-  <div class="lightbox__stage">
-    <img id="lightbox-img" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="1" height="1">
-  </div>
-  <p class="lightbox__caption" id="lightbox-caption"></p>
-  <button class="lightbox__nav lightbox__nav--prev" type="button" data-lightbox-prev aria-label="Immagine precedente">
-    <svg aria-hidden="true" focusable="false"><use href="#i-arrow-left"></use></svg>
-  </button>
-  <button class="lightbox__nav lightbox__nav--next" type="button" data-lightbox-next aria-label="Immagine successiva">
-    <svg aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
-  </button>
-</div>
-
-<script src="/assets/js/main.js?v=88ff1f0f54" defer></script>
 </body>
 </html>
