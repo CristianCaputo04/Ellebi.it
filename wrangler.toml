@@ -181,7 +181,7 @@ NEGOZIO_ATTIVO = "0"
 #       Per vedere il sito vero da un browser: aggiungere ?anteprima=1
 #       a qualsiasi indirizzo (?anteprima=0 per tornare all'avviso).
 # "0" = sito normale.
-IN_ARRIVO = "1"
+IN_ARRIVO = "0"
 
 # ---- Dati fiscali obbligatori per vendere (D.Lgs 70/2003 art. 7) ----
 # Vuoti finché la partita IVA non esiste. Riempiono da soli i segnaposto
