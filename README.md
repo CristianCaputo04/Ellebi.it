@@ -279,7 +279,7 @@ momento della pubblicazione: non vanno reinseriti come regole del dominio.
 
 | Indirizzo | A cosa serve |
 |---|---|
-| `ellebi-it.cristiancaputo04.workers.dev` | indirizzo tecnico, creato da Cloudflare |
+| `emmelu.cristiancaputo04.workers.dev` | indirizzo tecnico, creato da Cloudflare |
 | `ellebi.it.capfyweb.com` | anteprima, per vedere e mostrare il sito |
 | `ellebi.it` | **indirizzo definitivo, ancora da collegare** |
 
@@ -297,7 +297,7 @@ portarlo qui:
 2. Cloudflare mostra due nameserver: vanno inseriti **presso il registrar dove
    ellebi.it è registrato**, al posto di quelli attuali. La propagazione
    richiede da qualche ora a un giorno.
-3. A zona attiva: Worker `ellebi-it` → **Domini** → *Aggiungi dominio* →
+3. A zona attiva: Worker `emmelu` → **Domini** → *Aggiungi dominio* →
    `ellebi.it`, poi di nuovo con `www.ellebi.it`. Il certificato HTTPS viene
    emesso da solo.
 4. Infine, per spegnere l'indirizzo `workers.dev`, aggiungi a `wrangler.toml`:

@@ -1,9 +1,12 @@
 # Configurazione Cloudflare Workers — negozio EMMELÙ.
 #
-# Il nome del Worker ("ellebi-it") e il dominio restano quelli di prima: il
-# rebrand ha cambiato marchio e testi, non l'indirizzo del sito. Rinominare
-# il Worker creerebbe un'applicazione nuova e staccherebbe i domini già
-# collegati, quindi non va fatto insieme al rebrand.
+# Il nome del Worker decide l'indirizzo tecnico: emmelu.<account>.workers.dev.
+# Era "ellebi-it"; e' cambiato con il nome del marchio. Rinominare crea un
+# Worker nuovo e lascia il vecchio dov'era, con i domini che aveva collegati:
+# si e' potuto fare senza danni perche' ellebi.it non era collegato a
+# Cloudflare (il DNS puntava altrove). Il vecchio Worker "ellebi-it" continua
+# a esistere con l'ultima versione pubblicata finche' non lo si elimina dal
+# pannello Cloudflare.
 #
 # Il sito non è più solo statico: c'è uno script in "src/index.js" che serve
 # catalogo, carrello, pagamento, pannello e API leggendo il database D1. I
@@ -13,7 +16,7 @@
 #
 # I file public/_headers e public/_redirects vengono letti in automatico.
 
-name = "ellebi-it"
+name = "emmelu"
 main = "src/index.js"
 compatibility_date = "2026-08-11"
 
