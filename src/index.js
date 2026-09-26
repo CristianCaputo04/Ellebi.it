@@ -222,6 +222,18 @@ async function paginaInArrivo(richiesta, url, percorso, config, env) {
   const pagina = await env.ASSETS.fetch(new Request(`${url.origin}/in-arrivo.html`));
   const intestazioni = new Headers(pagina.headers);
   intestazioni.set("X-Robots-Tag", "noindex, follow");
+  // Le intestazioni di sicurezza si mettono qui e non si lasciano a
+  // public/_headers: lo stesso codice gira anche su Cloudflare Pages, dove
+  // non e' garantito che quel file si applichi a una risposta passata da
+  // questo script. La pagina carica solo file propri e uno stile in linea,
+  // quindi la politica puo' essere strettissima.
+  intestazioni.set("Content-Security-Policy",
+    "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; " +
+    "script-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'");
+  intestazioni.set("X-Content-Type-Options", "nosniff");
+  intestazioni.set("X-Frame-Options", "DENY");
+  intestazioni.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  intestazioni.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains");
   // Mai in cache: il giorno dell'apertura tutti devono vedere il sito vero
   // al primo caricamento, non la pagina provvisoria ricordata dal browser.
   intestazioni.set("Cache-Control", "no-store");
